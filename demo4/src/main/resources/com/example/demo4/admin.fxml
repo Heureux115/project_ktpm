@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.demo4.controllers.AdminController">
+    <top>
+        <ToolBar>
+            <Button text="Đăng xuất" onAction="#onLogout"/>
+        </ToolBar>
+    </top>
+    <center>
+        <VBox spacing="8">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Label text="Quản lý tài khoản" style="-fx-font-size:16px;"/>
+            <TableView fx:id="tblUsers" prefHeight="400">
+                <columns>
+                    <TableColumn fx:id="colUsername" text="Username" prefWidth="300"/>
+                    <TableColumn fx:id="colRole" text="Role" prefWidth="200"/>
+                </columns>
+            </TableView>
+            <HBox spacing="8">
+                <Button fx:id="btnDelete" text="Xóa tài khoản" onAction="#onDelete"/>
+            </HBox>
+            <Label fx:id="lblMessage" textFill="green"/>
+        </VBox>
+
+    </center>
+    <bottom>
+        <HBox spacing="8" alignment="CENTER_RIGHT">
+            <padding>
+                <Insets top="5" right="10" bottom="5" left="10"/>
+            </padding>
+            <Button text="Quản lý cơ sở vật chất" onAction="#onManageAssets"/>
+        </HBox>
+    </bottom>
+</BorderPane>
