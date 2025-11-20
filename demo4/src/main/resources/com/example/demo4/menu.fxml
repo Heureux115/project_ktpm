@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.demo4.controllers.MenuController">
+
+    <children>
+        <Text text="Trang Chọn Chức Năng"
+              layoutX="60" layoutY="60"
+              style="-fx-font-size: 26px; -fx-font-weight: bold;" />
+
+        <Button text="Quản lý Nhà Văn Hóa"
+                layoutX="60" layoutY="120"
+                prefWidth="250" prefHeight="40"
+                onAction="#goToManagement"/>
+
+        <Button text="Quản lý Công Dân"
+                layoutX="60" layoutY="180"
+                prefWidth="250" prefHeight="40"
+                onAction="#goToCitizenManagement"/>
+
+        <Button text="Đăng xuất"
+                layoutX="60" layoutY="240"
+                prefWidth="250" prefHeight="40"
+                onAction="#logout"/>
+    </children>
+</AnchorPane>
+

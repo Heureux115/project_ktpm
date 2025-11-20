@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.demo4.controllers.CitizenController">
+
+    <children>
+        <VBox spacing="10" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10">
+            <Label text="Quản lý Công dân" style="-fx-font-size: 22px; -fx-font-weight: bold;" />
+
+            <HBox spacing="10">
+                <TextField fx:id="searchField" promptText="Tìm theo tên hoặc CCCD" />
+                <Button text="Tìm" onAction="#searchCitizen"/>
+                <Button text="Làm mới" onAction="#refreshList" />
+            </HBox>
+
+            <TableView fx:id="citizenTable">
+                <columns>
+                    <TableColumn fx:id="colName" text="Họ và tên" prefWidth="160"/>
+                    <TableColumn fx:id="colRelation" text="Quan hệ" prefWidth="100"/>
+                    <TableColumn fx:id="colDob" text="Ngày sinh" prefWidth="120"/>
+                    <TableColumn fx:id="colCCCD" text="CCCD" prefWidth="130"/>
+                    <TableColumn fx:id="colJob" text="Nghề nghiệp" prefWidth="150"/>
+                </columns>
+            </TableView>
+
+            <HBox spacing="10">
+                <Button text="Thêm mới" onAction="#addCitizen"/>
+                <Button text="Sửa" onAction="#editCitizen"/>
+                <Button text="Xóa" onAction="#deleteCitizen"/>
+                <Button text="Quay lại menu" onAction="#backToMenu"/>
+            </HBox>
+        </VBox>
+    </children>
+</AnchorPane>
