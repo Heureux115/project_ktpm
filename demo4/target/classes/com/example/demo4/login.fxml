@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.demo4.controllers.LoginController">
+        <VBox spacing="10" layoutX="200" layoutY="120" AnchorPane.leftAnchor="150" AnchorPane.rightAnchor="150">
+            <Label text="Quản lý Nhà Văn Hóa" style="-fx-font-size:20px;"/>
+            <TextField fx:id="txtUsername" promptText="Username"/>
+            <PasswordField fx:id="txtPassword" promptText="Password"/>
+            <HBox spacing="10">
+                <Button fx:id="btnLogin" text="Đăng nhập" onAction="#onLogin"/>
+                <Button fx:id="btnRegister" text="Đăng ký" onAction="#onShowRegister"/>
+            </HBox>
+            <Label fx:id="lblMessage" textFill="red"/>
+        </VBox>
+</AnchorPane>
+
