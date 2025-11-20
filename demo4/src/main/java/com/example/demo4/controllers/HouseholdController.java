@@ -1,11 +1,15 @@
 package com.example.demo4.controllers;
 
 import com.example.demo4.Database;
+import com.example.demo4.Main;
 import com.example.demo4.models.Citizen;
 import com.example.demo4.models.Household;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 
 import java.sql.*;
@@ -69,6 +73,16 @@ public class HouseholdController {
     }
 
     @FXML
+    public void onLogout() throws Exception {
+        Main.showLogin();
+    }
+
+    @FXML
+    public void backToMenu() throws Exception {
+        Main.showMenu();
+    }
+
+    @FXML
     private void viewMembers() {
         Household selected = householdTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
@@ -76,16 +90,18 @@ public class HouseholdController {
             return;
         }
 
-        // Hiển thị danh sách thành viên
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        StringBuilder sb = new StringBuilder("Thành viên hộ " + selected.getHouseholdId() + ":\n");
-        for (Citizen c : selected.getMembers()) {
-            sb.append(c.getFullName()).append(" - ").append(c.getRelation()).append("\n");
+        try {
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("/com/example/demo4/citizen.fxml"));
+            Parent root = loader.load();
+
+            CitizenController controller = loader.getController();
+            controller.setCurrentHouseholdId(selected.getHouseholdId());
+            controller.setMembers(selected.getMembers());
+
+            Main.getPrimaryStage().setScene(new Scene(root));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        alert.setTitle("Thành viên hộ khẩu");
-        alert.setHeaderText(null);
-        alert.setContentText(sb.toString());
-        alert.show();
     }
 
     private void showAlert(String title, String msg) {

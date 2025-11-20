@@ -6,7 +6,11 @@ import com.example.demo4.models.Citizen;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
+
+import java.util.List;
 
 import java.io.IOException;
 import java.sql.*;
@@ -23,6 +27,14 @@ public class CitizenController {
 
     private ObservableList<Citizen> citizenList = FXCollections.observableArrayList();
 
+    private boolean fromHousehold = false;
+
+    private String currentHouseholdId;
+
+    public void setCurrentHouseholdId(String id) {
+        this.currentHouseholdId = id;
+    }
+
     @FXML
     public void initialize() {
         colName.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getFullName()));
@@ -31,7 +43,14 @@ public class CitizenController {
         colCCCD.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getCccd()));
         colJob.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getJob()));
 
+        citizenTable.setItems(citizenList);
         loadFromDB();
+    }
+
+    public void setMembers(List<Citizen> members) {
+        fromHousehold = true;
+        citizenList.setAll(members);
+        citizenTable.setItems(citizenList);
     }
 
     private void loadFromDB() {
@@ -51,46 +70,33 @@ public class CitizenController {
                 ));
             }
 
-            citizenTable.setItems(citizenList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    // ========= ADD ==========
+    @FXML
+    private void addCitizen() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/demo4/add_citizen.fxml"));
+            Stage stage = new Stage();
+            stage.setScene(new javafx.scene.Scene(loader.load()));
+            stage.setTitle("Thêm công dân");
+
+            AddCitizenController controller = loader.getController();
+            controller.setStage(stage);
+            controller.setHouseholdId(currentHouseholdId);
+            controller.setOnAddSuccess(this::loadFromDB); // reload danh sách sau khi thêm
+
+            stage.show();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    // ========= ADD ==========
-    @FXML
-    private void addCitizen() {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Thêm công dân");
-        dialog.setHeaderText("Nhập theo format:");
-        dialog.setContentText("Họ tên;Quan hệ;Ngày sinh;CCCD;Nghề:");
-
-        dialog.showAndWait().ifPresent(data -> {
-            String[] parts = data.split(";");
-            if (parts.length != 5) {
-                showAlert("Sai format!", "Hãy nhập 5 trường cách nhau dấu ;");
-                return;
-            }
-
-            try {
-                Connection conn = Database.getConnection();
-                PreparedStatement st = conn.prepareStatement(
-                        "INSERT INTO citizens (full_name, relation, dob, cccd, job) VALUES (?, ?, ?, ?, ?)"
-                );
-                st.setString(1, parts[0]);
-                st.setString(2, parts[1]);
-                st.setString(3, parts[2]);
-                st.setString(4, parts[3]);
-                st.setString(5, parts[4]);
-                st.executeUpdate();
-
-                loadFromDB();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
 
     // ========= EDIT ==========
     @FXML
@@ -101,40 +107,21 @@ public class CitizenController {
             return;
         }
 
-        TextInputDialog dialog = new TextInputDialog(
-                selected.getFullName() + ";" +
-                        selected.getRelation() + ";" +
-                        selected.getDob() + ";" +
-                        selected.getCccd() + ";" +
-                        selected.getJob()
-        );
-        dialog.setTitle("Sửa công dân");
-        dialog.setHeaderText("Chỉnh lại thông tin:");
-        dialog.setContentText("Họ tên;Quan hệ;Ngày sinh;CCCD;Nghề:");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/demo4/edit_citizen.fxml"));
+            Stage stage = new Stage();
+            stage.setScene(new javafx.scene.Scene(loader.load()));
+            stage.setTitle("Sửa công dân");
 
-        dialog.showAndWait().ifPresent(data -> {
-            String[] p = data.split(";");
-            if (p.length != 5) return;
+            EditCitizenController controller = loader.getController();
+            controller.setStage(stage);
+            controller.setCitizen(selected);
+            controller.setOnEditSuccess(this::loadFromDB);
 
-            try {
-                Connection conn = Database.getConnection();
-                PreparedStatement st = conn.prepareStatement(
-                        "UPDATE citizens SET full_name=?, relation=?, dob=?, cccd=?, job=? WHERE id=?"
-                );
-                st.setString(1, p[0]);
-                st.setString(2, p[1]);
-                st.setString(3, p[2]);
-                st.setString(4, p[3]);
-                st.setString(5, p[4]);
-                st.setInt(6, selected.getId());
-                st.executeUpdate();
-
-                loadFromDB();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // ========= DELETE ==========
@@ -165,13 +152,26 @@ public class CitizenController {
     }
 
     @FXML
-    private void searchCitizen() throws IOException {
-        Main.showMenu();
+    private void searchCitizen() {
+        String keyword = searchField.getText().trim().toLowerCase();
+        if (keyword.isEmpty()) {
+            citizenTable.setItems(citizenList);
+            return;
+        }
+
+        ObservableList<Citizen> filteredList = FXCollections.observableArrayList();
+        for (Citizen c : citizenList) {
+            if (c.getFullName().toLowerCase().contains(keyword) || c.getCccd().toLowerCase().contains(keyword)) {
+                filteredList.add(c);
+            }
+        }
+        citizenTable.setItems(filteredList);
     }
 
     @FXML
-    private void refreshList() throws IOException {
-        Main.showMenu();
+    private void refreshList() {
+        searchField.clear();
+        loadFromDB();
     }
 
     private void showAlert(String title, String msg) {

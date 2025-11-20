@@ -9,6 +9,11 @@
 <AnchorPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.demo4.controllers.HouseholdController">
 
+    <ToolBar>
+        <Button text="Đăng xuất" onAction="#onLogout"/>
+        <Button text="Quay lại Menu" onAction="#backToMenu"/>
+    </ToolBar>
+
     <children>
         <VBox spacing="10" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10">
             <Label text="Quản lý Hộ khẩu" style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
