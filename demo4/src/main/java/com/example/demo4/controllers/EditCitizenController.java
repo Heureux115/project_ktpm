@@ -1,24 +1,19 @@
 package com.example.demo4.controllers;
 
-import com.example.demo4.Database;
+import com.example.demo4.dao.CitizenDao;
 import com.example.demo4.models.Citizen;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-
-public class EditCitizenController {
+public class EditCitizenController extends BaseController {
 
     @FXML private TextField tfName;
     @FXML private TextField tfRelation;
     @FXML private TextField tfDob;
     @FXML private TextField tfCCCD;
     @FXML private TextField tfJob;
-    @FXML private Button btnSave;
-    @FXML private Button btnCancel;
 
     private Stage stage;
     private Citizen citizen;
@@ -43,27 +38,42 @@ public class EditCitizenController {
 
     @FXML
     private void handleSave() {
-        try (Connection conn = Database.getConnection();
-             PreparedStatement st = conn.prepareStatement(
-                     "UPDATE citizens SET full_name=?, relation=?, dob=?, cccd=?, job=? WHERE id=?"
-             )) {
-            st.setString(1, tfName.getText().trim());
-            st.setString(2, tfRelation.getText().trim());
-            st.setString(3, tfDob.getText().trim());
-            st.setString(4, tfCCCD.getText().trim());
-            st.setString(5, tfJob.getText().trim());
-            st.setInt(6, citizen.getId());
-            st.executeUpdate();
+        String name     = tfName.getText().trim();
+        String relation = tfRelation.getText().trim();
+        String dob      = tfDob.getText().trim();
+        String cccd     = tfCCCD.getText().trim();
+        String job      = tfJob.getText().trim();
+
+        if (name.isEmpty() || relation.isEmpty() || dob.isEmpty()
+                || cccd.isEmpty() || job.isEmpty()) {
+            showAlert("Thiếu thông tin",
+                    "Vui lòng nhập đầy đủ thông tin công dân!",
+                    Alert.AlertType.WARNING);
+            return;
+        }
+
+        try {
+            // Cập nhật lại object Citizen trong memory
+            citizen.setFullName(name);
+            citizen.setRelation(relation);
+            citizen.setDob(dob);
+            citizen.setCccd(cccd);
+            citizen.setJob(job);
+
+            // Ghi xuống DB qua DAO
+            CitizenDao.update(citizen);
 
             if (onEditSuccess != null) onEditSuccess.run();
-            stage.close();
+            if (stage != null) stage.close();
+
         } catch (Exception e) {
             e.printStackTrace();
+            showError("Lỗi", "Không thể cập nhật thông tin công dân, vui lòng thử lại!");
         }
     }
 
     @FXML
     private void handleCancel() {
-        stage.close();
+        if (stage != null) stage.close();
     }
 }

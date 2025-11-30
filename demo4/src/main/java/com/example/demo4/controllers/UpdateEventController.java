@@ -1,121 +1,150 @@
-    package com.example.demo4.controllers;
+package com.example.demo4.controllers;
 
-    import com.example.demo4.Database;
-    import javafx.fxml.FXML;
-    import javafx.scene.control.*;
-    import javafx.stage.Stage;
+import com.example.demo4.dao.EventDao;
+import com.example.demo4.models.Event;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
 
-    import java.sql.Connection;
-    import java.sql.PreparedStatement;
-    import java.sql.SQLException;
-    import java.time.LocalDate;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 
-    public class UpdateEventController {
+public class UpdateEventController extends BaseController {
 
-        private CustomerController customerController;
+    private CustomerController customerController;
 
-        public void setCustomerController(CustomerController controller) {
-            this.customerController = controller;
-        }
+    public void setCustomerController(CustomerController controller) {
+        this.customerController = controller;
+    }
 
+    @FXML private DatePicker datePicker;
+    @FXML private ComboBox<String> cbStartHour, cbStartMinute, cbEndHour, cbEndMinute;
+    @FXML private TextField txtTitle;
+    @FXML private TextArea txtDesc;
+    @FXML private ComboBox<String> txtLocation;
 
-        @FXML private DatePicker datePicker;
-        @FXML private ComboBox<String> cbStartHour, cbStartMinute, cbEndHour, cbEndMinute;
-        @FXML private TextField txtTitle;
-        @FXML private TextArea txtDesc;
-        @FXML private ComboBox<String> txtLocation;
+    private int eventId;
+    private String currentStatus;   // giữ status cũ để không làm mất
 
-        private int eventId;
+    public void setEventData(int id, String title, LocalDate date,
+                             String start, String end,
+                             String location, String desc,
+                             String status) {
+        this.eventId = id;
+        this.currentStatus = status;
 
-        public void setEventData(int id, String title, LocalDate date, String start, String end, String location, String desc) {
-            this.eventId = id;
-            txtTitle.setText(title);
-            datePicker.setValue(date);
-            txtLocation.setValue(location);
-            txtDesc.setText(desc);
+        txtTitle.setText(title);
+        datePicker.setValue(date);
+        txtLocation.setValue(location);
+        txtDesc.setText(desc);
 
-            String[] startSplit = start.split(":");
-            String[] endSplit = end.split(":");
+        String[] startSplit = start.split(":");
+        String[] endSplit   = end.split(":");
 
+        if (startSplit.length >= 2) {
             cbStartHour.setValue(startSplit[0]);
             cbStartMinute.setValue(startSplit[1]);
+        }
+        if (endSplit.length >= 2) {
             cbEndHour.setValue(endSplit[0]);
             cbEndMinute.setValue(endSplit[1]);
         }
+    }
 
-        @FXML
-        public void initialize() {
-            // populate giờ/phút
-            for (int h = 0; h < 24; h++) {
-                cbStartHour.getItems().add(String.format("%02d", h));
-                cbEndHour.getItems().add(String.format("%02d", h));
-            }
-            for (int m = 0; m < 60; m += 5) {
-                cbStartMinute.getItems().add(String.format("%02d", m));
-                cbEndMinute.getItems().add(String.format("%02d", m));
-            }
+    @FXML
+    public void initialize() {
+        // populate giờ/phút
+        for (int h = 0; h < 24; h++) {
+            String s = String.format("%02d", h);
+            cbStartHour.getItems().add(s);
+            cbEndHour.getItems().add(s);
+        }
+        for (int m = 0; m < 60; m += 5) {
+            String s = String.format("%02d", m);
+            cbStartMinute.getItems().add(s);
+            cbEndMinute.getItems().add(s);
+        }
 
-            // populate địa điểm
-            txtLocation.getItems().addAll(
-                    "Hội trường rộng tầng 1",
-                    "Phòng chức năng tầng 2"
+        // populate địa điểm
+        txtLocation.getItems().addAll(
+                "Hội trường rộng tầng 1",
+                "Phòng chức năng tầng 2"
+        );
+    }
+
+    @FXML
+    public void onSave() {
+        String title    = txtTitle.getText().trim();
+        LocalDate date  = datePicker.getValue();
+        String sh       = cbStartHour.getValue();
+        String sm       = cbStartMinute.getValue();
+        String eh       = cbEndHour.getValue();
+        String em       = cbEndMinute.getValue();
+        String location = txtLocation.getValue();
+        String desc     = txtDesc.getText().trim();
+
+        if (title.isEmpty() || date == null ||
+                sh == null || sm == null || eh == null || em == null ||
+                location == null || location.isEmpty()) {
+            showWarning("Nhập thiếu", "Vui lòng nhập đầy đủ thông tin sự kiện!");
+            return;
+        }
+
+        String start = sh + ":" + sm;
+        String end   = eh + ":" + em;
+
+        LocalTime startTime;
+        LocalTime endTime;
+        try {
+            startTime = LocalTime.parse(start);
+            endTime   = LocalTime.parse(end);
+        } catch (DateTimeParseException ex) {
+            showWarning("Lỗi giờ", "Định dạng giờ không hợp lệ (HH:mm)!");
+            return;
+        }
+
+        if (!startTime.isBefore(endTime)) {
+            showWarning("Lỗi giờ", "Giờ bắt đầu phải nhỏ hơn giờ kết thúc!");
+            return;
+        }
+
+        try {
+            // Tạo Event và cập nhật qua DAO
+            Event e = new Event(
+                    eventId,
+                    title,
+                    date.toString(),
+                    location,
+                    desc,
+                    currentStatus   // giữ nguyên trạng thái cũ
             );
-        }
+            // nếu Event có setStartTime / setEndTime:
+            e.setStartTime(start);
+            e.setEndTime(end);
 
+            EventDao.update(e);
 
-        @FXML
-        public void onSave() {
-            String title = txtTitle.getText();
-            LocalDate date = datePicker.getValue();
-            String start = cbStartHour.getValue() + ":" + cbStartMinute.getValue();
-            String end = cbEndHour.getValue() + ":" + cbEndMinute.getValue();
-            String location = txtLocation.getValue();
-            String desc = txtDesc.getText();
+            showInfo("Thành công", "Cập nhật sự kiện thành công!");
 
-            if (title.isEmpty() || date == null || start.isEmpty() || end.isEmpty()) {
-                showAlert("Nhập thiếu", "Nhập đầy đủ thông tin!", Alert.AlertType.WARNING);
-                return;
+            if (customerController != null) {
+                customerController.loadEvents(); // reload bảng ở CustomerController
             }
 
-            if (!java.time.LocalTime.parse(start).isBefore(java.time.LocalTime.parse(end))) {
-                showAlert("Lỗi giờ", "Giờ bắt đầu phải nhỏ hơn giờ kết thúc!", Alert.AlertType.WARNING);
-                return;
-            }
+            Stage stage = (Stage) txtTitle.getScene().getWindow();
+            stage.close();
 
-            try (Connection conn = Database.getConnection()) {
-                PreparedStatement ps = conn.prepareStatement(
-                        "UPDATE events SET title=?, date=?, start_time=?, end_time=?, location=?, description=? WHERE id=?"
-                );
-                ps.setString(1, title);
-                ps.setString(2, date.toString());
-                ps.setString(3, start);
-                ps.setString(4, end);
-                ps.setString(5, location);
-                ps.setString(6, desc);
-                ps.setInt(7, eventId);
-                ps.executeUpdate();
-
-                showAlert("Thành công", "Cập nhật sự kiện thành công!", Alert.AlertType.INFORMATION);
-                if (customerController != null) {
-                    customerController.loadEvents(); // reload bảng ở CustomerController
-                }
-                ((Stage) txtTitle.getScene().getWindow()).close();
-
-            } catch (SQLException e) {
-                showAlert("Lỗi", e.getMessage(), Alert.AlertType.ERROR);
-            }
-        }
-
-        @FXML
-        public void onCancel() {
-            ((Stage) txtTitle.getScene().getWindow()).close();
-        }
-
-        private void showAlert(String title, String message, Alert.AlertType type) {
-            Alert alert = new Alert(type);
-            alert.setTitle(title);
-            alert.setHeaderText(null);
-            alert.setContentText(message);
-            alert.showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Lỗi", "Không thể cập nhật sự kiện: " + e.getMessage());
         }
     }
+
+    @FXML
+    public void onCancel() {
+        Stage stage = (Stage) txtTitle.getScene().getWindow();
+        stage.close();
+    }
+
+
+}

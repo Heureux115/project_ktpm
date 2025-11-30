@@ -1,5 +1,6 @@
 package com.example.demo4.controllers;
 
+import com.example.demo4.Session;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
@@ -28,6 +29,27 @@ public abstract class BaseController {
     }
 
     /**
+     * Chỉ cho ADMIN dùng chức năng.
+     * @return true nếu là ADMIN, false nếu không (và đã show Alert).
+     */
+    protected boolean requireAdmin() {
+        String role = Session.getCurrentRole();
+        if (!"ADMIN".equalsIgnoreCase(role)) {
+            showAlert("Không có quyền", "Chỉ ADMIN mới dùng chức năng này!", Alert.AlertType.ERROR);
+            return false;
+        }
+        return true;
+    }
+
+    protected boolean requireLogin() {
+        if (Session.getCurrentUserId() == null) {
+            showWarning("Chưa đăng nhập", "Vui lòng đăng nhập lại!");
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Hộp thoại xác nhận, trả về true nếu user chọn OK.
      */
     protected boolean showConfirm(String title, String msg) {
@@ -36,6 +58,15 @@ public abstract class BaseController {
         alert.setHeaderText(null);
         alert.setContentText(msg);
 
+        Optional<ButtonType> result = alert.showAndWait();
+        return result.isPresent() && result.get() == ButtonType.OK;
+    }
+
+    protected boolean showConfirmWithHeader(String title, String header, String msg) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(msg);
         Optional<ButtonType> result = alert.showAndWait();
         return result.isPresent() && result.get() == ButtonType.OK;
     }

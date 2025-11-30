@@ -1,17 +1,17 @@
 package com.example.demo4.controllers;
 
-import com.example.demo4.Database;
+import com.example.demo4.dao.EventDao;
 import com.example.demo4.models.Event;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.stage.Stage;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 
-import java.sql.*;
-
-public class EventApprovalController {
+public class EventApprovalController extends BaseController {
 
     @FXML private TableView<EventRow> tblEvents;
     @FXML private TableColumn<EventRow, String> colTitle;
@@ -33,24 +33,19 @@ public class EventApprovalController {
 
     private void loadEvents() {
         ObservableList<EventRow> list = FXCollections.observableArrayList();
-        try (Connection conn = Database.getConnection();
-             Statement st = conn.createStatement();
-             ResultSet rs = st.executeQuery(
-                     "SELECT id, title, date, location, status FROM events"
-             )) {
-
-            while (rs.next()) {
+        try {
+            for (Event e : EventDao.findAll()) {
                 list.add(new EventRow(
-                        rs.getInt("id"),
-                        rs.getString("title"),
-                        rs.getString("date"),
-                        rs.getString("location"),
-                        rs.getString("status")
+                        e.getId(),
+                        e.getTitle(),
+                        e.getDate(),
+                        e.getLocation(),
+                        e.getStatus()
                 ));
             }
             tblEvents.setItems(list);
-
-        } catch (SQLException e) {
+            lblMessage.setText("");
+        } catch (Exception e) {
             e.printStackTrace();
             lblMessage.setText("Lỗi tải dữ liệu: " + e.getMessage());
         }
@@ -58,50 +53,40 @@ public class EventApprovalController {
 
     @FXML
     private void onMarkPaid() {
+        if (!requireAdmin()) return;
         changeStatus(Event.STATUS_PAID);
     }
 
     @FXML
     private void onMarkConfirmed() {
+        if (!requireAdmin()) return;
         changeStatus(Event.STATUS_CONFIRMED);
     }
 
     @FXML
     private void onMarkCancelled() {
+        if (!requireAdmin()) return;
         changeStatus(Event.STATUS_CANCELLED);
     }
 
     private void changeStatus(String newStatus) {
         EventRow sel = tblEvents.getSelectionModel().getSelectedItem();
         if (sel == null) {
-            showAlert("Chọn sự kiện", "Hãy chọn sự kiện để cập nhật trạng thái!");
+            showWarning("Chọn sự kiện", "Hãy chọn sự kiện để cập nhật trạng thái!");
             return;
         }
 
-        try (Connection conn = Database.getConnection();
-             PreparedStatement ps = conn.prepareStatement(
-                     "UPDATE events SET status=? WHERE id=?"
-             )) {
-            ps.setString(1, newStatus);
-            ps.setInt(2, sel.getId());
-            ps.executeUpdate();
-
-            showAlert("Thành công", "Cập nhật trạng thái thành công!");
+        try {
+            EventDao.updateStatus(sel.getId(), newStatus);
+            showInfo("Thành công", "Cập nhật trạng thái thành công!");
             loadEvents();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Lỗi", "Không thể cập nhật trạng thái!");
+            showError("Lỗi", "Không thể cập nhật trạng thái!");
         }
     }
 
-    private void showAlert(String title, String msg) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(msg);
-        alert.showAndWait();
-    }
-
+    // ====== Row hiển thị trong TableView ======
     public static class EventRow {
         private final SimpleIntegerProperty id;
         private final SimpleStringProperty title;

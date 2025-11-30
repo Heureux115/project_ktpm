@@ -7,9 +7,22 @@ public class Household {
     private String headName;
     private String address;
     private List<Citizen> members;
-    private String owner; // danh sách nhân khẩu
+    private String owner; // chủ hộ / userId quản lý hộ
 
-    public Household(String householdId, String headName, String address, List<Citizen> members) {
+    // Constructor dùng trong HouseholdCustomerController
+    public Household(String householdId, String headName, String address, String owner) {
+        this.householdId = householdId;
+        this.headName = headName;
+        this.address = address;
+        this.owner = owner;
+    }
+
+    // Nếu sau này có muốn truyền luôn danh sách nhân khẩu
+    public Household(String householdId,
+                     String headName,
+                     String address,
+                     List<Citizen> members,
+                     String owner) {
         this.householdId = householdId;
         this.headName = headName;
         this.address = address;
@@ -48,7 +61,6 @@ public class Household {
     public void setAddress(String address) {
         this.address = address;
     }
-
 
     public String getOwner() {
         return owner;

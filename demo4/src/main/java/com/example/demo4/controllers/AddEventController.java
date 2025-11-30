@@ -1,19 +1,16 @@
 package com.example.demo4.controllers;
 
-import com.example.demo4.Database;
+import com.example.demo4.dao.EventDao;
+import com.example.demo4.models.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 
-public class AddEventController {
+public class AddEventController extends BaseController {
 
     @FXML private TextField txtTitle;
     @FXML private TextArea txtDesc;
@@ -35,13 +32,11 @@ public class AddEventController {
 
     @FXML
     public void initialize() {
-        // Địa điểm
         txtLocation.getItems().addAll(
                 "Hội trường rộng tầng 1",
                 "Phòng chức năng tầng 2"
         );
 
-        // Giờ / phút
         for (int h = 0; h < 24; h++) {
             cbStartHour.getItems().add(String.format("%02d", h));
             cbEndHour.getItems().add(String.format("%02d", h));
@@ -54,94 +49,80 @@ public class AddEventController {
 
     @FXML
     public void onSave() {
-        String title = txtTitle.getText().trim();
-        LocalDate date = datePicker.getValue();
-        String sh = cbStartHour.getValue();
-        String sm = cbStartMinute.getValue();
-        String eh = cbEndHour.getValue();
-        String em = cbEndMinute.getValue();
+        String title    = txtTitle.getText().trim();
+        LocalDate date  = datePicker.getValue();
+        String sh       = cbStartHour.getValue();
+        String sm       = cbStartMinute.getValue();
+        String eh       = cbEndHour.getValue();
+        String em       = cbEndMinute.getValue();
         String location = txtLocation.getValue();
-        String desc = txtDesc.getText().trim();
+        String desc     = txtDesc.getText().trim();
 
-        // Check thiếu
+        // 1. Check thiếu dữ liệu
         if (title.isEmpty() || date == null ||
                 sh == null || sm == null || eh == null || em == null ||
                 location == null) {
-            showAlert("Lỗi nhập liệu", "⚠️ Nhập đầy đủ thông tin!", Alert.AlertType.WARNING);
+            showWarning("Lỗi nhập liệu", "⚠️ Nhập đầy đủ thông tin!");
             return;
         }
 
         String start = sh + ":" + sm;
         String end   = eh + ":" + em;
 
+        // 2. Validate format giờ
         LocalTime startTime, endTime;
         try {
             startTime = LocalTime.parse(start);
-            endTime = LocalTime.parse(end);
+            endTime   = LocalTime.parse(end);
         } catch (DateTimeParseException ex) {
-            showAlert("Lỗi giờ", "Định dạng giờ không hợp lệ (HH:mm)!", Alert.AlertType.WARNING);
+            showWarning("Lỗi giờ", "Định dạng giờ không hợp lệ (HH:mm)!");
             return;
         }
 
-        // Check logic giờ
+        // 3. Start < End
         if (!startTime.isBefore(endTime)) {
-            showAlert("Lỗi giờ", "Giờ bắt đầu phải nhỏ hơn giờ kết thúc!", Alert.AlertType.WARNING);
+            showWarning("Lỗi giờ", "Giờ bắt đầu phải nhỏ hơn giờ kết thúc!");
             return;
         }
 
-        // Không cho tạo sự kiện quá khứ
+        // 4. Ngày không ở quá khứ
         if (date.isBefore(LocalDate.now())) {
-            showAlert("Ngày không hợp lệ", "Không thể tạo sự kiện trong quá khứ!", Alert.AlertType.WARNING);
+            showWarning("Ngày không hợp lệ", "Không thể tạo sự kiện trong quá khứ!");
             return;
         }
 
-        try (Connection conn = Database.getConnection()) {
-            // Kiểm tra trùng giờ trong cùng ngày
-            PreparedStatement checkStmt = conn.prepareStatement(
-                    "SELECT COUNT(*) FROM events " +
-                            "WHERE date = ? " +
-                            "AND ((start_time <= ? AND end_time > ?) " +
-                            "OR (start_time < ? AND end_time >= ?))"
-            );
-            checkStmt.setString(1, date.toString());
-            checkStmt.setString(2, start);
-            checkStmt.setString(3, start);
-            checkStmt.setString(4, end);
-            checkStmt.setString(5, end);
-
-            ResultSet rs = checkStmt.executeQuery();
-            rs.next();
-            if (rs.getInt(1) > 0) {
-                showAlert("Trùng giờ", "Sự kiện này trùng giờ với sự kiện khác!", Alert.AlertType.ERROR);
+        try {
+            // 5. Kiểm tra trùng giờ dùng EventDao
+            boolean conflict = EventDao.hasTimeConflict(date.toString(), start, end);
+            if (conflict) {
+                showError("Trùng giờ", "Sự kiện này trùng giờ với sự kiện khác!");
                 return;
             }
 
-            // Insert
-            PreparedStatement ps = conn.prepareStatement(
-                    "INSERT INTO events(title, date, start_time, end_time, location, description, status) " +
-                            "VALUES(?,?,?,?,?,?,?)"
+            // 6. Tạo Event model
+            Event event = new Event(
+                    -1,                         // id tạm, DB tự tăng
+                    title,
+                    date.toString(),
+                    start,
+                    end,
+                    location,
+                    desc,
+                    Event.STATUS_REGISTERED
             );
-            ps.setString(1, title);
-            ps.setString(2, date.toString());
-            ps.setString(3, start);
-            ps.setString(4, end);
-            ps.setString(5, location);
-            ps.setString(6, desc);
-            ps.setString(7, com.example.demo4.models.Event.STATUS_REGISTERED);
-            ps.executeUpdate();
 
+            // 7. Lưu DB qua DAO
+            EventDao.insert(event);
 
-            showAlert("Thông báo", "✅ Tạo sự kiện thành công!", Alert.AlertType.INFORMATION);
+            showInfo("Thông báo", "✅ Tạo sự kiện thành công!");
 
-            // Reload bảng ở CustomerController nếu có
             if (customerController != null) {
-                customerController.loadEvents();
+                customerController.loadEvents(); // reload list
             }
 
-            // Đóng cửa sổ
             if (stage != null) stage.close();
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             lblMessage.setText("❌ Lỗi: " + e.getMessage());
         }
@@ -150,13 +131,5 @@ public class AddEventController {
     @FXML
     public void onCancel() {
         if (stage != null) stage.close();
-    }
-
-    private void showAlert(String title, String message, Alert.AlertType type) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

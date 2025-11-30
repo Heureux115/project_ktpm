@@ -1,8 +1,9 @@
 package com.example.demo4.controllers;
 
-import com.example.demo4.Database;
 import com.example.demo4.EventStatusUtil;
 import com.example.demo4.Main;
+import com.example.demo4.dao.EventDao;
+import com.example.demo4.models.Event;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -18,7 +19,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.sql.*;
 import java.time.LocalDate;
 
 public class CustomerController extends BaseController {
@@ -47,7 +47,7 @@ public class CustomerController extends BaseController {
 
         loadEvents();
 
-        // Filter theo cột (nếu cậu đã setup graphic trong FXML)
+        // Filter theo cột
         addColumnFilter(colTitle, "text");
         addColumnFilter(colLocation, "text");
         addColumnFilter(colDate, "date");
@@ -55,21 +55,11 @@ public class CustomerController extends BaseController {
 
     @FXML
     private void onResetTable() {
-        // Xóa nội dung filter
-        if (titleFilterField != null) {
-            titleFilterField.clear();
-        }
-        if (locationFilterField != null) {
-            locationFilterField.clear();
-        }
-        if (dateFilterPicker != null) {
-            dateFilterPicker.setValue(null);
-        }
+        if (titleFilterField != null) titleFilterField.clear();
+        if (locationFilterField != null) locationFilterField.clear();
+        if (dateFilterPicker != null) dateFilterPicker.setValue(null);
 
-        // Xóa sắp xếp cột (nếu có)
         eventTable.getSortOrder().clear();
-
-        // Load lại dữ liệu từ DB (vẫn theo logic 30 ngày + status)
         loadEvents();
     }
 
@@ -95,8 +85,10 @@ public class CustomerController extends BaseController {
                     row.startProperty().get(),
                     row.endProperty().get(),
                     row.locationProperty().get(),
-                    row.descriptionProperty().get()
+                    row.descriptionProperty().get(),
+                    row.statusProperty().get()      // <-- thêm status
             );
+
             controller.setCustomerController(this);
 
             Stage stage = new Stage();
@@ -113,49 +105,49 @@ public class CustomerController extends BaseController {
     @FXML
     public void loadEvents() {
 
-        // 1. Tự động cập nhật status "ĐÃ DIỄN RA"
+        // 1. Tự động cập nhật status cho sự kiện đã qua
         EventStatusUtil.autoUpdatePastEvents();
 
         // 2. Chỉ lấy sự kiện từ (hôm nay - 30 ngày) trở đi
         LocalDate minDate = LocalDate.now().minusDays(30);
-        String minDateStr = minDate.toString();
 
         ObservableList<EventRow> list = FXCollections.observableArrayList();
-        try (Connection conn = Database.getConnection();
-             PreparedStatement ps = conn.prepareStatement(
-                     "SELECT id, title, date, start_time, end_time, location, description, status " +
-                             "FROM events " +
-                             "WHERE date >= ? " +
-                             "ORDER BY date, start_time"
-             )) {
+        try {
+            // dùng EventDao thay cho JDBC trực tiếp
+            for (Event e : EventDao.findUpcomingFrom(minDate)) {
 
-            ps.setString(1, minDateStr);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                String start = rs.getString("start_time");
-                String end   = rs.getString("end_time");
+                String start = null;
+                String end   = null;
+                try {
+                    // nếu Event có getter startTime/endTime
+                    start = e.getStartTime();
+                    end   = e.getEndTime();
+                } catch (NoSuchMethodError | Exception ignore) {
+                    // nếu model chưa có, có thể bỏ đoạn này hoặc sửa lại cho khớp
+                }
 
                 if (start != null && start.length() >= 5) start = start.substring(0, 5);
                 if (end   != null && end.length()   >= 5) end   = end.substring(0, 5);
 
                 list.add(new EventRow(
-                        rs.getInt("id"),
-                        rs.getString("title"),
-                        rs.getString("date"),
+                        e.getId(),
+                        e.getTitle(),
+                        e.getDate(),
                         start,
                         end,
-                        rs.getString("location"),
-                        rs.getString("description"),
-                        rs.getString("status")
+                        e.getLocation(),
+                        e.getDescription(),
+                        e.getStatus()
                 ));
             }
+
             eventTable.setItems(list);
-        } catch (SQLException e) {
-            showAlert("Lỗi", "Lỗi tải dữ liệu: " + e.getMessage(), Alert.AlertType.WARNING);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            showAlert("Lỗi", "Lỗi tải dữ liệu: " + ex.getMessage(), Alert.AlertType.WARNING);
         }
     }
-
 
     @FXML
     public void onAddEvent() {
@@ -181,7 +173,7 @@ public class CustomerController extends BaseController {
 
     @FXML
     public void onLogout() throws Exception {
-        Main.showLogin();
+        Main.logout();
     }
 
     @FXML
@@ -206,8 +198,8 @@ public class CustomerController extends BaseController {
             this.id = new SimpleIntegerProperty(id);
             this.title = new SimpleStringProperty(title);
             this.date = new SimpleStringProperty(date);
-            this.start = new SimpleStringProperty(start);
-            this.end = new SimpleStringProperty(end);
+            this.start = new SimpleStringProperty(start == null ? "" : start);
+            this.end = new SimpleStringProperty(end == null ? "" : end);
             this.location = new SimpleStringProperty(location);
             this.description = new SimpleStringProperty(description == null ? "" : description);
             this.status = new SimpleStringProperty(
@@ -225,12 +217,12 @@ public class CustomerController extends BaseController {
         public SimpleStringProperty statusProperty() { return status; }
     }
 
+    // ==== Filter header cho các cột ====
     private void addColumnFilter(TableColumn<CustomerController.EventRow, ?> column, String type) {
         if (type.equals("text")) {
             TextField filterField = new TextField();
             filterField.setPromptText("Lọc");
 
-            // Lưu reference theo cột
             if (column == colTitle) {
                 titleFilterField = filterField;
             } else if (column == colLocation) {
@@ -254,7 +246,6 @@ public class CustomerController extends BaseController {
             DatePicker filterDate = new DatePicker();
             filterDate.setPromptText("Lọc");
 
-            // lưu reference cho reset
             if (column == colDate) {
                 dateFilterPicker = filterDate;
             }
@@ -272,5 +263,4 @@ public class CustomerController extends BaseController {
             });
         }
     }
-
 }

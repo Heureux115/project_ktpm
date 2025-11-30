@@ -15,15 +15,17 @@ public class Main extends Application {
         return primaryStage;
     }
 
-    public static String currentRole;
-    public static String currentUser;
-
     @Override
     public void start(Stage stage) throws Exception {
         primaryStage = stage;
         stage.setTitle("Quản lý Nhà Văn Hóa");
         showLogin();
         stage.show();
+    }
+
+    public static void logout() throws IOException {
+        Session.logout();
+        showLogin();
     }
 
     public static void showWelcome() throws Exception {

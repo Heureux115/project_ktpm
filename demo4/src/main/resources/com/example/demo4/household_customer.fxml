@@ -18,10 +18,9 @@
     <center>
         <TableView fx:id="table" prefWidth="900" prefHeight="500">
             <columns>
-                <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
-                <TableColumn fx:id="colAddress" text="Địa chỉ" prefWidth="300"/>
-                <TableColumn fx:id="colMembers" text="Số nhân khẩu" prefWidth="150"/>
-                <TableColumn fx:id="colCreated" text="Ngày tạo" prefWidth="150"/>
+                <TableColumn fx:id="colId" text="ID" prefWidth="80"/>
+                <TableColumn fx:id="colOwner" text="Chủ hộ" prefWidth="200"/>
+                <TableColumn fx:id="colAddress" text="Địa chỉ" prefWidth="400"/>
             </columns>
         </TableView>
     </center>

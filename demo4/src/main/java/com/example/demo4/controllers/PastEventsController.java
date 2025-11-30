@@ -1,17 +1,20 @@
 package com.example.demo4.controllers;
 
-import com.example.demo4.Database;
 import com.example.demo4.EventStatusUtil;
+import com.example.demo4.dao.EventDao;
+import com.example.demo4.models.Event;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import java.sql.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+
 import java.time.LocalDate;
 
-public class PastEventsController {
+public class PastEventsController extends BaseController {
 
     @FXML private TableView<EventRow> tblPastEvents;
     @FXML private TableColumn<EventRow, String> colTitle;
@@ -23,7 +26,18 @@ public class PastEventsController {
     @FXML
     public void initialize() {
 
-        // Cập nhật status ĐÃ DIỄN RA trước cho chắc
+        // Chỉ ADMIN được xem màn này
+        if (!requireAdmin()) {
+            if (tblPastEvents != null) {
+                tblPastEvents.setDisable(true);
+            }
+            if (lblMessage != null) {
+                lblMessage.setText("Bạn không có quyền xem danh sách này.");
+            }
+            return;
+        }
+
+        // Cập nhật status ĐÃ DIỄN RA
         EventStatusUtil.autoUpdatePastEvents();
 
         colTitle.setCellValueFactory(c -> c.getValue().titleProperty());
@@ -37,34 +51,26 @@ public class PastEventsController {
     private void loadPastEvents() {
         ObservableList<EventRow> list = FXCollections.observableArrayList();
         LocalDate limitDate = LocalDate.now().minusDays(30);
-        String limitStr = limitDate.toString();
 
-        try (Connection conn = Database.getConnection();
-             PreparedStatement ps = conn.prepareStatement(
-                     "SELECT id, title, date, location, status " +
-                             "FROM events " +
-                             "WHERE date < ? " +
-                             "ORDER BY date DESC"
-             )) {
-
-            ps.setString(1, limitStr);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
+        try {
+            // dùng EventDao thay vì JDBC thô
+            for (Event e : EventDao.findPastBefore(limitDate)) {
                 list.add(new EventRow(
-                        rs.getInt("id"),
-                        rs.getString("title"),
-                        rs.getString("date"),
-                        rs.getString("location"),
-                        rs.getString("status")
+                        e.getId(),
+                        e.getTitle(),
+                        e.getDate(),
+                        e.getLocation(),
+                        e.getStatus()
                 ));
             }
+
             tblPastEvents.setItems(list);
             lblMessage.setText("Tổng số sự kiện cũ: " + list.size());
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            lblMessage.setText("Lỗi tải dữ liệu: " + e.getMessage());
+            lblMessage.setText("Lỗi tải dữ liệu");
+            showError("Lỗi", "Lỗi tải dữ liệu: " + e.getMessage());
         }
     }
 

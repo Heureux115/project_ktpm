@@ -3,14 +3,11 @@ package com.example.demo4.controllers;
 import com.example.demo4.Main;
 import javafx.animation.*;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class WelcomeController {
@@ -18,6 +15,10 @@ public class WelcomeController {
     @FXML private ImageView box, mario;
     @FXML private Text successText, scrollText;
     @FXML private Pane rootPane;
+    @FXML private Button btnSkip;   // 👉 thêm nút skip
+
+    // Giữ animation để có thể stop khi skip
+    private SequentialTransition intro;
 
     @FXML
     public void initialize() {
@@ -80,21 +81,36 @@ public class WelcomeController {
     }
 
     private void playIntro() {
-        SequentialTransition intro = buildIntroAnimation();
-        intro.setOnFinished(e -> {
-            // Animation xong → load scene theo role
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/demo4/menu.fxml"));
-                Parent root = loader.load();
-
-                Stage stage = (Stage) rootPane.getScene().getWindow();
-                stage.setScene(new Scene(root, 1000, 600));
-                stage.show();
-
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        });
+        intro = buildIntroAnimation();
+        intro.setOnFinished(e -> goToMenu());
         intro.play();
+    }
+
+    private void goToMenu() {
+        try {
+            // dùng Main.showMenu() cho gọn nếu em đã có
+            Main.showMenu();
+
+            // Hoặc nếu muốn giữ như code cũ:
+            /*
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/demo4/menu.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) rootPane.getScene().getWindow();
+            stage.setScene(new Scene(root, 1000, 600));
+            stage.show();
+            */
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void onSkip() {
+        // stop animation nếu đang chạy
+        if (intro != null) {
+            intro.stop();
+        }
+        goToMenu();
     }
 }

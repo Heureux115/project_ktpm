@@ -1,15 +1,14 @@
 package com.example.demo4.controllers;
 
-import com.example.demo4.Database;
 import com.example.demo4.Main;
+import com.example.demo4.dao.UserDao;
+import com.example.demo4.models.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+public class RegisterController extends BaseController {
 
-public class RegisterController {
     @FXML private TextField txtUsername;
     @FXML private PasswordField txtPassword;
     @FXML private PasswordField txtPassword2;
@@ -21,43 +20,52 @@ public class RegisterController {
 
     @FXML
     public void initialize() {
+        // Tạm thời chỉ cho đăng ký CUSTOMER
         roleBox.getItems().addAll("CUSTOMER");
         roleBox.setValue("CUSTOMER");
     }
 
     @FXML
     public void onRegister(ActionEvent e) {
-        String u = txtUsername.getText().trim();
-        String p = txtPassword.getText();
-        String p2 = txtPassword2.getText();
-        String name = txtFullname.getText().trim();
+        String u     = txtUsername.getText().trim();
+        String p     = txtPassword.getText();
+        String p2    = txtPassword2.getText();
+        String name  = txtFullname.getText().trim();
         String email = txtEmail.getText().trim();
-        String role = roleBox.getValue();
+        String role  = roleBox.getValue();
 
         if (u.isEmpty() || p.isEmpty() || p2.isEmpty()) {
             lblMessage.setText("Vui lòng nhập đầy đủ");
+            showWarning("Thiếu thông tin", "Vui lòng nhập đầy đủ username và password!");
             return;
         }
         if (!p.equals(p2)) {
             lblMessage.setText("Mật khẩu không khớp");
+            showWarning("Sai mật khẩu", "Mật khẩu nhập lại không khớp!");
             return;
         }
-        try (Connection conn = Database.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement(
-                    "INSERT INTO users(username,password,role,fullname,email) VALUES(?,?,?,?,?)");
-            ps.setString(1, u);
-            ps.setString(2, p);
-            ps.setString(3, role);
-            ps.setString(4, name);
-            ps.setString(5, email);
-            ps.executeUpdate();
-            ps.close();
+
+        try {
+            // 1. Kiểm tra username đã tồn tại chưa
+            if (UserDao.findByUsername(u) != null) {
+                lblMessage.setText("Username đã tồn tại, hãy chọn tên khác");
+                showWarning("Trùng username", "Tên đăng nhập này đã có người dùng, vui lòng chọn tên khác!");
+                return;
+            }
+
+            // 2. Tạo User và lưu qua DAO
+            // TODO: về lâu dài nên hash password trước khi lưu
+            User user = new User(u, p, role, name, email);
+            UserDao.insert(user);
+
             lblMessage.setText("Đăng ký thành công! Quay về login...");
-            Thread.sleep(800);
+            showInfo("Thành công", "Đăng ký thành công! Nhấn OK để quay lại màn đăng nhập.");
             Main.showLogin();
+
         } catch (Exception ex) {
             ex.printStackTrace();
             lblMessage.setText("Lỗi: " + ex.getMessage());
+            showError("Lỗi", "Không thể đăng ký tài khoản: " + ex.getMessage());
         }
     }
 

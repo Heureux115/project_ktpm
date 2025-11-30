@@ -1,8 +1,8 @@
 package com.example.demo4.controllers;
 
-import com.example.demo4.Database;
 import com.example.demo4.Main;
-import javafx.application.Application;
+import com.example.demo4.dao.UserDao;
+import com.example.demo4.models.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -10,12 +10,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 
-import java.sql.*;
+import java.util.List;
 
 public class AdminController extends BaseController {
+
     @FXML private TableView<UserRow> tblUsers;
     @FXML private TableColumn<UserRow,String> colUsername;
     @FXML private TableColumn<UserRow,String> colRole;
@@ -23,39 +26,47 @@ public class AdminController extends BaseController {
 
     @FXML
     public void initialize() {
-        colUsername.setCellValueFactory(c->c.getValue().usernameProperty());
-        colRole.setCellValueFactory(c->c.getValue().roleProperty());
+        colUsername.setCellValueFactory(c -> c.getValue().usernameProperty());
+        colRole.setCellValueFactory(c -> c.getValue().roleProperty());
         loadUsers();
     }
 
     private void loadUsers() {
         ObservableList<UserRow> list = FXCollections.observableArrayList();
-        try (Connection conn = Database.getConnection();
-             Statement st = conn.createStatement();
-             ResultSet rs = st.executeQuery("SELECT id,username,role FROM users")) {
-            while (rs.next()) {
-                list.add(new UserRow(rs.getInt("id"), rs.getString("username"), rs.getString("role")));
+        try {
+            List<User> users = UserDao.findAll();
+            for (User u : users) {
+                list.add(new UserRow(u.getId(), u.getUsername(), u.getRole()));
             }
             tblUsers.setItems(list);
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Lỗi", "Không thể tải danh sách user: " + e.getMessage());
+        }
     }
 
     @FXML
     public void onDelete(ActionEvent e) {
+        if (!requireAdmin()) return;
+
         UserRow sel = tblUsers.getSelectionModel().getSelectedItem();
-        if (sel==null) { lblMessage.setText("Chọn user để xóa"); return; }
-        try (Connection conn = Database.getConnection();
-             PreparedStatement ps = conn.prepareStatement("DELETE FROM users WHERE id=?")) {
-            ps.setInt(1, sel.getId());
-            ps.executeUpdate();
-            lblMessage.setText("Xóa user thành công");
+        if (sel == null) {
+            showWarning("Thiếu chọn", "Chọn user để xóa");
+            return;
+        }
+        try {
+            UserDao.deleteById(sel.getId());
+            showInfo("Thành công", "Xóa user thành công");
             loadUsers();
-        } catch (SQLException ex) { ex.printStackTrace(); lblMessage.setText("Lỗi: "+ex.getMessage()); }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            showError("Lỗi", "Lỗi: " + ex.getMessage());
+        }
     }
 
     @FXML
     public void onLogout(ActionEvent e) throws Exception {
-        Main.showLogin();
+        Main.logout();
     }
 
     public static class UserRow {
@@ -63,9 +74,9 @@ public class AdminController extends BaseController {
         private final javafx.beans.property.SimpleStringProperty username;
         private final javafx.beans.property.SimpleStringProperty role;
         public UserRow(int id, String username, String role) {
-            this.id=new javafx.beans.property.SimpleIntegerProperty(id);
-            this.username=new javafx.beans.property.SimpleStringProperty(username);
-            this.role=new javafx.beans.property.SimpleStringProperty(role);
+            this.id = new javafx.beans.property.SimpleIntegerProperty(id);
+            this.username = new javafx.beans.property.SimpleStringProperty(username);
+            this.role = new javafx.beans.property.SimpleStringProperty(role);
         }
         public int getId(){return id.get();}
         public javafx.beans.property.StringProperty usernameProperty(){return username;}
@@ -79,6 +90,8 @@ public class AdminController extends BaseController {
 
     @FXML
     public void onViewPastEvents() {
+        if (!requireAdmin()) return;
+
         try {
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("/com/example/demo4/past_events.fxml"));
@@ -97,6 +110,8 @@ public class AdminController extends BaseController {
 
     @FXML
     public void onApproveEvents() {
+        if (!requireAdmin()) return;
+
         try {
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("/com/example/demo4/event_approval.fxml"));
@@ -109,14 +124,17 @@ public class AdminController extends BaseController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            lblMessage.setText("Lỗi mở màn hình duyệt sự kiện: " + e.getMessage());
+            showError("Lỗi", "Lỗi mở màn hình duyệt sự kiện: " + e.getMessage());
         }
     }
 
     @FXML
     public void onManageAssets() {
+        if (!requireAdmin()) return;
+
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/demo4/assets.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com/example/demo4/assets.fxml"));
             Parent root = loader.load();
 
             Stage stage = new Stage();
@@ -126,8 +144,7 @@ public class AdminController extends BaseController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            lblMessage.setText("Lỗi mở quản lý cơ sở vật chất: " + e.getMessage());
+            showError("Lỗi", "Lỗi mở quản lý cơ sở vật chất: " + e.getMessage());
         }
     }
-
 }

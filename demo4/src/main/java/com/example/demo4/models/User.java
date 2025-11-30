@@ -23,4 +23,24 @@ public class User {
     public String getRole(){return role;}
     public String getFullname(){return fullname;}
     public String getEmail(){return email;}
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
