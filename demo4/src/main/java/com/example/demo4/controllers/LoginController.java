@@ -39,8 +39,10 @@ public class LoginController {
 
                 lblMessage.setText("Đăng nhập thành công!");
 
-                // ✅ chuyển sang màn welcome video và truyền role qua
-                Main.showWelcome(role);
+                Main.currentRole = role;
+                Main.currentUser = rs.getString("id");
+
+                Main.showWelcome();
 
             } else {
                 lblMessage.setText("Sai username hoặc password");

@@ -19,12 +19,6 @@ public class WelcomeController {
     @FXML private Text successText, scrollText;
     @FXML private Pane rootPane;
 
-    private String role;
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     @FXML
     public void initialize() {
         try {
@@ -92,10 +86,6 @@ public class WelcomeController {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/demo4/menu.fxml"));
                 Parent root = loader.load();
-
-                // Truyền role vào MenuController
-                MenuController menuController = loader.getController();
-                menuController.setRole(role);
 
                 Stage stage = (Stage) rootPane.getScene().getWindow();
                 stage.setScene(new Scene(root, 1000, 600));

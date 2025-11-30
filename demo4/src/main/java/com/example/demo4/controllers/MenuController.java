@@ -6,15 +6,9 @@ import javafx.stage.Stage;
 
 public class MenuController {
 
-    private String role;
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
     @FXML
     public void goToManagement() throws Exception {
-        if ("ADMIN".equalsIgnoreCase(role)) {
+        if ("ADMIN".equalsIgnoreCase(Main.currentRole)) {
             Main.showAdmin();
         } else {
             Main.showCustomer();
@@ -23,7 +17,11 @@ public class MenuController {
 
     @FXML
     public void goToCitizenManagement() throws Exception {
-        Main.showHouseholdList();
+        if ("ADMIN".equalsIgnoreCase(Main.currentRole)) {
+            Main.showAdminHousehold();
+        } else {
+            Main.showCustomerHousehold();
+        }
     }
 
     @FXML

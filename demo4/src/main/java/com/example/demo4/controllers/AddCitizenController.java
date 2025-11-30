@@ -2,13 +2,14 @@ package com.example.demo4.controllers;
 
 import com.example.demo4.Database;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
-public class AddCitizenController {
+public class AddCitizenController extends BaseController {
 
     @FXML private TextField tfName;
     @FXML private TextField tfRelation;
@@ -41,8 +42,10 @@ public class AddCitizenController {
         String job = tfJob.getText().trim();
 
         if (name.isEmpty() || relation.isEmpty() || dob.isEmpty() || cccd.isEmpty() || job.isEmpty()) {
+            showAlert("Lỗi", "Vui lòng nhập đầy đủ thông tin công dân!", Alert.AlertType.ERROR);
             return;
         }
+
 
         try (Connection conn = Database.getConnection();
              PreparedStatement st = conn.prepareStatement(
@@ -61,6 +64,7 @@ public class AddCitizenController {
 
         } catch (Exception e) {
             e.printStackTrace();
+            showAlert("Lỗi", "Không thể cập nhật dữ liệu, vui lòng thử lại sau!", Alert.AlertType.ERROR);
         }
     }
 
@@ -68,4 +72,5 @@ public class AddCitizenController {
     private void handleCancel() {
         if (stage != null) stage.close();
     }
+
 }

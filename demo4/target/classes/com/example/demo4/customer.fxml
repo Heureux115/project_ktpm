@@ -3,7 +3,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.demo4.controllers.CustomerController">
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.demo4.controllers.CustomerController">
+
     <top>
         <ToolBar>
             <Button text="Đăng xuất" onAction="#onLogout"/>
@@ -53,43 +55,22 @@
                         </graphic>
                     </TableColumn>
 
+                    <TableColumn fx:id="colStatus" prefWidth="200">
+                        <graphic>
+                            <TextField fx:id="filterStatus" promptText="Trạng thái"/>
+                        </graphic>
+                    </TableColumn>
+
                 </columns>
             </TableView>
 
-
-            <Label text="Tạo sự kiện mới" style="-fx-font-size:14px; -fx-font-weight:bold;"/>
-
-        <GridPane hgap="10" vgap="10">
-
-            <Label text="Tiêu đề:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-            <TextField fx:id="txtTitle" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-
-            <Label text="Ngày:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-            <DatePicker fx:id="datePicker" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-
-            <Label text="Giờ bắt đầu:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-            <HBox spacing="5" GridPane.rowIndex="2" GridPane.columnIndex="1">
-                <ComboBox fx:id="cbStartHour" promptText="Giờ"/>
-                <ComboBox fx:id="cbStartMinute" promptText="Phút"/>
+            <!-- Chỉ còn 2 nút thao tác -->
+            <HBox spacing="10">
+                <Button text="Thêm sự kiện" onAction="#onAddEvent"/>
+                <Button text="Cập nhật sự kiện" onAction="#onOpenUpdate"/>
+                <Button text="Reset bảng" onAction="#onResetTable"/>
             </HBox>
 
-            <Label text="Giờ kết thúc:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-            <HBox spacing="5" GridPane.rowIndex="3" GridPane.columnIndex="1">
-                <ComboBox fx:id="cbEndHour" promptText="Giờ"/>
-                <ComboBox fx:id="cbEndMinute" promptText="Phút"/>
-            </HBox>
-
-            <Label text="Địa điểm:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-            <ComboBox fx:id="txtLocation" promptText="Chọn địa điểm" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
-
-            <Label text="Mô tả:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
-            <TextArea fx:id="txtDesc" GridPane.rowIndex="5" GridPane.columnIndex="1" prefRowCount="2"/>
-
-        </GridPane>
-
-        <Button text="Thêm sự kiện" onAction="#onAddEvent"/>
-        <Button text="Cập nhật sự kiện" onAction="#onOpenUpdate"/>
         </VBox>
-
     </center>
 </BorderPane>

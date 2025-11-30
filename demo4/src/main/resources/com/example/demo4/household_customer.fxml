@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.demo4.controllers.HouseholdCustomerController">
+
+    <top>
+        <HBox spacing="15" style="-fx-padding: 15; -fx-background-color: #e8e8e8;">
+            <Label text="Hộ khẩu của bạn"
+                   style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Button text="Quay lại Menu" onAction="#backToMenu"/>
+        </HBox>
+    </top>
+
+    <center>
+        <TableView fx:id="table" prefWidth="900" prefHeight="500">
+            <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+                <TableColumn fx:id="colAddress" text="Địa chỉ" prefWidth="300"/>
+                <TableColumn fx:id="colMembers" text="Số nhân khẩu" prefWidth="150"/>
+                <TableColumn fx:id="colCreated" text="Ngày tạo" prefWidth="150"/>
+            </columns>
+        </TableView>
+    </center>
+
+</BorderPane>

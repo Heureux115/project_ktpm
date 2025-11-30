@@ -1,6 +1,5 @@
 package com.example.demo4;
 
-import com.example.demo4.controllers.WelcomeController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,6 +15,9 @@ public class Main extends Application {
         return primaryStage;
     }
 
+    public static String currentRole;
+    public static String currentUser;
+
     @Override
     public void start(Stage stage) throws Exception {
         primaryStage = stage;
@@ -24,14 +26,10 @@ public class Main extends Application {
         stage.show();
     }
 
-    public static void showWelcome(String role) throws Exception {
+    public static void showWelcome() throws Exception {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("/com/example/demo4/welcome.fxml"));
-        Parent root = loader.load();
-
-        WelcomeController controller = loader.getController();
-        controller.setRole(role);
-
-        primaryStage.setScene(new Scene(root));
+        Scene scene = new Scene(loader.load(), 1000, 600);
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 
@@ -40,14 +38,14 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root, 800, 600));
     }
 
-    public static void showCitizenManagement() throws Exception {
-        Parent root = FXMLLoader.load(Main.class.getResource("/com/example/demo4/citizen.fxml"));
-        primaryStage.setScene(new Scene(root));
+    public static void showAdminHousehold() throws IOException {
+        Parent root = FXMLLoader.load(Main.class.getResource("/com/example/demo4/household_admin.fxml"));
+        primaryStage.setScene(new Scene(root, 1000, 600));
     }
 
-    public static void showHouseholdList() throws IOException {
-        Parent root = FXMLLoader.load(Main.class.getResource("/com/example/demo4/householdList.fxml"));
-        primaryStage.setScene(new Scene(root, 900, 600)); // chỉnh kích thước hợp lý
+    public static void showCustomerHousehold() throws IOException {
+        Parent root = FXMLLoader.load(Main.class.getResource("/com/example/demo4/household_customer.fxml"));
+        primaryStage.setScene(new Scene(root, 1000, 600));
     }
 
     public static void showLogin() throws IOException {
@@ -62,11 +60,6 @@ public class Main extends Application {
 
     public static void showCustomer() throws IOException {
         Parent root = FXMLLoader.load(Main.class.getResource("/com/example/demo4/customer.fxml"));
-        primaryStage.setScene(new Scene(root, 1000, 600));
-    }
-
-    public static void showStaff() throws IOException {
-        Parent root = FXMLLoader.load(Main.class.getResource("/com/example/demo4/staff.fxml"));
         primaryStage.setScene(new Scene(root, 1000, 600));
     }
 

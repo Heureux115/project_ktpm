@@ -2,6 +2,7 @@ package com.example.demo4.controllers;
 
 import com.example.demo4.Database;
 import com.example.demo4.Main;
+import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,7 +15,7 @@ import javafx.stage.Stage;
 
 import java.sql.*;
 
-public class AdminController {
+public class AdminController extends BaseController {
     @FXML private TableView<UserRow> tblUsers;
     @FXML private TableColumn<UserRow,String> colUsername;
     @FXML private TableColumn<UserRow,String> colRole;
@@ -76,6 +77,41 @@ public class AdminController {
         Main.showMenu();
     }
 
+    @FXML
+    public void onViewPastEvents() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com/example/demo4/past_events.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Sự kiện đã quá 30 ngày");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Lỗi", "Lỗi mở danh sách sự kiện cũ: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    public void onApproveEvents() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com/example/demo4/event_approval.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Duyệt sự kiện");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            lblMessage.setText("Lỗi mở màn hình duyệt sự kiện: " + e.getMessage());
+        }
+    }
 
     @FXML
     public void onManageAssets() {

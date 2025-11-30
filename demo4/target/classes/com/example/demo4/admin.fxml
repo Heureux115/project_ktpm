@@ -34,6 +34,8 @@
                 <Insets top="5" right="10" bottom="5" left="10"/>
             </padding>
             <Button text="Quản lý cơ sở vật chất" onAction="#onManageAssets"/>
+            <Button text="Duyệt sự kiện" onAction="#onApproveEvents"/>
+            <Button text="Xem sự kiện cũ" onAction="#onViewPastEvents"/>
         </HBox>
     </bottom>
 </BorderPane>

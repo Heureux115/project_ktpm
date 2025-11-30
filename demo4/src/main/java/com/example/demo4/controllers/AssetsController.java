@@ -12,7 +12,7 @@ import javafx.scene.layout.VBox;
 
 import java.sql.*;
 
-public class AssetsController {
+public class AssetsController extends BaseController {
 
     @FXML private TableView<AssetRow> tblAssets;
     @FXML private TableColumn<AssetRow,String> colName;
@@ -62,7 +62,7 @@ public class AssetsController {
             }
             tblAssets.setItems(list);
         } catch (SQLException e) {
-            lblMessage.setText("Lỗi tải dữ liệu: " + e.getMessage());
+            showError("Lỗi", "Lỗi tải dữ liệu: " + e.getMessage());
         }
     }
 
@@ -75,7 +75,7 @@ public class AssetsController {
         String quantityStr = txtQuantity.getText();
 
         if(name.isEmpty() || type.isEmpty() || status == null || quantityStr.isEmpty()) {
-            lblMessage.setText("Nhập đầy đủ thông tin!");
+            showWarning("Thiếu thông tin", "Vui lòng nhập đầy đủ thông tin tài sản!");
             return;
         }
 
@@ -83,7 +83,7 @@ public class AssetsController {
         try {
             quantity = Integer.parseInt(quantityStr);
         } catch (NumberFormatException e) {
-            lblMessage.setText("Số lượng phải là số nguyên!");
+            showWarning("Lỗi", "Số lượng phải là số nguyên!");
             return;
         }
 
@@ -105,7 +105,7 @@ public class AssetsController {
 
             loadAssets();
         } catch (SQLException e) {
-            lblMessage.setText("Lỗi: " + e.getMessage());
+            showError("Lỗi", "Không thể thêm tài sản: " + e.getMessage());
         }
     }
 
@@ -166,7 +166,7 @@ public class AssetsController {
                     asset.setStatus(cbStatusEdit.getValue());
                     updateAssetInDB(asset);
                 } catch (NumberFormatException e) {
-                    lblMessage.setText("Số lượng phải là số nguyên!");
+                    showWarning("Lỗi", "Số lượng phải là số nguyên!");
                 }
             }
         });
@@ -180,7 +180,7 @@ public class AssetsController {
             ps.executeUpdate();
             loadAssets();
         } catch (SQLException e) {
-            lblMessage.setText("Lỗi: " + e.getMessage());
+            showError("Lỗi", e.getMessage());
         }
     }
 
@@ -197,7 +197,7 @@ public class AssetsController {
             ps.executeUpdate();
             loadAssets();
         } catch (SQLException e) {
-            lblMessage.setText("Lỗi: " + e.getMessage());
+            showError("Lỗi", e.getMessage());
         }
     }
 

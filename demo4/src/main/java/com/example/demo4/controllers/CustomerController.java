@@ -1,6 +1,7 @@
 package com.example.demo4.controllers;
 
 import com.example.demo4.Database;
+import com.example.demo4.EventStatusUtil;
 import com.example.demo4.Main;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -8,6 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,10 +21,7 @@ import javafx.stage.Stage;
 import java.sql.*;
 import java.time.LocalDate;
 
-public class CustomerController {
-
-    @FXML private DatePicker datePicker;
-    @FXML private ComboBox<String> cbStartHour, cbStartMinute, cbEndHour, cbEndMinute;
+public class CustomerController extends BaseController {
 
     @FXML private TableView<EventRow> eventTable;
     @FXML private TableColumn<EventRow, String> colTitle;
@@ -30,68 +29,52 @@ public class CustomerController {
     @FXML private TableColumn<EventRow, String> colStart;
     @FXML private TableColumn<EventRow, String> colEnd;
     @FXML private TableColumn<EventRow, String> colLocation;
+    @FXML private TableColumn<EventRow, String> colStatus;
 
-    @FXML private TextField txtTitle;
-    @FXML private TextArea txtDesc;
-    @FXML private ComboBox<String> txtLocation;
-    @FXML private Label lblMessage;
+    private TextField titleFilterField;
+    private TextField locationFilterField;
+    private DatePicker dateFilterPicker;
 
     @FXML
     public void initialize() {
+        // Binding các cột
         colTitle.setCellValueFactory(c -> c.getValue().titleProperty());
         colDate.setCellValueFactory(c -> c.getValue().dateProperty());
         colStart.setCellValueFactory(c -> c.getValue().startProperty());
         colEnd.setCellValueFactory(c -> c.getValue().endProperty());
         colLocation.setCellValueFactory(c -> c.getValue().locationProperty());
-        txtLocation.getItems().addAll(
-                "Hội trường rộng tầng 1",
-                "Phòng chức năng tầng 2"
-        );
+        colStatus.setCellValueFactory(c -> c.getValue().statusProperty());
 
-        for (int h = 0; h < 24; h++) {
-            cbStartHour.getItems().add(String.format("%02d", h));
-            cbEndHour.getItems().add(String.format("%02d", h));
+        loadEvents();
+
+        // Filter theo cột (nếu cậu đã setup graphic trong FXML)
+        addColumnFilter(colTitle, "text");
+        addColumnFilter(colLocation, "text");
+        addColumnFilter(colDate, "date");
+    }
+
+    @FXML
+    private void onResetTable() {
+        // Xóa nội dung filter
+        if (titleFilterField != null) {
+            titleFilterField.clear();
         }
-        for (int m = 0; m < 60; m += 5) {
-            cbStartMinute.getItems().add(String.format("%02d", m));
-            cbEndMinute.getItems().add(String.format("%02d", m));
+        if (locationFilterField != null) {
+            locationFilterField.clear();
+        }
+        if (dateFilterPicker != null) {
+            dateFilterPicker.setValue(null);
         }
 
+        // Xóa sắp xếp cột (nếu có)
+        eventTable.getSortOrder().clear();
+
+        // Load lại dữ liệu từ DB (vẫn theo logic 30 ngày + status)
         loadEvents();
     }
 
     @FXML
-    public void loadEvents() {
-        ObservableList<EventRow> list = FXCollections.observableArrayList();
-        try (Connection conn = Database.getConnection();
-             Statement st = conn.createStatement();
-             ResultSet rs = st.executeQuery("SELECT id, title, date, start_time, end_time, location FROM events")) {
-
-            while (rs.next()) {
-                String start = rs.getString("start_time");
-                String end = rs.getString("end_time");
-
-                // ✅ Bỏ giây nếu có HH:mm:ss => HH:mm
-                if (start != null && start.length() >= 5) start = start.substring(0, 5);
-                if (end != null && end.length() >= 5) end = end.substring(0, 5);
-
-                list.add(new EventRow(
-                        rs.getInt("id"),
-                        rs.getString("title"),
-                        rs.getString("date"),
-                        start,
-                        end,
-                        rs.getString("location")
-                ));
-            }
-            eventTable.setItems(list);
-        } catch (SQLException e) {
-            showAlert("Lỗi","Lỗi tải dữ liệu: " + e.getMessage(), Alert.AlertType.WARNING);
-        }
-    }
-
-    @FXML
-    public void onOpenUpdate() {
+    private void onOpenUpdate(ActionEvent event) {
         EventRow row = eventTable.getSelectionModel().getSelectedItem();
         if (row == null) {
             showAlert("Chọn sự kiện", "Chọn sự kiện để cập nhật!", Alert.AlertType.WARNING);
@@ -99,7 +82,9 @@ public class CustomerController {
         }
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/demo4/update_event.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com/example/demo4/update_event.fxml")
+            );
             Parent root = loader.load();
 
             UpdateEventController controller = loader.getController();
@@ -110,7 +95,7 @@ public class CustomerController {
                     row.startProperty().get(),
                     row.endProperty().get(),
                     row.locationProperty().get(),
-                    "" // mô tả
+                    row.descriptionProperty().get()
             );
             controller.setCustomerController(this);
 
@@ -120,80 +105,79 @@ public class CustomerController {
             stage.show();
 
         } catch (Exception e) {
-            e.printStackTrace(); // in ra console để debug
+            e.printStackTrace();
             showAlert("Lỗi", e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+
+    @FXML
+    public void loadEvents() {
+
+        // 1. Tự động cập nhật status "ĐÃ DIỄN RA"
+        EventStatusUtil.autoUpdatePastEvents();
+
+        // 2. Chỉ lấy sự kiện từ (hôm nay - 30 ngày) trở đi
+        LocalDate minDate = LocalDate.now().minusDays(30);
+        String minDateStr = minDate.toString();
+
+        ObservableList<EventRow> list = FXCollections.observableArrayList();
+        try (Connection conn = Database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(
+                     "SELECT id, title, date, start_time, end_time, location, description, status " +
+                             "FROM events " +
+                             "WHERE date >= ? " +
+                             "ORDER BY date, start_time"
+             )) {
+
+            ps.setString(1, minDateStr);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String start = rs.getString("start_time");
+                String end   = rs.getString("end_time");
+
+                if (start != null && start.length() >= 5) start = start.substring(0, 5);
+                if (end   != null && end.length()   >= 5) end   = end.substring(0, 5);
+
+                list.add(new EventRow(
+                        rs.getInt("id"),
+                        rs.getString("title"),
+                        rs.getString("date"),
+                        start,
+                        end,
+                        rs.getString("location"),
+                        rs.getString("description"),
+                        rs.getString("status")
+                ));
+            }
+            eventTable.setItems(list);
+        } catch (SQLException e) {
+            showAlert("Lỗi", "Lỗi tải dữ liệu: " + e.getMessage(), Alert.AlertType.WARNING);
         }
     }
 
 
     @FXML
     public void onAddEvent() {
-        String title = txtTitle.getText();
-        LocalDate date = datePicker.getValue();
-        String start = cbStartHour.getValue() + ":" + cbStartMinute.getValue();
-        String end = cbEndHour.getValue() + ":" + cbEndMinute.getValue();
-        String location = txtLocation.getValue(); // dùng getValue() thay vì getText()
-        String desc = txtDesc.getText();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/demo4/add_event.fxml"));
+            Parent root = loader.load();
 
-        if (title.isEmpty() || date == null || start == null || end == null || location == null) {
-            showAlert("Lỗi nhập liệu","⚠️ Nhập đầy đủ thông tin!", Alert.AlertType.WARNING);
-            return;
-        }
+            AddEventController controller = loader.getController();
+            controller.setCustomerController(this);
 
-        java.time.LocalTime startTime = java.time.LocalTime.parse(start);
-        java.time.LocalTime endTime = java.time.LocalTime.parse(end);
+            Stage stage = new Stage();
+            stage.setTitle("Tạo sự kiện mới");
+            controller.setStage(stage);
 
-        if (!startTime.isBefore(endTime)) {
-            showAlert("Lỗi giờ", "Giờ bắt đầu phải nhỏ hơn giờ kết thúc!", Alert.AlertType.WARNING);
-            return;
-        }
+            stage.setScene(new Scene(root));
+            stage.show();
 
-        if (date.isBefore(LocalDate.now())) {
-            showAlert("Ngày không hợp lệ", "Không thể tạo sự kiện trong quá khứ!", Alert.AlertType.WARNING);
-            return;
-        }
-
-        try (Connection conn = Database.getConnection()) {
-            // Kiểm tra trùng giờ
-            PreparedStatement checkStmt = conn.prepareStatement(
-                    "SELECT COUNT(*) FROM events " +
-                            "WHERE date = ? " +
-                            "AND ((start_time <= ? AND end_time > ?) " +
-                            "OR (start_time < ? AND end_time >= ?))"
-            );
-            checkStmt.setString(1, date.toString());
-            checkStmt.setString(2, start);
-            checkStmt.setString(3, start);
-            checkStmt.setString(4, end);
-            checkStmt.setString(5, end);
-
-            ResultSet rs = checkStmt.executeQuery();
-            rs.next();
-            if (rs.getInt(1) > 0) {
-                showAlert("Trùng giờ", "Sự kiện này trùng giờ với sự kiện khác!", Alert.AlertType.ERROR);
-                return;
-            }
-
-            PreparedStatement ps = conn.prepareStatement(
-                    "INSERT INTO events(title, date, start_time, end_time, location, description) VALUES(?,?,?,?,?,?)"
-            );
-            ps.setString(1, title);
-            ps.setString(2, date.toString());
-            ps.setString(3, start);
-            ps.setString(4, end);
-            ps.setString(5, location);
-            ps.setString(6, desc);
-            ps.executeUpdate();
-
-            showAlert("thông báo","✅ Tạo sự kiện thành công!", Alert.AlertType.INFORMATION);
-            clearFields();
-            loadEvents();
-
-        } catch (SQLException e) {
-            lblMessage.setText("❌ Lỗi: " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Lỗi", e.getMessage(), Alert.AlertType.ERROR);
         }
     }
-
 
     @FXML
     public void onLogout() throws Exception {
@@ -205,29 +189,30 @@ public class CustomerController {
         Main.showMenu();
     }
 
-    private void clearFields() {
-        txtTitle.clear();
-        datePicker.setValue(null);
-        cbStartHour.setValue(null);
-        cbStartMinute.setValue(null);
-        cbEndHour.setValue(null);
-        cbEndMinute.setValue(null);
-        txtLocation.setValue(null); // ComboBox
-        txtDesc.clear();
-    }
-
-    // ✅ Inner class hiển thị bảng
+    // ==== Inner class hiển thị bảng ====
     public static class EventRow {
         private final SimpleIntegerProperty id;
-        private final SimpleStringProperty title, date, start, end, location;
+        private final SimpleStringProperty title;
+        private final SimpleStringProperty date;
+        private final SimpleStringProperty start;
+        private final SimpleStringProperty end;
+        private final SimpleStringProperty location;
+        private final SimpleStringProperty description;
+        private final SimpleStringProperty status;
 
-        public EventRow(int id, String title, String date, String start, String end, String location) {
+        public EventRow(int id, String title, String date,
+                        String start, String end,
+                        String location, String description, String status) {
             this.id = new SimpleIntegerProperty(id);
             this.title = new SimpleStringProperty(title);
             this.date = new SimpleStringProperty(date);
             this.start = new SimpleStringProperty(start);
             this.end = new SimpleStringProperty(end);
             this.location = new SimpleStringProperty(location);
+            this.description = new SimpleStringProperty(description == null ? "" : description);
+            this.status = new SimpleStringProperty(
+                    status == null ? "ĐĂNG KÝ" : status
+            );
         }
 
         public int getId() { return id.get(); }
@@ -236,20 +221,22 @@ public class CustomerController {
         public SimpleStringProperty startProperty() { return start; }
         public SimpleStringProperty endProperty() { return end; }
         public SimpleStringProperty locationProperty() { return location; }
-    }
-
-    private void showAlert(String title, String message, Alert.AlertType type) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+        public SimpleStringProperty descriptionProperty() { return description; }
+        public SimpleStringProperty statusProperty() { return status; }
     }
 
     private void addColumnFilter(TableColumn<CustomerController.EventRow, ?> column, String type) {
         if (type.equals("text")) {
             TextField filterField = new TextField();
             filterField.setPromptText("Lọc");
+
+            // Lưu reference theo cột
+            if (column == colTitle) {
+                titleFilterField = filterField;
+            } else if (column == colLocation) {
+                locationFilterField = filterField;
+            }
+
             VBox header = new VBox(new Label(column.getText()), filterField);
             column.setGraphic(header);
 
@@ -265,6 +252,13 @@ public class CustomerController {
 
         } else if (type.equals("date")) {
             DatePicker filterDate = new DatePicker();
+            filterDate.setPromptText("Lọc");
+
+            // lưu reference cho reset
+            if (column == colDate) {
+                dateFilterPicker = filterDate;
+            }
+
             VBox header = new VBox(new Label(column.getText()), filterDate);
             column.setGraphic(header);
 

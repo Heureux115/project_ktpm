@@ -47,18 +47,21 @@ public class CitizenController {
         loadFromDB();
     }
 
-    public void setMembers(List<Citizen> members) {
-        fromHousehold = true;
-        citizenList.setAll(members);
-        citizenTable.setItems(citizenList);
-    }
-
     private void loadFromDB() {
         citizenList.clear();
-        try {
-            Connection conn = Database.getConnection();
-            ResultSet rs = conn.createStatement().executeQuery("SELECT * FROM citizens");
+        try (Connection conn = Database.getConnection()) {
+            PreparedStatement st;
 
+            if (currentHouseholdId != null && !currentHouseholdId.isEmpty()) {
+                // Trường hợp đang xem thành viên của một hộ cụ thể
+                st = conn.prepareStatement("SELECT * FROM citizens WHERE household_id = ?");
+                st.setString(1, currentHouseholdId);
+            } else {
+                // Trường hợp xem toàn bộ công dân (màn quản lý chung)
+                st = conn.prepareStatement("SELECT * FROM citizens");
+            }
+
+            ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 citizenList.add(new Citizen(
                         rs.getInt("id"),
@@ -69,11 +72,9 @@ public class CitizenController {
                         rs.getString("job")
                 ));
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     // ========= ADD ==========

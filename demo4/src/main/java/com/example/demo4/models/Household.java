@@ -6,13 +6,15 @@ public class Household {
     private String householdId;
     private String headName;
     private String address;
-    private List<Citizen> members; // danh sách nhân khẩu
+    private List<Citizen> members;
+    private String owner; // danh sách nhân khẩu
 
     public Household(String householdId, String headName, String address, List<Citizen> members) {
         this.householdId = householdId;
         this.headName = headName;
         this.address = address;
         this.members = members;
+        this.owner = owner;
     }
 
     public String getHouseholdId() {
@@ -47,5 +49,12 @@ public class Household {
         this.address = address;
     }
 
-    // constructor, getter, setter
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
 }
