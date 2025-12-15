@@ -2,6 +2,7 @@ package com.example.demo4.controllers;
 
 import com.example.demo4.Session;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 
 import java.util.Optional;
@@ -40,6 +41,20 @@ public abstract class BaseController {
         }
         return true;
     }
+
+    protected boolean confirm(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+
+        ButtonType ok = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancel = new ButtonType("Hủy", ButtonBar.ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().setAll(ok, cancel);
+
+        return alert.showAndWait().orElse(cancel) == ok;
+    }
+
 
     protected boolean requireLogin() {
         if (Session.getCurrentUserId() == null) {

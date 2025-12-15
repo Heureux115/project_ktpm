@@ -16,45 +16,40 @@ public class AssetsController extends BaseController {
     @FXML private TableColumn<assets,String> colName;
     @FXML private TableColumn<assets,String> colType;
     @FXML private TableColumn<assets,String> colStatus;
-    @FXML private TableColumn<assets,Void>   colActions;
     @FXML private TableColumn<assets,Integer> colQuantity;
+    @FXML private TableColumn<assets,Void> colActions;
 
     @FXML private TextField txtName;
     @FXML private TextField txtType;
-    @FXML private ComboBox<String> cbStatus;
     @FXML private TextField txtQuantity;
-
+    @FXML private ComboBox<String> cbStatus;
     @FXML private Label lblMessage;
 
     private final ObservableList<assets> assetList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
-        // Bind cột với property trong model `assets`
         colName.setCellValueFactory(new PropertyValueFactory<>("name"));
         colType.setCellValueFactory(new PropertyValueFactory<>("type"));
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
         colQuantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
         cbStatus.setItems(FXCollections.observableArrayList(
-                "Tốt",
-                "Hư hỏng",
-                "Đang sử dụng"
+                "Tốt", "Hư hỏng", "Đang sử dụng"
         ));
 
         tblAssets.setItems(assetList);
-
         addButtonToTable();
-        loadAssets();
+        refresh();
     }
 
-    private void loadAssets() {
+    private void refresh() {
         assetList.clear();
         try {
             assetList.addAll(AssetDao.findAll());
         } catch (Exception e) {
             e.printStackTrace();
-            showError("Lỗi", "Lỗi tải dữ liệu: " + e.getMessage());
+            showError("Lỗi", "Không tải được tài sản!");
         }
     }
 
@@ -62,129 +57,115 @@ public class AssetsController extends BaseController {
     public void onAddAsset() {
         if (!requireAdmin()) return;
 
-        String name       = txtName.getText().trim();
-        String type       = txtType.getText().trim();
-        String status     = cbStatus.getValue();
-        String quantityStr= txtQuantity.getText().trim();
+        Integer quantity = parseInt(txtQuantity.getText());
+        if (quantity == null) return;
 
-        if (name.isEmpty() || type.isEmpty() || status == null || quantityStr.isEmpty()) {
-            showWarning("Thiếu thông tin", "Vui lòng nhập đầy đủ thông tin tài sản!");
-            return;
-        }
-
-        int quantity;
-        try {
-            quantity = Integer.parseInt(quantityStr);
-        } catch (NumberFormatException e) {
-            showWarning("Lỗi", "Số lượng phải là số nguyên!");
+        if (txtName.getText().isBlank()
+                || txtType.getText().isBlank()
+                || cbStatus.getValue() == null) {
+            showWarning("Thiếu thông tin", "Nhập đầy đủ thông tin!");
             return;
         }
 
         try {
-            assets a = new assets(0, name, type, quantity, status); // id=0, DB tự tăng
-            AssetDao.insert(a);
-
+            AssetDao.insert(new assets(
+                    0,
+                    txtName.getText().trim(),
+                    txtType.getText().trim(),
+                    quantity,
+                    cbStatus.getValue()
+            ));
+            clearInput();
+            refresh();
             lblMessage.setText("Thêm tài sản thành công!");
-            txtName.clear();
-            txtType.clear();
-            txtQuantity.clear();
-            cbStatus.setValue(null);
-
-            loadAssets();
         } catch (Exception e) {
             e.printStackTrace();
-            showError("Lỗi", "Không thể thêm tài sản: " + e.getMessage());
+            showError("Lỗi", "Không thể thêm tài sản!");
         }
     }
 
     private void addButtonToTable() {
-        colActions.setCellFactory(param -> new TableCell<>() {
-            private final Button btnEdit   = new Button("Sửa");
-            private final Button btnDelete = new Button("Xóa");
-            private final HBox pane        = new HBox(5, btnEdit, btnDelete);
+        colActions.setCellFactory(col -> new TableCell<>() {
+            private final Button btnEdit = new Button("Sửa");
+            private final Button btnDel  = new Button("Xóa");
+            private final HBox box = new HBox(5, btnEdit, btnDel);
 
             {
-                btnEdit.setOnAction(event -> {
-                    assets asset = getTableView().getItems().get(getIndex());
-                    editAsset(asset);
-                });
-                btnDelete.setOnAction(event -> {
-                    assets asset = getTableView().getItems().get(getIndex());
-                    deleteAsset(asset);
-                });
+                btnEdit.setOnAction(e ->
+                        editAsset(getTableView().getItems().get(getIndex())));
+                btnDel.setOnAction(e ->
+                        deleteAsset(getTableView().getItems().get(getIndex())));
             }
 
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(pane);
-                }
+                setGraphic(empty ? null : box);
             }
         });
     }
 
-    private void editAsset(assets asset) {
+    private void editAsset(assets a) {
         if (!requireAdmin()) return;
 
-        Dialog<ButtonType> dialog = new Dialog<>();
-        dialog.setTitle("Sửa tài sản");
+        TextField tfName = new TextField(a.getName());
+        TextField tfType = new TextField(a.getType());
+        TextField tfQty  = new TextField(String.valueOf(a.getQuantity()));
+        ComboBox<String> cb = new ComboBox<>(cbStatus.getItems());
+        cb.setValue(a.getStatus());
 
-        TextField tfName      = new TextField(asset.getName());
-        TextField tfType      = new TextField(asset.getType());
-        TextField tfQuantity  = new TextField(String.valueOf(asset.getQuantity()));
-        ComboBox<String> cbStatusEdit = new ComboBox<>();
-        cbStatusEdit.getItems().addAll("Tốt", "Hư hỏng", "Đang sử dụng");
-        cbStatusEdit.setValue(asset.getStatus());
+        Dialog<ButtonType> d = new Dialog<>();
+        d.setTitle("Sửa tài sản");
+        d.getDialogPane().setContent(new VBox(5, tfName, tfType, tfQty, cb));
+        d.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
-        VBox vbox = new VBox(5, tfName, tfType, tfQuantity, cbStatusEdit);
-        dialog.getDialogPane().setContent(vbox);
-
-        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-
-        dialog.showAndWait().ifPresent(buttonType -> {
-            if (buttonType == ButtonType.OK) {
-                try {
-                    int quantity = Integer.parseInt(tfQuantity.getText());
-
-                    asset.setName(tfName.getText());
-                    asset.setType(tfType.getText());
-                    asset.setQuantity(quantity);
-                    asset.setStatus(cbStatusEdit.getValue());
-
-                    updateAssetInDB(asset);
-                } catch (NumberFormatException e) {
-                    showWarning("Lỗi", "Số lượng phải là số nguyên!");
-                }
+        d.showAndWait().ifPresent(bt -> {
+            if (bt == ButtonType.OK) {
+                Integer q = parseInt(tfQty.getText());
+                if (q == null) return;
+                a.setName(tfName.getText());
+                a.setType(tfType.getText());
+                a.setQuantity(q);
+                a.setStatus(cb.getValue());
+                updateAsset(a);
             }
         });
     }
 
-    private void deleteAsset(assets asset) {
+    private void deleteAsset(assets a) {
         if (!requireAdmin()) return;
-
-        if (!showConfirm("Xác nhận", "Bạn có chắc muốn xóa tài sản này?")) {
-            return;
-        }
+        if (!showConfirm("Xác nhận", "Xóa tài sản này?")) return;
 
         try {
-            AssetDao.deleteById(asset.getId());
-            loadAssets();
+            AssetDao.deleteById(a.getId());
+            refresh();
         } catch (Exception e) {
-            e.printStackTrace();
-            showError("Lỗi", e.getMessage());
+            showError("Lỗi", "Không thể xóa!");
         }
     }
 
-    private void updateAssetInDB(assets asset) {
+    private void updateAsset(assets a) {
         try {
-            AssetDao.update(asset);
-            loadAssets();
+            AssetDao.update(a);
+            refresh();
         } catch (Exception e) {
-            e.printStackTrace();
-            showError("Lỗi", e.getMessage());
+            showError("Lỗi", "Không thể cập nhật!");
         }
+    }
+
+    private Integer parseInt(String s) {
+        try {
+            return Integer.parseInt(s.trim());
+        } catch (Exception e) {
+            showWarning("Sai dữ liệu", "Số lượng phải là số!");
+            return null;
+        }
+    }
+
+    private void clearInput() {
+        txtName.clear();
+        txtType.clear();
+        txtQuantity.clear();
+        cbStatus.setValue(null);
     }
 }

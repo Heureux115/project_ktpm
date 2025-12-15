@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.*?>
 
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.demo4.controllers.AddHouseholdController"
-      spacing="10" style="-fx-padding: 10">
+      spacing="10" style="-fx-padding: 15;">
 
-    <Label text="Thêm Hộ khẩu" style="-fx-font-size: 16px; -fx-font-weight: bold"/>
-
-    <TextField fx:id="tfId" promptText="Mã hộ khẩu"/>
-    <TextField fx:id="tfHead" promptText="Tên chủ hộ"/>
-    <TextField fx:id="tfAddress" promptText="Địa chỉ"/>
-    <TextField fx:id="tfOwner" promptText="Chủ sở hữu (Owner, có thể bỏ trống để lấy user hiện tại)"/>
+    <Label text="Thêm hộ khẩu mới" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
 
     <HBox spacing="10">
-        <Button text="Thêm" onAction="#handleAdd"/>
-        <Button text="Hủy" onAction="#handleCancel"/>
+        <Label text="Chủ hộ:"/>
+        <ComboBox fx:id="cbHeadCitizen" prefWidth="280"
+                  promptText="Chọn công dân làm chủ hộ"/>
     </HBox>
+
+    <HBox spacing="10">
+        <Label text="Địa chỉ:"/>
+        <TextField fx:id="tfAddress" promptText="Nhập địa chỉ" prefWidth="280"/>
+    </HBox>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Hủy" onAction="#handleCancel"/>
+        <Button text="Thêm" onAction="#handleAdd"/>
+    </HBox>
+
 </VBox>

@@ -10,16 +10,16 @@ import java.util.List;
 
 public class EventDao {
 
-    // Lấy các sự kiện từ ngày minDate trở đi (sắp xếp theo ngày + giờ bắt đầu)
+    // Lấy các sự kiện từ ngày minDate trở đi
     public static List<Event> findUpcomingFrom(LocalDate minDate) throws SQLException {
         List<Event> list = new ArrayList<>();
-        String sql = "SELECT id, title, date, start_time, end_time, location, description, status " +
-                "FROM events WHERE date >= ? ORDER BY date, start_time";
+        String sql = "SELECT id, title, event_date, start_time, end_time, location, description, status " +
+                "FROM events WHERE event_date >= ? ORDER BY event_date, start_time";
 
         try (Connection conn = Database.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, minDate.toString());
+            ps.setString(1, minDate.toString()); // yyyy-MM-dd
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(mapRow(rs));
@@ -28,11 +28,11 @@ public class EventDao {
         return list;
     }
 
-    // Lấy các sự kiện trước ngày limitDate (quá khứ)
+    // Lấy sự kiện quá khứ
     public static List<Event> findPastBefore(LocalDate limitDate) throws SQLException {
         List<Event> list = new ArrayList<>();
-        String sql = "SELECT id, title, date, start_time, end_time, location, description, status " +
-                "FROM events WHERE date < ? ORDER BY date DESC";
+        String sql = "SELECT id, title, event_date, start_time, end_time, location, description, status " +
+                "FROM events WHERE event_date < ? ORDER BY event_date DESC";
 
         try (Connection conn = Database.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -49,7 +49,7 @@ public class EventDao {
     // Lấy tất cả sự kiện
     public static List<Event> findAll() throws SQLException {
         List<Event> list = new ArrayList<>();
-        String sql = "SELECT id, title, date, start_time, end_time, location, description, status FROM events";
+        String sql = "SELECT id, title, event_date, start_time, end_time, location, description, status FROM events";
 
         try (Connection conn = Database.getConnection();
              Statement st = conn.createStatement();
@@ -62,11 +62,11 @@ public class EventDao {
         return list;
     }
 
-    // Kiểm tra xem trong ngày đó đã có sự kiện trùng khoảng thời gian chưa
+    // Kiểm tra trùng lịch sự kiện
     public static boolean hasTimeConflict(String date, String start, String end) throws SQLException {
         String sql =
                 "SELECT COUNT(*) FROM events " +
-                        "WHERE date = ? " +
+                        "WHERE event_date = ? " +
                         "AND ((start_time <= ? AND end_time > ?) " +
                         "   OR (start_time < ? AND end_time >= ?))";
 
@@ -80,24 +80,20 @@ public class EventDao {
             ps.setString(5, end);
 
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1) > 0;
-            }
+            return rs.next() && rs.getInt(1) > 0;
         }
-        return false;
     }
 
-
-    // Thêm sự kiện mới
+    // Thêm mới sự kiện
     public static void insert(Event e) throws SQLException {
-        String sql = "INSERT INTO events(title, date, start_time, end_time, location, description, status) " +
+        String sql = "INSERT INTO events(title, event_date, start_time, end_time, location, description, status) " +
                 "VALUES(?,?,?,?,?,?,?)";
 
         try (Connection conn = Database.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, e.getTitle());
-            ps.setString(2, e.getDate());
+            ps.setString(2, e.getDate());       // yyyy-MM-dd
             ps.setString(3, e.getStartTime());
             ps.setString(4, e.getEndTime());
             ps.setString(5, e.getLocation());
@@ -107,9 +103,47 @@ public class EventDao {
         }
     }
 
-    // Cập nhật toàn bộ thông tin sự kiện
+    public static void insertWithCheck(Event e) throws SQLException {
+        String checkSql = "SELECT COUNT(*) FROM events WHERE event_date=? " +
+                "AND ((start_time<=? AND end_time>?) OR (start_time<? AND end_time>=?))";
+
+        String insertSql = "INSERT INTO events(title,event_date,start_time,end_time,location,description,status) " +
+                "VALUES(?,?,?,?,?,?,?)";
+
+        try (Connection conn = Database.getConnection()) {
+            conn.setAutoCommit(false);
+
+            try (PreparedStatement ps = conn.prepareStatement(checkSql)) {
+                ps.setString(1, e.getDate());
+                ps.setString(2, e.getStartTime());
+                ps.setString(3, e.getStartTime());
+                ps.setString(4, e.getEndTime());
+                ps.setString(5, e.getEndTime());
+
+                ResultSet rs = ps.executeQuery();
+                if (rs.next() && rs.getInt(1) > 0) {
+                    throw new SQLException("Trùng giờ sự kiện");
+                }
+            }
+
+            try (PreparedStatement ps = conn.prepareStatement(insertSql)) {
+                ps.setString(1, e.getTitle());
+                ps.setString(2, e.getDate());
+                ps.setString(3, e.getStartTime());
+                ps.setString(4, e.getEndTime());
+                ps.setString(5, e.getLocation());
+                ps.setString(6, e.getDescription());
+                ps.setString(7, e.getStatus());
+                ps.executeUpdate();
+            }
+
+            conn.commit();
+        }
+    }
+
+    // Cập nhật sự kiện
     public static void update(Event e) throws SQLException {
-        String sql = "UPDATE events SET title=?, date=?, start_time=?, end_time=?, " +
+        String sql = "UPDATE events SET title=?, event_date=?, start_time=?, end_time=?, " +
                 "location=?, description=?, status=? WHERE id=?";
 
         try (Connection conn = Database.getConnection();
@@ -127,7 +161,7 @@ public class EventDao {
         }
     }
 
-    // Chỉ cập nhật trạng thái sự kiện
+    // Cập nhật trạng thái sự kiện
     public static void updateStatus(int id, String status) throws SQLException {
         String sql = "UPDATE events SET status=? WHERE id=?";
 
@@ -140,12 +174,12 @@ public class EventDao {
         }
     }
 
-    // Map 1 dòng ResultSet -> 1 đối tượng Event
+    // Map ResultSet -> Event
     private static Event mapRow(ResultSet rs) throws SQLException {
         return new Event(
                 rs.getInt("id"),
                 rs.getString("title"),
-                rs.getString("date"),
+                rs.getString("event_date"),
                 rs.getString("start_time"),
                 rs.getString("end_time"),
                 rs.getString("location"),

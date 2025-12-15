@@ -1,76 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.demo4.controllers.CustomerController">
 
     <top>
         <ToolBar>
+            <Label text="SỰ KIỆN NHÀ VĂN HÓA"
+                   style="-fx-font-weight:bold;"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Button text="Menu" onAction="#backToMenu"/>
             <Button text="Đăng xuất" onAction="#onLogout"/>
-            <Button text="Quay lại Menu" onAction="#backToMenu"/>
         </ToolBar>
     </top>
 
     <center>
-        <VBox spacing="8">
-            <Label text="Danh sách sự kiện" style="-fx-font-size:16px;"/>
+        <VBox spacing="10" style="-fx-padding:10;">
 
-            <TableView fx:id="eventTable" prefHeight="400">
+            <TableView fx:id="eventTable" VBox.vgrow="ALWAYS">
                 <columns>
-
-                    <!-- Cột Tiêu đề với TextField filter -->
-                    <TableColumn fx:id="colTitle" prefWidth="200">
-                        <graphic>
-                            <TextField fx:id="filterTitle" promptText="Tiêu đề"/>
-                        </graphic>
-                    </TableColumn>
-
-                    <!-- Cột Ngày với DatePicker filter -->
-                    <TableColumn fx:id="colDate" prefWidth="150">
-                        <graphic>
-                            <DatePicker fx:id="filterDate" promptText="Ngày"/>
-                        </graphic>
-                    </TableColumn>
-
-                    <!-- Cột Bắt đầu -->
-                    <TableColumn fx:id="colStart" prefWidth="100">
-                        <graphic>
-                            <TextField fx:id="filterStart" promptText="Bắt đầu"/>
-                        </graphic>
-                    </TableColumn>
-
-                    <!-- Cột Kết thúc -->
-                    <TableColumn fx:id="colEnd" prefWidth="100">
-                        <graphic>
-                            <TextField fx:id="filterEnd" promptText="Kết thúc"/>
-                        </graphic>
-                    </TableColumn>
-
-                    <!-- Cột Địa điểm với TextField filter -->
-                    <TableColumn fx:id="colLocation" prefWidth="200">
-                        <graphic>
-                            <TextField fx:id="filterLocation" promptText="Địa điểm"/>
-                        </graphic>
-                    </TableColumn>
-
-                    <TableColumn fx:id="colStatus" prefWidth="200">
-                        <graphic>
-                            <TextField fx:id="filterStatus" promptText="Trạng thái"/>
-                        </graphic>
-                    </TableColumn>
-
+                    <TableColumn fx:id="colTitle" text="Tiêu đề" prefWidth="220"/>
+                    <TableColumn fx:id="colDate" text="Ngày" prefWidth="130"/>
+                    <TableColumn fx:id="colStart" text="Bắt đầu" prefWidth="90"/>
+                    <TableColumn fx:id="colEnd" text="Kết thúc" prefWidth="90"/>
+                    <TableColumn fx:id="colLocation" text="Địa điểm" prefWidth="200"/>
+                    <TableColumn fx:id="colStatus" text="Trạng thái" prefWidth="140"/>
                 </columns>
             </TableView>
 
-            <!-- Chỉ còn 2 nút thao tác -->
-            <HBox spacing="10">
+            <HBox spacing="10" alignment="CENTER_RIGHT">
                 <Button text="Thêm sự kiện" onAction="#onAddEvent"/>
-                <Button text="Cập nhật sự kiện" onAction="#onOpenUpdate"/>
+                <Button text="Cập nhật" onAction="#onOpenUpdate"/>
                 <Button text="Reset bảng" onAction="#onResetTable"/>
             </HBox>
 
         </VBox>
     </center>
+
 </BorderPane>

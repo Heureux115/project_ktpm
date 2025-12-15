@@ -2,37 +2,48 @@
 
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.geometry.Insets?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml"
+<BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.demo4.controllers.CitizenController">
 
-    <children>
-        <VBox spacing="10" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10">
-            <Label text="Quản lý Công dân" style="-fx-font-size: 22px; -fx-font-weight: bold;" />
+    <!-- HEADER -->
+    <top>
+        <Label text="Quản lý Công dân"
+               style="-fx-font-size:22px; -fx-font-weight:bold; -fx-padding:10;"/>
+    </top>
+
+    <!-- CENTER -->
+    <center>
+        <VBox spacing="10" style="-fx-padding:10;">
 
             <HBox spacing="10">
-                <TextField fx:id="searchField" promptText="Tìm theo tên hoặc CCCD" />
+                <TextField fx:id="searchField" promptText="Tìm theo tên hoặc CCCD" HBox.hgrow="ALWAYS"/>
                 <Button text="Tìm" onAction="#searchCitizen"/>
-                <Button text="Làm mới" onAction="#refreshList" />
+                <Button text="Làm mới" onAction="#refreshList"/>
             </HBox>
 
-            <TableView fx:id="citizenTable">
+            <TableView fx:id="citizenTable" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="colName" text="Họ và tên" prefWidth="160"/>
-                    <TableColumn fx:id="colRelation" text="Quan hệ" prefWidth="100"/>
+                    <TableColumn fx:id="colName" text="Họ và tên" prefWidth="180"/>
+                    <TableColumn fx:id="colRelation" text="Quan hệ" prefWidth="120"/>
                     <TableColumn fx:id="colDob" text="Ngày sinh" prefWidth="120"/>
-                    <TableColumn fx:id="colCCCD" text="CCCD" prefWidth="130"/>
-                    <TableColumn fx:id="colJob" text="Nghề nghiệp" prefWidth="150"/>
+                    <TableColumn fx:id="colCCCD" text="CCCD" prefWidth="140"/>
+                    <TableColumn fx:id="colJob" text="Nghề nghiệp" prefWidth="160"/>
                 </columns>
             </TableView>
 
-            <HBox spacing="10">
-                <Button text="Thêm mới" onAction="#addCitizen"/>
-                <Button text="Sửa" onAction="#editCitizen"/>
-                <Button text="Xóa" onAction="#deleteCitizen"/>
-                <Button text="Quay lại menu" onAction="#backToMenu"/>
-            </HBox>
         </VBox>
-    </children>
-</AnchorPane>
+    </center>
+
+    <!-- FOOTER -->
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT"
+              style="-fx-padding:10; -fx-background-color:#f4f4f4;">
+            <Button text="Thêm" onAction="#addCitizen"/>
+            <Button text="Sửa" onAction="#editCitizen"/>
+            <Button text="Xóa" onAction="#deleteCitizen"/>
+            <Button text="Menu" onAction="#backToMenu"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

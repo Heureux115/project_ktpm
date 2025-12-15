@@ -1,41 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.geometry.Insets?>
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.demo4.controllers.AdminController">
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.demo4.controllers.AdminController"
+            >
+
+    <!-- TOP BAR -->
     <top>
         <ToolBar>
+            <Label text="ADMIN PANEL" style="-fx-font-weight: bold;"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Button text="Menu" onAction="#backToMenu"/>
             <Button text="Đăng xuất" onAction="#onLogout"/>
-            <Button text="Quay lại Menu" onAction="#backToMenu"/>
         </ToolBar>
     </top>
+
+    <!-- CENTER -->
     <center>
-        <VBox spacing="8">
-            <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
-            </padding>
-            <Label text="Quản lý tài khoản" style="-fx-font-size:16px;"/>
-            <TableView fx:id="tblUsers" prefHeight="400">
+        <VBox spacing="10" style="-fx-padding: 15;">
+
+            <Label text="Quản lý tài khoản"
+                   style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+            <TableView fx:id="tblUsers" prefHeight="420">
                 <columns>
                     <TableColumn fx:id="colUsername" text="Username" prefWidth="300"/>
                     <TableColumn fx:id="colRole" text="Role" prefWidth="200"/>
                 </columns>
             </TableView>
-            <HBox spacing="8">
-                <Button fx:id="btnDelete" text="Xóa tài khoản" onAction="#onDelete"/>
-            </HBox>
-            <Label fx:id="lblMessage" textFill="green"/>
-        </VBox>
 
+            <HBox spacing="10">
+                <Button fx:id="btnDelete" text="Xóa tài khoản"/>
+                <Label fx:id="lblMessage"/>
+            </HBox>
+
+        </VBox>
     </center>
+
+    <!-- BOTTOM ACTIONS -->
     <bottom>
-        <HBox spacing="8" alignment="CENTER_RIGHT">
-            <padding>
-                <Insets top="5" right="10" bottom="5" left="10"/>
-            </padding>
-            <Button text="Quản lý cơ sở vật chất" onAction="#onManageAssets"/>
+        <HBox spacing="10" alignment="CENTER_RIGHT"
+              style="-fx-padding: 10; -fx-background-color: #f4f4f4;">
+            <Button text="Cơ sở vật chất" onAction="#onManageAssets"/>
             <Button text="Duyệt sự kiện" onAction="#onApproveEvents"/>
-            <Button text="Xem sự kiện cũ" onAction="#onViewPastEvents"/>
+            <Button text="Sự kiện cũ" onAction="#onViewPastEvents"/>
+            <Button text="Gán tài khoản" onAction="#onAssignAccount"/>
         </HBox>
     </bottom>
+
 </BorderPane>

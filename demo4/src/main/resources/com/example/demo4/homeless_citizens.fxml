@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.demo4.controllers.HomelessCitizenController">
+
+    <top>
+        <ToolBar>
+            <Label text="Cư dân chưa có nơi cư trú"
+                   style="-fx-font-size:16px; -fx-font-weight:bold;"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Button text="Đóng" onAction="#close"/>
+        </ToolBar>
+    </top>
+
+    <center>
+        <TableView fx:id="table" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+                <TableColumn fx:id="colName" text="Họ tên" prefWidth="180"/>
+                <TableColumn fx:id="colRelation" text="Quan hệ" prefWidth="120"/>
+                <TableColumn fx:id="colDob" text="Ngày sinh" prefWidth="120"/>
+                <TableColumn fx:id="colCCCD" text="CCCD" prefWidth="140"/>
+            </columns>
+        </TableView>
+    </center>
+
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT"
+              style="-fx-padding:10; -fx-background-color:#f4f4f4;">
+
+            <Button text="➕ Thêm công dân"
+                    onAction="#openAddCitizen"/>
+
+            <Label text="Gán vào hộ:"/>
+            <ComboBox fx:id="cbHousehold" prefWidth="200"/>
+
+            <Button text="➡ Gán vào hộ"
+                    onAction="#assignToHousehold"/>
+        </HBox>
+    </bottom>
+
+
+</BorderPane>
+

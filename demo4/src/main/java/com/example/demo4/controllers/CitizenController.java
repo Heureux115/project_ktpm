@@ -1,6 +1,5 @@
 package com.example.demo4.controllers;
 
-import com.example.demo4.Database;
 import com.example.demo4.Main;
 import com.example.demo4.dao.CitizenDao;
 import com.example.demo4.models.Citizen;
@@ -14,10 +13,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-
 public class CitizenController extends BaseController {
 
     @FXML private TableView<Citizen> citizenTable;
@@ -28,15 +23,13 @@ public class CitizenController extends BaseController {
     @FXML private TableColumn<Citizen, String> colJob;
     @FXML private TextField searchField;
 
-    // Danh sách nguồn cho TableView
+    // Lưu ID hộ khẩu hiện tại → kiểu Integer đúng theo Database
+    private Integer currentHouseholdId = null;
+
     private final ObservableList<Citizen> citizenList = FXCollections.observableArrayList();
 
-    // Hộ khẩu hiện tại (nếu xem nhân khẩu theo từng hộ)
-    private String currentHouseholdId;
-
-    public void setCurrentHouseholdId(String id) {
-        this.currentHouseholdId = id;
-        // Khi được set từ ngoài (vd: từ HouseholdController) thì load lại theo hộ đó
+    public void setCurrentHouseholdId(int householdId) {
+        this.currentHouseholdId = householdId;
         loadFromDB();
     }
 
@@ -55,45 +48,26 @@ public class CitizenController extends BaseController {
 
         citizenTable.setItems(citizenList);
 
-        // Nếu controller này được dùng độc lập (không setHouseholdId từ ngoài)
-        // thì lúc khởi tạo sẽ load toàn bộ
-        loadFromDB();
-    }
-
-    /**
-     * Load dữ liệu từ DB:
-     *  - Nếu currentHouseholdId != null: chỉ lấy nhân khẩu thuộc hộ đó
-     *  - Nếu null: lấy tất cả công dân
-     */
-    private void loadFromDB() {
-        citizenList.clear();
-        try {
-            if (currentHouseholdId == null || currentHouseholdId.isEmpty()) {
-                // Lấy tất cả
-                citizenList.addAll(CitizenDao.findAll());
-            } else {
-                // Lấy theo hộ khẩu
-                citizenList.addAll(CitizenDao.findByHousehold(currentHouseholdId));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            showError("Lỗi", "Không thể tải danh sách công dân!");
-        }
+        loadFromDB(); // nếu không set household trước → load all
     }
 
     @FXML
     private void addCitizen() {
+        if (currentHouseholdId == null) {
+            showWarning("Lỗi", "Cần mở từ màn hình hộ khẩu để thêm nhân khẩu!");
+            return;
+        }
+
         try {
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/com/example/demo4/add_citizen.fxml")
-            );
+                    getClass().getResource("/com/example/demo4/add_citizen.fxml"));
             Stage stage = new Stage();
             stage.setScene(new Scene(loader.load()));
             stage.setTitle("Thêm công dân");
 
             AddCitizenController controller = loader.getController();
             controller.setStage(stage);
-            controller.setHouseholdId(currentHouseholdId);
+            controller.setHouseholdId(currentHouseholdId); // kiểu int chuẩn
             controller.setOnAddSuccess(this::loadFromDB);
 
             stage.show();
@@ -114,8 +88,7 @@ public class CitizenController extends BaseController {
 
         try {
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/com/example/demo4/edit_citizen.fxml")
-            );
+                    getClass().getResource("/com/example/demo4/edit_citizen.fxml"));
             Stage stage = new Stage();
             stage.setScene(new Scene(loader.load()));
             stage.setTitle("Sửa công dân");
@@ -151,28 +124,40 @@ public class CitizenController extends BaseController {
         }
     }
 
-
     @FXML
-    private void backToMenu() throws IOException {
+    private void backToMenu() throws Exception {
         Main.showMenu();
+    }
+
+    private void loadFromDB() {
+        citizenList.clear();
+        try {
+            citizenList.addAll(
+                    currentHouseholdId == null
+                            ? CitizenDao.findAll()
+                            : CitizenDao.findByHousehold(currentHouseholdId)
+            );
+        } catch (Exception e) {
+            showError("Lỗi", "Không tải được công dân!");
+        }
     }
 
     @FXML
     private void searchCitizen() {
-        String keyword = searchField.getText().trim().toLowerCase();
-        if (keyword.isEmpty()) {
+        String key = searchField.getText().trim().toLowerCase();
+        if (key.isEmpty()) {
             citizenTable.setItems(citizenList);
             return;
         }
 
-        ObservableList<Citizen> filteredList = FXCollections.observableArrayList();
+        ObservableList<Citizen> filtered = FXCollections.observableArrayList();
         for (Citizen c : citizenList) {
-            if (c.getFullName().toLowerCase().contains(keyword)
-                    || c.getCccd().toLowerCase().contains(keyword)) {
-                filteredList.add(c);
+            if (c.getFullName().toLowerCase().contains(key)
+                    || c.getCccd().toLowerCase().contains(key)) {
+                filtered.add(c);
             }
         }
-        citizenTable.setItems(filteredList);
+        citizenTable.setItems(filtered);
     }
 
     @FXML

@@ -7,35 +7,41 @@
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.demo4.controllers.AddEventController"
-      spacing="8">
+      spacing="10">
 
     <padding>
         <Insets top="10" right="10" bottom="10" left="10"/>
     </padding>
 
-    <Label text="Tạo sự kiện mới" style="-fx-font-size:16px; -fx-font-weight:bold;"/>
+    <Label text="Tạo sự kiện mới"
+           style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
 
     <GridPane hgap="10" vgap="10">
+
         <Label text="Tiêu đề:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-        <TextField fx:id="txtTitle" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        <TextField fx:id="txtTitle"
+                   GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
         <Label text="Ngày:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-        <DatePicker fx:id="datePicker" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        <DatePicker fx:id="datePicker"
+                    GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
         <Label text="Giờ bắt đầu:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
         <HBox spacing="5" GridPane.rowIndex="2" GridPane.columnIndex="1">
-            <ComboBox fx:id="cbStartHour" promptText="Giờ"/>
-            <ComboBox fx:id="cbStartMinute" promptText="Phút"/>
+            <ComboBox fx:id="cbStartHour" prefWidth="60"/>
+            <ComboBox fx:id="cbStartMinute" prefWidth="60"/>
         </HBox>
 
         <Label text="Giờ kết thúc:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
         <HBox spacing="5" GridPane.rowIndex="3" GridPane.columnIndex="1">
-            <ComboBox fx:id="cbEndHour" promptText="Giờ"/>
-            <ComboBox fx:id="cbEndMinute" promptText="Phút"/>
+            <ComboBox fx:id="cbEndHour" prefWidth="60"/>
+            <ComboBox fx:id="cbEndMinute" prefWidth="60"/>
         </HBox>
 
         <Label text="Địa điểm:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-        <ComboBox fx:id="txtLocation" promptText="Chọn địa điểm"
+        <ComboBox fx:id="txtLocation"
+                  promptText="Chọn địa điểm"
+                  prefWidth="200"
                   GridPane.rowIndex="4" GridPane.columnIndex="1"/>
 
         <Label text="Mô tả:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
@@ -43,9 +49,9 @@
                   GridPane.rowIndex="5" GridPane.columnIndex="1"/>
     </GridPane>
 
-    <Label fx:id="lblMessage"/>
+    <Label fx:id="lblMessage" style="-fx-text-fill: red;"/>
 
-    <HBox spacing="10">
+    <HBox spacing="12">
         <Button text="Lưu" onAction="#onSave"/>
         <Button text="Hủy" onAction="#onCancel"/>
     </HBox>

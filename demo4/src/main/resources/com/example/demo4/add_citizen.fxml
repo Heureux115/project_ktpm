@@ -11,15 +11,16 @@
         <Insets top="10" right="10" bottom="10" left="10"/>
     </padding>
 
-    <Label text="Thêm Công dân" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+    <Label text="Thêm Công dân"
+           style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
 
     <TextField fx:id="tfName" promptText="Họ và tên"/>
-    <TextField fx:id="tfRelation" promptText="Quan hệ"/>
-    <TextField fx:id="tfDob" promptText="Ngày sinh"/>
-    <TextField fx:id="tfCCCD" promptText="CCCD"/>
+    <TextField fx:id="tfRelation" promptText="Quan hệ với chủ hộ"/>
+    <DatePicker fx:id="dpDob"/>
+    <TextField fx:id="tfCCCD" promptText="Số CCCD"/>
     <TextField fx:id="tfJob" promptText="Nghề nghiệp"/>
 
-    <HBox spacing="10">
+    <HBox spacing="12">
         <Button text="Thêm" onAction="#handleAdd"/>
         <Button text="Hủy" onAction="#handleCancel"/>
     </HBox>

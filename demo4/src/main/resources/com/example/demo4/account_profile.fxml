@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.demo4.controllers.AccountProfileController"
+      spacing="10"
+      style="-fx-padding:15">
+
+    <Label text="Thông tin tài khoản"
+           style="-fx-font-size:18px; -fx-font-weight:bold;"/>
+
+    <TextField fx:id="txtUsername" promptText="Username"/>
+    <PasswordField fx:id="txtPassword" promptText="Mật khẩu mới"/>
+
+    <Button text="Cập nhật tài khoản"
+            onAction="#updateAccount"/>
+
+    <Separator/>
+
+    <Label text="Thông tin công dân gán với tài khoản"
+           style="-fx-font-size:16px;"/>
+
+    <Label fx:id="lblCitizenInfo"/>
+
+    <Label fx:id="lblMessage"
+           style="-fx-text-fill:red;"/>
+
+</VBox>

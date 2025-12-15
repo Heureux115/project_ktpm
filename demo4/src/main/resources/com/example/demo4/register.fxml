@@ -1,19 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.demo4.controllers.RegisterController">
-        <VBox spacing="8" layoutX="180" layoutY="70" AnchorPane.leftAnchor="150" AnchorPane.rightAnchor="150">
-            <Label text="Đăng ký tài khoản" style="-fx-font-size:18px;"/>
-            <TextField fx:id="txtUsername" promptText="Username"/>
-            <PasswordField fx:id="txtPassword" promptText="Password"/>
-            <PasswordField fx:id="txtPassword2" promptText="Confirm Password"/>
-            <TextField fx:id="txtFullname" promptText="Họ tên"/>
-            <TextField fx:id="txtEmail" promptText="Email"/>
-            <ChoiceBox fx:id="roleBox"/>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.demo4.controllers.RegisterController">
+
+    <center>
+        <VBox spacing="10" alignment="CENTER" style="-fx-padding:30;">
+
+            <Label text="Đăng ký tài khoản"
+                   style="-fx-font-size:18px; -fx-font-weight:bold;"/>
+
+            <TextField fx:id="txtUsername" promptText="Username" maxWidth="280"/>
+            <PasswordField fx:id="txtPassword" promptText="Password" maxWidth="280"/>
+            <PasswordField fx:id="txtPassword2" promptText="Confirm Password" maxWidth="280"/>
+            <TextField fx:id="txtFullname" promptText="Họ tên" maxWidth="280"/>
+            <TextField fx:id="txtEmail" promptText="Email" maxWidth="280"/>
+            <ChoiceBox fx:id="roleBox" maxWidth="280"/>
+
             <HBox spacing="10">
                 <Button text="Đăng ký" onAction="#onRegister"/>
                 <Button text="Quay lại" onAction="#onBack"/>
             </HBox>
+
             <Label fx:id="lblMessage" textFill="red"/>
+
         </VBox>
-</AnchorPane>
+    </center>
+
+</BorderPane>

@@ -115,16 +115,14 @@ public class UpdateEventController extends BaseController {
                     eventId,
                     title,
                     date.toString(),
+                    start,
+                    end,
                     location,
                     desc,
-                    currentStatus   // giữ nguyên trạng thái cũ
+                    currentStatus
             );
-            // nếu Event có setStartTime / setEndTime:
-            e.setStartTime(start);
-            e.setEndTime(end);
 
             EventDao.update(e);
-
             showInfo("Thành công", "Cập nhật sự kiện thành công!");
 
             if (customerController != null) {

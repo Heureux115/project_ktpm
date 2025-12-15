@@ -38,8 +38,7 @@
     <Button fx:id="btnSkip"
             text="Skip"
             onAction="#onSkip"
-            layoutX="900"
-            layoutY="20" />
-
+            layoutX="700"
+            layoutY="20"/>
 
 </Pane>

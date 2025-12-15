@@ -16,6 +16,8 @@ import java.time.LocalDate;
 
 public class PastEventsController extends BaseController {
 
+    private static boolean updated = false;
+
     @FXML private TableView<EventRow> tblPastEvents;
     @FXML private TableColumn<EventRow, String> colTitle;
     @FXML private TableColumn<EventRow, String> colDate;
@@ -26,19 +28,16 @@ public class PastEventsController extends BaseController {
     @FXML
     public void initialize() {
 
-        // Chỉ ADMIN được xem màn này
         if (!requireAdmin()) {
-            if (tblPastEvents != null) {
-                tblPastEvents.setDisable(true);
-            }
-            if (lblMessage != null) {
-                lblMessage.setText("Bạn không có quyền xem danh sách này.");
-            }
+            tblPastEvents.setDisable(true);
+            lblMessage.setText("Bạn không có quyền xem danh sách này.");
             return;
         }
 
-        // Cập nhật status ĐÃ DIỄN RA
-        EventStatusUtil.autoUpdatePastEvents();
+        if (!updated) {
+            EventStatusUtil.autoUpdatePastEvents();
+            updated = true;
+        }
 
         colTitle.setCellValueFactory(c -> c.getValue().titleProperty());
         colDate.setCellValueFactory(c -> c.getValue().dateProperty());
@@ -47,6 +46,7 @@ public class PastEventsController extends BaseController {
 
         loadPastEvents();
     }
+
 
     private void loadPastEvents() {
         ObservableList<EventRow> list = FXCollections.observableArrayList();

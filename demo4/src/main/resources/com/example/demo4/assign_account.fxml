@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.demo4.controllers.AssignAccountController">
+
+    <top>
+        <Label text="Gán tài khoản cho công dân"
+               style="-fx-font-size:20px; -fx-padding:10; -fx-font-weight: bold;" />
+    </top>
+
+    <center>
+        <VBox spacing="12" style="-fx-padding: 15;">
+
+            <Label text="1️⃣ Công dân chưa có tài khoản"/>
+
+            <TableView fx:id="tblCitizens" prefHeight="260">
+                <columns>
+                    <TableColumn fx:id="colName" text="Họ tên" prefWidth="220"/>
+                    <TableColumn fx:id="colCCCD" text="CCCD" prefWidth="160"/>
+                </columns>
+            </TableView>
+
+            <Label text="2️⃣ Chọn tài khoản để gán"/>
+
+            <ComboBox fx:id="cmbUsers" prefWidth="320"/>
+
+            <HBox alignment="CENTER_RIGHT">
+                <Button text="Gán tài khoản"
+                        onAction="#assignAccount"
+                        style="-fx-font-size: 14px;"/>
+            </HBox>
+
+            <Label fx:id="lblStatus"/>
+
+        </VBox>
+    </center>
+
+</BorderPane>

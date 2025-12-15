@@ -3,70 +3,39 @@ package com.example.demo4.models;
 import java.util.List;
 
 public class Household {
-    private String householdId;
-    private String headName;
+    private int householdId;        // id (PK)
+    private Integer headCitizenId;  // id citizen là chủ hộ
     private String address;
-    private List<Citizen> members;
-    private String owner; // chủ hộ / userId quản lý hộ
+    private List<Citizen> members;  // nếu cần load kèm
+    private Integer ownerUserId;    // user quản lý hộ
 
-    // Constructor dùng trong HouseholdCustomerController
-    public Household(String householdId, String headName, String address, String owner) {
+    // Constructor dùng trong HouseholdCustomerController / DAO
+    public Household(int householdId, Integer headCitizenId,
+                     String address, Integer ownerUserId) {
         this.householdId = householdId;
-        this.headName = headName;
+        this.headCitizenId = headCitizenId;
         this.address = address;
-        this.owner = owner;
+        this.ownerUserId = ownerUserId;
     }
 
-    // Nếu sau này có muốn truyền luôn danh sách nhân khẩu
-    public Household(String householdId,
-                     String headName,
-                     String address,
-                     List<Citizen> members,
-                     String owner) {
-        this.householdId = householdId;
-        this.headName = headName;
-        this.address = address;
-        this.members = members;
-        this.owner = owner;
+    @Override
+    public String toString() {
+        return "Hộ " + householdId + " - " + address;
     }
 
-    public String getHouseholdId() {
-        return householdId;
-    }
+    // getters/setters
+    public int getHouseholdId() { return householdId; }
+    public void setHouseholdId(int householdId) { this.householdId = householdId; }
 
-    public void setHouseholdId(String householdId) {
-        this.householdId = householdId;
-    }
+    public Integer getHeadCitizenId() { return headCitizenId; }
+    public void setHeadCitizenId(Integer headCitizenId) { this.headCitizenId = headCitizenId; }
 
-    public String getHeadName() {
-        return headName;
-    }
+    public String getAddress() { return address; }
+    public void setAddress(String address) { this.address = address; }
 
-    public void setHeadName(String headName) {
-        this.headName = headName;
-    }
+    public List<Citizen> getMembers() { return members; }
+    public void setMembers(List<Citizen> members) { this.members = members; }
 
-    public List<Citizen> getMembers() {
-        return members;
-    }
-
-    public void setMembers(List<Citizen> members) {
-        this.members = members;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
+    public Integer getOwnerUserId() { return ownerUserId; }
+    public void setOwnerUserId(Integer ownerUserId) { this.ownerUserId = ownerUserId; }
 }

@@ -1,37 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.demo4.controllers.HouseholdAdminController">
 
     <top>
-        <HBox spacing="15" style="-fx-padding: 15; -fx-background-color: #e8e8e8;">
-            <Label text="Quản lý Hộ Khẩu - ADMIN"
-                   style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+        <ToolBar>
+            <Label text="Quản lý Hộ khẩu (ADMIN)"
+                   style="-fx-font-size:18px; -fx-font-weight:bold;"/>
             <Pane HBox.hgrow="ALWAYS"/>
-            <Button text="Quay lại Menu" onAction="#backToMenu"/>
-        </HBox>
+            <Button text="Menu" onAction="#backToMenu"/>
+        </ToolBar>
     </top>
 
     <center>
-        <TableView fx:id="table" prefWidth="900" prefHeight="500">
+        <TableView fx:id="table" VBox.vgrow="ALWAYS">
             <columns>
                 <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
                 <TableColumn fx:id="colOwner" text="Chủ hộ" prefWidth="150"/>
-                <TableColumn fx:id="colAddress" text="Địa chỉ" prefWidth="250"/>
-                <TableColumn fx:id="colMembers" text="Số nhân khẩu" prefWidth="120"/>
-                <TableColumn fx:id="colCreated" text="Ngày tạo" prefWidth="150"/>
+                <TableColumn fx:id="colAddress" text="Địa chỉ" prefWidth="260"/>
+                <TableColumn fx:id="colMembers" text="Nhân khẩu" prefWidth="120"/>
             </columns>
         </TableView>
     </center>
 
     <bottom>
-        <HBox spacing="10" style="-fx-padding: 15; -fx-background-color: #f3f3f3;">
-            <Button text="Thêm hộ khẩu" onAction="#addHousehold"/>
+        <HBox spacing="10" alignment="CENTER_RIGHT"
+              style="-fx-padding:10; -fx-background-color:#f4f4f4;">
+            <Button text="Thêm" onAction="#addHousehold"/>
             <Button text="Sửa" onAction="#editHousehold"/>
             <Button text="Xóa" onAction="#deleteHousehold"/>
+            <Button text="Thành viên" onAction="#manageMembers"/>
+            <Button text="Quản lý cư dân" onAction="#manageCitizens"/>
+            <Button text="Cư dân chưa có nơi cư trú" onAction="#manageHomelessCitizens"/>
         </HBox>
     </bottom>
 

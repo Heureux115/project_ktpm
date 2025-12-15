@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
 
-<?import javafx.geometry.Insets?>
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
+<BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.demo4.controllers.EventApprovalController">
 
     <top>
         <ToolBar>
-            <Label text="Duyệt sự kiện" style="-fx-font-size:16px; -fx-font-weight:bold;"/>
+            <Label text="Duyệt sự kiện"
+                   style="-fx-font-size:16px; -fx-font-weight:bold;"/>
         </ToolBar>
     </top>
 
     <center>
-        <VBox spacing="8" >
-            <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
-            </padding>
-            <TableView fx:id="tblEvents" prefHeight="400">
+        <VBox spacing="10" style="-fx-padding:10;">
+
+            <TableView fx:id="tblEvents" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="colTitle" text="Tiêu đề" prefWidth="200"/>
+                    <TableColumn fx:id="colTitle" text="Tiêu đề" prefWidth="220"/>
                     <TableColumn fx:id="colDate" text="Ngày" prefWidth="120"/>
-                    <TableColumn fx:id="colLocation" text="Địa điểm" prefWidth="200"/>
-                    <TableColumn fx:id="colStatus" text="Trạng thái" prefWidth="120"/>
+                    <TableColumn fx:id="colLocation" text="Địa điểm" prefWidth="220"/>
+                    <TableColumn fx:id="colStatus" text="Trạng thái" prefWidth="140"/>
                 </columns>
             </TableView>
 
             <Label fx:id="lblMessage"/>
 
-            <HBox spacing="10">
-                <Button text="Đánh dấu Đã thanh toán" onAction="#onMarkPaid"/>
-                <Button text="Xác nhận sự kiện" onAction="#onMarkConfirmed"/>
-                <Button text="Huỷ sự kiện" onAction="#onMarkCancelled"/>
-            </HBox>
         </VBox>
     </center>
-</BorderPane>
 
+    <bottom>
+        <HBox spacing="10" alignment="CENTER_RIGHT"
+              style="-fx-padding:10; -fx-background-color:#f4f4f4;">
+            <Button text="Đã thanh toán" onAction="#onMarkPaid"/>
+            <Button text="Xác nhận" onAction="#onMarkConfirmed"/>
+            <Button text="Huỷ" onAction="#onMarkCancelled"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

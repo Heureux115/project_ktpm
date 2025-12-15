@@ -8,7 +8,6 @@ import javafx.stage.Stage;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeParseException;
 
 public class AddEventController extends BaseController {
 
@@ -49,83 +48,81 @@ public class AddEventController extends BaseController {
 
     @FXML
     public void onSave() {
-        String title    = txtTitle.getText().trim();
-        LocalDate date  = datePicker.getValue();
-        String sh       = cbStartHour.getValue();
-        String sm       = cbStartMinute.getValue();
-        String eh       = cbEndHour.getValue();
-        String em       = cbEndMinute.getValue();
-        String location = txtLocation.getValue();
-        String desc     = txtDesc.getText().trim();
 
-        // 1. Check thiếu dữ liệu
-        if (title.isEmpty() || date == null ||
-                sh == null || sm == null || eh == null || em == null ||
-                location == null) {
-            showWarning("Lỗi nhập liệu", "⚠️ Nhập đầy đủ thông tin!");
-            return;
-        }
+        if (!validateInput()) return;
 
-        String start = sh + ":" + sm;
-        String end   = eh + ":" + em;
-
-        // 2. Validate format giờ
-        LocalTime startTime, endTime;
-        try {
-            startTime = LocalTime.parse(start);
-            endTime   = LocalTime.parse(end);
-        } catch (DateTimeParseException ex) {
-            showWarning("Lỗi giờ", "Định dạng giờ không hợp lệ (HH:mm)!");
-            return;
-        }
-
-        // 3. Start < End
-        if (!startTime.isBefore(endTime)) {
-            showWarning("Lỗi giờ", "Giờ bắt đầu phải nhỏ hơn giờ kết thúc!");
-            return;
-        }
-
-        // 4. Ngày không ở quá khứ
-        if (date.isBefore(LocalDate.now())) {
-            showWarning("Ngày không hợp lệ", "Không thể tạo sự kiện trong quá khứ!");
-            return;
-        }
+        LocalDate date = datePicker.getValue();
+        String start = cbStartHour.getValue() + ":" + cbStartMinute.getValue();
+        String end   = cbEndHour.getValue()   + ":" + cbEndMinute.getValue();
 
         try {
-            // 5. Kiểm tra trùng giờ dùng EventDao
-            boolean conflict = EventDao.hasTimeConflict(date.toString(), start, end);
-            if (conflict) {
+            if (EventDao.hasTimeConflict(date.toString(), start, end)) {
                 showError("Trùng giờ", "Sự kiện này trùng giờ với sự kiện khác!");
                 return;
             }
 
-            // 6. Tạo Event model
             Event event = new Event(
-                    -1,                         // id tạm, DB tự tăng
-                    title,
+                    -1,
+                    txtTitle.getText().trim(),
                     date.toString(),
                     start,
                     end,
-                    location,
-                    desc,
+                    txtLocation.getValue(),
+                    txtDesc.getText().trim(),
                     Event.STATUS_REGISTERED
             );
 
-            // 7. Lưu DB qua DAO
-            EventDao.insert(event);
+            EventDao.insertWithCheck(event);
 
-            showInfo("Thông báo", "✅ Tạo sự kiện thành công!");
+            showInfo("Thành công", "Tạo sự kiện thành công!");
 
-            if (customerController != null) {
-                customerController.loadEvents(); // reload list
-            }
+            if (customerController != null)
+                customerController.loadEvents();
 
-            if (stage != null) stage.close();
+            closeStage();
 
         } catch (Exception e) {
             e.printStackTrace();
             lblMessage.setText("❌ Lỗi: " + e.getMessage());
         }
+    }
+
+    private boolean validateInput() {
+        if (txtTitle.getText().trim().isEmpty() ||
+                datePicker.getValue() == null ||
+                cbStartHour.getValue() == null ||
+                cbStartMinute.getValue() == null ||
+                cbEndHour.getValue() == null ||
+                cbEndMinute.getValue() == null ||
+                txtLocation.getValue() == null) {
+
+            showWarning("Lỗi", "Nhập đầy đủ thông tin!");
+            return false;
+        }
+
+        try {
+            LocalTime start = LocalTime.parse(cbStartHour.getValue() + ":" + cbStartMinute.getValue());
+            LocalTime end   = LocalTime.parse(cbEndHour.getValue() + ":" + cbEndMinute.getValue());
+
+            if (!start.isBefore(end)) {
+                showWarning("Lỗi giờ", "Giờ bắt đầu phải nhỏ hơn giờ kết thúc!");
+                return false;
+            }
+        } catch (Exception e) {
+            showWarning("Lỗi giờ", "Định dạng giờ không hợp lệ!");
+            return false;
+        }
+
+        if (datePicker.getValue().isBefore(LocalDate.now())) {
+            showWarning("Lỗi ngày", "Không thể tạo sự kiện trong quá khứ!");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void closeStage() {
+        if (stage != null) stage.close();
     }
 
     @FXML

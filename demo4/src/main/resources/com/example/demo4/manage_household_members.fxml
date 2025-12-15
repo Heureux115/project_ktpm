@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.demo4.controllers.ManageHouseholdMembersController">
+
+    <top>
+        <ToolBar>
+            <Label text="Quản lý thành viên hộ khẩu"
+                   style="-fx-font-size:18px; -fx-font-weight:bold;"/>
+        </ToolBar>
+    </top>
+
+    <center>
+        <HBox spacing="15" style="-fx-padding:10;">
+
+            <!-- Thành viên -->
+            <VBox spacing="8" VBox.vgrow="ALWAYS">
+                <Label text="Thành viên trong hộ"/>
+                <TableView fx:id="tableMembers" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colName1" text="Họ tên" prefWidth="200"/>
+                        <TableColumn fx:id="colRelation1" text="Quan hệ" prefWidth="150"/>
+                    </columns>
+                </TableView>
+
+                <HBox spacing="8">
+                    <Button text="Gỡ khỏi hộ" onAction="#removeMember"/>
+                    <TextField fx:id="tfTargetHousehold" promptText="ID hộ khác"/>
+                    <Button text="Chuyển hộ" onAction="#moveToOtherHousehold"/>
+                </HBox>
+            </VBox>
+
+            <!-- Chưa có nhà -->
+            <VBox spacing="8" VBox.vgrow="ALWAYS">
+                <Label text="Công dân chưa có hộ"/>
+                <TableView fx:id="tableNoHouse" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colName2" text="Họ tên" prefWidth="200"/>
+                        <TableColumn fx:id="colRelation2" text="Quan hệ" prefWidth="150"/>
+                    </columns>
+                </TableView>
+
+                <Button text="Thêm vào hộ" onAction="#addMember"/>
+            </VBox>
+
+        </HBox>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER" style="-fx-padding:10;">
+            <Button text="Đóng" onAction="#close"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

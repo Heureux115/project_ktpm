@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.demo4.controllers.AddHomelessCitizenController"
+      spacing="10"
+      style="-fx-padding:15">
+
+    <Label text="Thêm công dân chưa có nơi cư trú"
+           style="-fx-font-size:16px; -fx-font-weight:bold;"/>
+
+    <TextField fx:id="tfName" promptText="Họ và tên"/>
+    <TextField fx:id="tfRelation" promptText="Quan hệ"/>
+    <TextField fx:id="tfDob" promptText="Ngày sinh (yyyy-mm-dd)"/>
+    <TextField fx:id="tfCCCD" promptText="CCCD"/>
+    <TextField fx:id="tfJob" promptText="Nghề nghiệp"/>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Lưu" onAction="#save"/>
+        <Button text="Hủy" onAction="#cancel"/>
+    </HBox>
+
+    <Label fx:id="lblMessage" style="-fx-text-fill:red;"/>
+</VBox>
+

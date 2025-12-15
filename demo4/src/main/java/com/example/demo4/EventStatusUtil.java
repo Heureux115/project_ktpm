@@ -8,24 +8,21 @@ import java.time.format.DateTimeFormatter;
 
 public class EventStatusUtil {
 
-    // end_time của cậu đang lưu dạng "HH:mm" → format giống vậy
     private static final DateTimeFormatter TIME_FMT = DateTimeFormatter.ofPattern("HH:mm");
 
     /**
-     * Tự động set status = 'ĐÃ DIỄN RA'
-     * cho các sự kiện đã kết thúc (date < hôm nay
-     * hoặc date = hôm nay & end_time < giờ hiện tại)
+     * Tự động cập nhật trạng thái các sự kiện đã diễn ra
      */
     public static void autoUpdatePastEvents() {
         LocalDate today = LocalDate.now();
-        String nowTime = LocalTime.now().format(TIME_FMT); // "HH:mm"
+        String nowTime = LocalTime.now().format(TIME_FMT); // HH:mm
 
         try (Connection conn = Database.getConnection();
              PreparedStatement ps = conn.prepareStatement(
                      "UPDATE events " +
                              "SET status = N'ĐÃ DIỄN RA' " +
                              "WHERE status <> N'ĐÃ DIỄN RA' " +
-                             "AND (date < ? OR (date = ? AND end_time < ?))"
+                             "AND (event_date < ? OR (event_date = ? AND end_time < ?))"
              )) {
 
             String todayStr = today.toString(); // yyyy-MM-dd
@@ -41,4 +38,3 @@ public class EventStatusUtil {
         }
     }
 }
-

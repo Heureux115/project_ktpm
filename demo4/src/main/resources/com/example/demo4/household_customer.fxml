@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.demo4.controllers.HouseholdCustomerController">
 
     <top>
-        <HBox spacing="15" style="-fx-padding: 15; -fx-background-color: #e8e8e8;">
+        <ToolBar>
             <Label text="Hộ khẩu của bạn"
-                   style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+                   style="-fx-font-size:18px; -fx-font-weight:bold;"/>
             <Pane HBox.hgrow="ALWAYS"/>
-            <Button text="Quay lại Menu" onAction="#backToMenu"/>
-        </HBox>
+            <Button text="Menu" onAction="#backToMenu"/>
+        </ToolBar>
     </top>
 
     <center>
-        <TableView fx:id="table" prefWidth="900" prefHeight="500">
+        <TableView fx:id="table" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="colId" text="ID" prefWidth="80"/>
-                <TableColumn fx:id="colOwner" text="Chủ hộ" prefWidth="200"/>
-                <TableColumn fx:id="colAddress" text="Địa chỉ" prefWidth="400"/>
+                <TableColumn fx:id="colHead" text="Chủ hộ" prefWidth="300"/>
+                <TableColumn fx:id="colAddress" text="Địa chỉ" prefWidth="420"/>
+                <TableColumn fx:id="colMembers" text="Nhân khẩu" prefWidth="150"/>
             </columns>
         </TableView>
     </center>

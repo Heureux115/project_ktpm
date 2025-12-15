@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.geometry.Insets?>
 
-<?import javafx.scene.layout.HBox?>
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.demo4.controllers.EditHouseholdController"
-      spacing="10" style="-fx-padding: 10">
-    <Label text="Sửa Hộ khẩu" style="-fx-font-size: 16px; -fx-font-weight: bold"/>
-    <TextField fx:id="tfHead" promptText="Tên chủ hộ"/>
+      spacing="10"
+      style="-fx-padding:15;">
+
+    <Label text="Sửa hộ khẩu"
+           style="-fx-font-size:16px; -fx-font-weight:bold;"/>
+
+    <TextField fx:id="tfOwnerId" promptText="Nhập ID chủ hộ"/>
+    <TextField fx:id="tfOwnerCccd" promptText="Nhập CCCD chủ hộ"/>
     <TextField fx:id="tfAddress" promptText="Địa chỉ"/>
-    <HBox spacing="10">
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
         <Button text="Lưu" onAction="#handleSave"/>
         <Button text="Hủy" onAction="#handleCancel"/>
     </HBox>
+
 </VBox>
