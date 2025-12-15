@@ -15,30 +15,42 @@ public class WelcomeController {
     @FXML private ImageView box, mario;
     @FXML private Text successText, scrollText;
     @FXML private Pane rootPane;
-    @FXML private Button btnSkip;   // 👉 thêm nút skip
+    @FXML private Button btnSkip;
 
-    // Giữ animation để có thể stop khi skip
     private SequentialTransition intro;
 
     @FXML
     public void initialize() {
         try {
-            box.setImage(new Image(getClass().getResourceAsStream("/com/example/demo4/assets/box.jpg")));
-            mario.setImage(new Image(getClass().getResourceAsStream("/com/example/demo4/assets/mario.png")));
+            box.setImage(new Image(getClass().getResourceAsStream(
+                    "/com/example/demo4/assets/box.jpg")));
+            mario.setImage(new Image(getClass().getResourceAsStream(
+                    "/com/example/demo4/assets/mario.png")));
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        // ===== FIX 1: căn Mario đứng ngay dưới box =====
+        mario.setLayoutY(box.getLayoutY() + box.getFitHeight());
+
         playIntro();
+    }
+
+    private void playIntro() {
+        intro = buildIntroAnimation();
+        intro.setOnFinished(e -> goToMenu());
+        intro.play();
     }
 
     private SequentialTransition buildIntroAnimation() {
 
+        // ===== BOX BOUNCE =====
         TranslateTransition boxBounce = new TranslateTransition(Duration.millis(300), box);
         boxBounce.setByY(-30);
         boxBounce.setAutoReverse(true);
         boxBounce.setCycleCount(2);
 
+        // ===== LOGIN SUCCESS TEXT =====
         ScaleTransition textZoom = new ScaleTransition(Duration.millis(400), successText);
         textZoom.setFromX(0);
         textZoom.setFromY(0);
@@ -50,67 +62,54 @@ public class WelcomeController {
 
         ParallelTransition textAppear = new ParallelTransition(textZoom, textFade);
 
+        // ===== MARIO RUN TO BOX (FIX CHUẨN) =====
         TranslateTransition marioRun = new TranslateTransition(Duration.seconds(2), mario);
-        marioRun.setByX(550);
+        marioRun.setToX(box.getLayoutX() - mario.getLayoutX());
 
+        // ===== MARIO JUMP HIT BOX =====
         TranslateTransition marioJump = new TranslateTransition(Duration.millis(400), mario);
-        marioJump.setByY(-120);
+        marioJump.setByY(-box.getFitHeight());
         marioJump.setAutoReverse(true);
         marioJump.setCycleCount(2);
 
         SequentialTransition marioAnim = new SequentialTransition(marioRun, marioJump);
 
+        // ===== SCROLL TEXT =====
         FadeTransition scrollFade = new FadeTransition(Duration.millis(400), scrollText);
         scrollFade.setToValue(1);
 
-        TranslateTransition scrollMove = new TranslateTransition(Duration.seconds(3), scrollText);
-        scrollMove.setToX(-900);
+        TranslateTransition scrollMove = new TranslateTransition(Duration.seconds(5), scrollText);
+        scrollMove.setFromX(0);
+        scrollMove.setToX(-rootPane.getPrefWidth() - scrollText.getLayoutX());
 
         SequentialTransition scrollAnim = new SequentialTransition(
                 new PauseTransition(Duration.seconds(1)),
-                scrollFade, scrollMove
+                scrollFade,
+                scrollMove
         );
 
         return new SequentialTransition(
-                boxBounce,
-                textAppear,
-                marioAnim,
-                scrollAnim,
+                marioAnim,     // Mario chạy + nhảy
+                boxBounce,    // Box rung
+                textAppear,   // LOGIN SUCCESS bật
+                scrollAnim,   // Welcome chạy
                 new PauseTransition(Duration.seconds(1))
         );
     }
 
-    private void playIntro() {
-        intro = buildIntroAnimation();
-        intro.setOnFinished(e -> goToMenu());
-        intro.play();
-    }
-
-    private void goToMenu() {
-        try {
-            // dùng Main.showMenu() cho gọn nếu em đã có
-            Main.showMenu();
-
-            // Hoặc nếu muốn giữ như code cũ:
-            /*
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/demo4/menu.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) rootPane.getScene().getWindow();
-            stage.setScene(new Scene(root, 1000, 600));
-            stage.show();
-            */
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
     @FXML
     private void onSkip() {
-        // stop animation nếu đang chạy
         if (intro != null) {
             intro.stop();
         }
         goToMenu();
+    }
+
+    private void goToMenu() {
+        try {
+            Main.showMenu();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
