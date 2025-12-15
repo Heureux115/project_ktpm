@@ -17,6 +17,12 @@ public class assets {
         this.status = new SimpleStringProperty(status);
     }
 
+    @Override
+    public String toString() {
+        return name + " (" + quantity + ")";
+    }
+
+
     // ID
     public int getId() { return id.get(); }
     public void setId(int id) { this.id.set(id); }

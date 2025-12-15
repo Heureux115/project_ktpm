@@ -103,16 +103,25 @@ public class EventDao {
         }
     }
 
-    public static void insertWithCheck(Event e) throws SQLException {
-        String checkSql = "SELECT COUNT(*) FROM events WHERE event_date=? " +
-                "AND ((start_time<=? AND end_time>?) OR (start_time<? AND end_time>=?))";
+    public static int insertWithCheck(Event e) throws SQLException {
 
-        String insertSql = "INSERT INTO events(title,event_date,start_time,end_time,location,description,status) " +
-                "VALUES(?,?,?,?,?,?,?)";
+        String checkSql = """
+        SELECT COUNT(*) FROM events
+        WHERE event_date = ?
+          AND ((start_time <= ? AND end_time > ?)
+           OR  (start_time < ? AND end_time >= ?))
+    """;
+
+        String insertSql = """
+        INSERT INTO events(title,event_date,start_time,end_time,location,description,status)
+        OUTPUT INSERTED.id
+        VALUES (?,?,?,?,?,?,?)
+    """;
 
         try (Connection conn = Database.getConnection()) {
             conn.setAutoCommit(false);
 
+            // 1️⃣ Check trùng giờ
             try (PreparedStatement ps = conn.prepareStatement(checkSql)) {
                 ps.setString(1, e.getDate());
                 ps.setString(2, e.getStartTime());
@@ -126,6 +135,7 @@ public class EventDao {
                 }
             }
 
+            // 2️⃣ Insert + lấy ID
             try (PreparedStatement ps = conn.prepareStatement(insertSql)) {
                 ps.setString(1, e.getTitle());
                 ps.setString(2, e.getDate());
@@ -134,12 +144,20 @@ public class EventDao {
                 ps.setString(5, e.getLocation());
                 ps.setString(6, e.getDescription());
                 ps.setString(7, e.getStatus());
-                ps.executeUpdate();
+
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    int eventId = rs.getInt(1);
+                    conn.commit();
+                    return eventId;
+                }
             }
 
-            conn.commit();
+            conn.rollback();
+            throw new SQLException("Không tạo được sự kiện");
         }
     }
+
 
     // Cập nhật sự kiện
     public static void update(Event e) throws SQLException {

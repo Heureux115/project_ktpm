@@ -2,7 +2,10 @@ package com.example.demo4.controllers;
 
 import com.example.demo4.EventStatusUtil;
 import com.example.demo4.Main;
+import com.example.demo4.Session;
+import com.example.demo4.dao.BookingDao;
 import com.example.demo4.dao.EventDao;
+import com.example.demo4.models.Booking;
 import com.example.demo4.models.Event;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -192,6 +195,55 @@ public class CustomerController extends BaseController {
     }
 
     @FXML
+    private void openAssetRental() {
+
+        // 1. Phải chọn sự kiện
+        EventRow selected = eventTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showWarning("Chưa chọn", "Vui lòng chọn một sự kiện!");
+            return;
+        }
+
+        try {
+            // 2. Lấy booking của sự kiện
+            Booking booking = BookingDao.findByEventId(selected.getId());
+
+            if (booking == null) {
+                showWarning("Không hợp lệ", "Sự kiện chưa có booking!");
+                return;
+            }
+
+            // 3. Kiểm tra quyền: chỉ chủ sự kiện mới được thuê
+            if (booking.getUserId() != Session.getCurrentUserId()) {
+                showWarning(
+                        "Không có quyền",
+                        "Bạn không phải người tạo sự kiện này!"
+                );
+                return;
+            }
+
+            // 4. ĐÚNG NGƯỜI → mở form thuê tài sản
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/com/example/demo4/rent_asset.fxml")
+            );
+            Parent root = loader.load();
+
+            RentAssetController controller = loader.getController();
+            controller.setBookingId(booking.getId()); // 🔥 QUAN TRỌNG
+
+            Stage stage = new Stage();
+            stage.setTitle("Thuê tài sản");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Lỗi", "Không mở được thuê tài sản!");
+        }
+    }
+
+
+    @FXML
     private void onAddEvent() {
         try {
             FXMLLoader loader = new FXMLLoader(
@@ -215,6 +267,7 @@ public class CustomerController extends BaseController {
 
     @FXML
     private void onOpenUpdate() {
+
         EventRow selected = eventTable.getSelectionModel().getSelectedItem();
         if (selected == null) {
             showWarning("Chưa chọn", "Vui lòng chọn một sự kiện để cập nhật!");
@@ -222,6 +275,23 @@ public class CustomerController extends BaseController {
         }
 
         try {
+            // 🔒 CHECK QUYỀN
+            Booking booking = BookingDao.findByEventId(selected.getId());
+
+            if (booking == null) {
+                showWarning("Không hợp lệ", "Sự kiện chưa có booking!");
+                return;
+            }
+
+            if (booking.getUserId() != Session.getCurrentUserId()) {
+                showWarning(
+                        "Không có quyền",
+                        "Bạn không phải người tạo sự kiện này!"
+                );
+                return;
+            }
+
+            // ✅ ĐÚNG NGƯỜI → CHO SỬA
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("/com/example/demo4/update_event.fxml")
             );

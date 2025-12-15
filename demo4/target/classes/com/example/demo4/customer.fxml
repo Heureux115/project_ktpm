@@ -33,6 +33,7 @@
                 <Button text="Thêm sự kiện" onAction="#onAddEvent"/>
                 <Button text="Cập nhật" onAction="#onOpenUpdate"/>
                 <Button text="Reset bảng" onAction="#onResetTable"/>
+                <Button text="Thuê tài sản" onAction="#openAssetRental"/>
             </HBox>
 
         </VBox>

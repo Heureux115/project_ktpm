@@ -30,7 +30,7 @@
         <ComboBox fx:id="cbStatus" promptText="Tình trạng"/>
         <Button text="Thêm" onAction="#onAddAsset"/>
     </HBox>
-
+    <Button text="Trả tài sản" onAction="#openReturnAsset"/>
     <Label fx:id="lblMessage" style="-fx-text-fill: red;"/>
 
 </VBox>

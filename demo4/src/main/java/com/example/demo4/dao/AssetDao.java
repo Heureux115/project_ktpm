@@ -73,4 +73,63 @@ public class AssetDao {
                 rs.getString("status")
         );
     }
+
+    // Lấy asset theo ID (FOR UPDATE để khóa dòng)
+    public static assets findByIdForUpdate(Connection conn, int assetId) throws SQLException {
+        String sql = "SELECT * FROM assets WHERE id = ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, assetId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return new assets(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("type"),
+                        rs.getInt("quantity"),
+                        rs.getString("status")
+                );
+            }
+            return null;
+        }
+    }
+
+    public static List<assets> findAllAvailable() throws Exception {
+
+        List<assets> list = new ArrayList<>();
+
+        String sql = """
+        SELECT * FROM assets
+        WHERE quantity > 0
+    """;
+
+        try (Connection con = Database.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                list.add(new assets(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("type"),
+                        rs.getInt("quantity"),
+                        rs.getString("status")
+                ));
+            }
+        }
+
+        return list;
+    }
+
+    // Trừ số lượng asset
+    public static void decreaseQuantity(Connection conn, int assetId, int amount) throws SQLException {
+        String sql = "UPDATE assets SET quantity = quantity - ? WHERE id = ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, amount);
+            ps.setInt(2, assetId);
+            ps.executeUpdate();
+        }
+    }
 }

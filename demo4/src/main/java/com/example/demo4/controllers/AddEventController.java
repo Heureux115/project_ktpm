@@ -5,6 +5,9 @@ import com.example.demo4.models.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import com.example.demo4.Session;
+import com.example.demo4.dao.BookingDao;
+import com.example.demo4.models.Booking;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -72,7 +75,18 @@ public class AddEventController extends BaseController {
                     Event.STATUS_REGISTERED
             );
 
-            EventDao.insertWithCheck(event);
+            // ✅ 1. INSERT EVENT
+            int eventId = EventDao.insertWithCheck(event);
+
+            // ✅ 2. INSERT BOOKING NGƯỜI TẠO
+            Booking booking = new Booking(
+                    0,
+                    Session.getCurrentUserId(),
+                    eventId,
+                    "CREATOR",
+                    "UNPAID"
+            );
+            BookingDao.insert(booking);
 
             showInfo("Thành công", "Tạo sự kiện thành công!");
 

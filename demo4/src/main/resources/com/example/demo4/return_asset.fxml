@@ -1,0 +1,44 @@
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+<VBox spacing="10"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.demo4.controllers.ReturnAssetController"
+      style="-fx-padding:20">
+
+    <Label text="Danh sách tài sản đang thuê"
+           style="-fx-font-size:16; -fx-font-weight:bold"/>
+
+    <TableView fx:id="tblBookingAssets" prefHeight="220">
+        <columns>
+            <TableColumn fx:id="colAsset" text="Tài sản" prefWidth="200"/>
+            <TableColumn fx:id="colQty" text="Số lượng thuê" prefWidth="120"/>
+            <TableColumn fx:id="colReturned" text="Đã trả" prefWidth="120"/>
+        </columns>
+    </TableView>
+
+    <Separator/>
+
+    <Label fx:id="lblAssetInfo"/>
+
+    <TextField fx:id="tfReturnedQty"
+               promptText="Số lượng trả"/>
+
+    <TextArea fx:id="taConditionIn"
+              promptText="Tình trạng khi nhận về"
+              prefHeight="80"/>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Xác nhận trả"
+                onAction="#handleConfirmReturn"/>
+        <Button text="Hủy"
+                onAction="#handleCancel"/>
+    </HBox>
+
+</VBox>

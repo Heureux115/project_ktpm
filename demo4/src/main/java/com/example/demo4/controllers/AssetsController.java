@@ -1,14 +1,19 @@
 package com.example.demo4.controllers;
 
 import com.example.demo4.dao.AssetDao;
+import com.example.demo4.models.BookingAsset;
 import com.example.demo4.models.assets;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class AssetsController extends BaseController {
 
@@ -50,6 +55,27 @@ public class AssetsController extends BaseController {
         } catch (Exception e) {
             e.printStackTrace();
             showError("Lỗi", "Không tải được tài sản!");
+        }
+    }
+
+    @FXML
+    private void openReturnAsset() {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource(
+                            "/com/example/demo4/return_asset.fxml"
+                    )
+            );
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Trả tài sản");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Lỗi", "Không mở được màn hình trả tài sản!");
         }
     }
 
