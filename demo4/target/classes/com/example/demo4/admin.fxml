@@ -26,6 +26,7 @@
             <TableView fx:id="tblUsers" prefHeight="420">
                 <columns>
                     <TableColumn fx:id="colUsername" text="Username" prefWidth="300"/>
+                    <TableColumn fx:id="colCitizen" text="Công dân" prefWidth="400"/>
                     <TableColumn fx:id="colRole" text="Role" prefWidth="200"/>
                 </columns>
             </TableView>

@@ -2,42 +2,57 @@ package com.example.demo4.controllers;
 
 import com.example.demo4.Main;
 import com.example.demo4.Session;
+import com.example.demo4.dao.CitizenDao;
 import com.example.demo4.dao.HouseholdDao;
+import com.example.demo4.models.Citizen;
 import com.example.demo4.models.Household;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HouseholdCustomerController extends BaseController {
 
-    @FXML private TableView<Household> table;
-    @FXML private TableColumn<Household, String> colHead;
-    @FXML private TableColumn<Household, String> colAddress;
-    @FXML private TableColumn<Household, String> colMembers;
+    @FXML private TableView<Citizen> table;
+
+    @FXML private TableColumn<Citizen, String> colName;
+    @FXML private TableColumn<Citizen, String> colCccd;
+    @FXML private TableColumn<Citizen, String> colDob;
+    @FXML private TableColumn<Citizen, String> colRelation;
+    @FXML private TableColumn<Citizen, String> colJob;
 
     @FXML
     public void initialize() {
-        colHead.setCellValueFactory(data -> {
-            Integer cid = data.getValue().getHeadCitizenId();
-            return new SimpleStringProperty(cid == null ? "(chưa có chủ hộ)" : "CID: " + cid);
-        });
 
-        colAddress.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getAddress()));
+        colName.setCellValueFactory(c ->
+                new SimpleStringProperty(c.getValue().getFullName())
+        );
 
-        colMembers.setCellValueFactory(data -> {
-            // Nếu chưa load members từ DB → tạm để trống
-            List<?> m = data.getValue().getMembers();
-            return new SimpleStringProperty(m == null ? "-" : String.valueOf(m.size()));
-        });
+        colCccd.setCellValueFactory(c ->
+                new SimpleStringProperty(c.getValue().getCccd())
+        );
 
-        loadMyHouseholds();
+        colDob.setCellValueFactory(c ->
+                new SimpleStringProperty(
+                        c.getValue().getDob() == null ? "" : c.getValue().getDob().toString()
+                )
+        );
+
+        colRelation.setCellValueFactory(c ->
+                new SimpleStringProperty(c.getValue().getRelation())
+        );
+
+        colJob.setCellValueFactory(c ->
+                new SimpleStringProperty(c.getValue().getJob())
+        );
+
+        loadMyCitizens();
     }
 
-    private void loadMyHouseholds() {
+    private void loadMyCitizens() {
         try {
             Integer userId = Session.getCurrentUserId();
             if (userId == null) {
@@ -45,12 +60,20 @@ public class HouseholdCustomerController extends BaseController {
                 return;
             }
 
-            List<Household> list = HouseholdDao.findByOwner(userId);
-            table.getItems().setAll(list);
+            List<Household> households = HouseholdDao.findByOwner(userId);
+            List<Citizen> allCitizens = new ArrayList<>();
+
+            for (Household h : households) {
+                allCitizens.addAll(
+                        CitizenDao.findByHouseholdId(h.getHouseholdId())
+                );
+            }
+
+            table.getItems().setAll(allCitizens);
 
         } catch (Exception e) {
             e.printStackTrace();
-            showError("Lỗi", "Không thể tải hộ khẩu: " + e.getMessage());
+            showError("Lỗi", "Không thể tải nhân khẩu");
         }
     }
 

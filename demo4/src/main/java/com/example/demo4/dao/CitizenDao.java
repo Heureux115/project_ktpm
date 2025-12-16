@@ -339,4 +339,36 @@ public class CitizenDao {
 
         return list;
     }
+
+    public static List<Citizen> findByHouseholdId(int householdId) throws SQLException {
+        List<Citizen> list = new ArrayList<>();
+
+        String sql = """
+        SELECT *
+        FROM citizens
+        WHERE household_id = ?
+    """;
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, householdId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                list.add(new Citizen(
+                        rs.getInt("id"),
+                        rs.getString("full_name"),
+                        rs.getString("relation"),
+                        rs.getString("dob"),
+                        rs.getString("cccd"),
+                        rs.getString("job"),
+                        rs.getInt("household_id"),
+                        rs.getObject("user_id", Integer.class)
+                ));
+            }
+        }
+        return list;
+    }
+
 }

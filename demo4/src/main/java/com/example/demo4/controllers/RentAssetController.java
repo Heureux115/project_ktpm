@@ -1,6 +1,10 @@
 package com.example.demo4.controllers;
 
 import com.example.demo4.dao.BookingAssetDao;
+import com.example.demo4.dao.BookingDao;
+import com.example.demo4.dao.EventDao;
+import com.example.demo4.models.Booking;
+import com.example.demo4.models.Event;
 import com.example.demo4.models.assets;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -34,6 +38,39 @@ public class RentAssetController extends BaseController {
     @FXML
     private void handleRent() {
 
+        // ================== 🚫 CHECK EVENT THEO BOOKING ID ==================
+        try {
+            // 1️⃣ Lấy booking
+            Booking booking = BookingDao.findById(bookingId);
+            if (booking == null) {
+                showError("Lỗi", "Booking không tồn tại!");
+                return;
+            }
+
+            // 2️⃣ Lấy event từ booking
+            Event event = EventDao.findById(booking.getEventId());
+            if (event == null) {
+                showError("Lỗi", "Sự kiện không tồn tại!");
+                return;
+            }
+
+            // 3️⃣ Check trạng thái event
+            if (!Event.STATUS_CONFIRMED.equals(event.getStatus())) {
+                showWarning(
+                        "Không thể thuê tài sản",
+                        "Chỉ được thuê tài sản khi sự kiện đã được XÁC NHẬN!"
+                );
+                return;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Lỗi", "Không kiểm tra được trạng thái sự kiện!");
+            return;
+        }
+        // ====================================================================
+
+        // ===== CHECK DỮ LIỆU NHẬP =====
         if (cbAsset.getValue() == null) {
             showWarning("Thiếu thông tin", "Chọn tài sản!");
             return;
@@ -53,11 +90,25 @@ public class RentAssetController extends BaseController {
             return;
         }
 
+        assets asset = cbAsset.getValue();
+        String assetStatus = asset.getStatus().toLowerCase();
+
+        if (assetStatus.contains("hư") || assetStatus.contains("hu hong")
+                || assetStatus.contains("đang sử dụng")
+                || assetStatus.contains("dang su dung")) {
+
+            showWarning(
+                    "Không thể thuê",
+                    "Tài sản đang hư hỏng hoặc đang được sử dụng!"
+            );
+            return;
+        }
+
+        // ===== THUÊ TÀI SẢN =====
         try {
-            // 🔥 GỌI DAO CHUẨN (có trừ quantity + check)
             BookingAssetDao.rentAsset(
                     bookingId,
-                    cbAsset.getValue().getId(),
+                    asset.getId(),
                     quantity,
                     taConditionOut.getText().trim()
             );
@@ -69,6 +120,7 @@ public class RentAssetController extends BaseController {
             showError("Không thể thuê", e.getMessage());
         }
     }
+
 
     private void closeStage() {
         cbAsset.getScene().getWindow().hide();

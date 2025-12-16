@@ -6,11 +6,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import java.time.LocalDate;
+
 public class AddHomelessCitizenController extends BaseController {
 
     @FXML private TextField tfName;
     @FXML private TextField tfRelation;
-    @FXML private TextField tfDob;
+    @FXML private DatePicker dpDob;
     @FXML private TextField tfCCCD;
     @FXML private TextField tfJob;
     @FXML private Label lblMessage;
@@ -24,16 +26,25 @@ public class AddHomelessCitizenController extends BaseController {
     @FXML
     private void save() {
         try {
+            // ✅ validate bắt buộc
             if (tfName.getText().isBlank() || tfCCCD.getText().isBlank()) {
                 lblMessage.setText("Tên và CCCD không được trống!");
                 return;
             }
 
+            // ✅ lấy ngày sinh
+            LocalDate dob = dpDob.getValue();
+            if (dob == null) {
+                lblMessage.setText("Vui lòng chọn ngày sinh!");
+                return;
+            }
+
+            // ✅ tạo Citizen
             Citizen c = new Citizen(
                     0,
                     tfName.getText().trim(),
                     tfRelation.getText().trim(),
-                    tfDob.getText().trim(),
+                    dob.toString(),                      // ✅ LocalDate
                     tfCCCD.getText().trim(),
                     tfJob.getText().trim(),
                     null,   // household_id

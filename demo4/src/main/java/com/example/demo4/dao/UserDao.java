@@ -1,5 +1,7 @@
 package com.example.demo4.dao;
 
+import com.example.demo4.Database;
+import com.example.demo4.dto.UserRowData;
 import com.example.demo4.models.User;
 
 import java.sql.*;
@@ -28,6 +30,35 @@ public class UserDao extends BaseDao {
         }
     }
 
+    public static List<UserRowData> findAllWithCitizenName() throws SQLException {
+
+        String sql = """
+            SELECT u.id,
+                   u.username,
+                   u.role,
+                   c.full_name AS citizen_name
+            FROM users u
+            LEFT JOIN citizens c ON c.user_id = u.id
+            ORDER BY u.id
+        """;
+
+        List<UserRowData> list = new ArrayList<>();
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                list.add(new UserRowData(
+                        rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("citizen_name"),
+                        rs.getString("role")
+                ));
+            }
+        }
+        return list;
+    }
     public static User findByUsername(String username) throws SQLException {
         String sql = BASE_SELECT + " WHERE username=?";
 

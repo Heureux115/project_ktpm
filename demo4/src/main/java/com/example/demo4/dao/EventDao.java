@@ -158,6 +158,38 @@ public class EventDao {
         }
     }
 
+    public static Event findById(int eventId) throws Exception {
+
+        String sql = """
+    SELECT id, title, event_date, start_time, end_time,
+           location, description, status
+    FROM events
+    WHERE id = ?
+""";
+
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, eventId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Event(
+                            rs.getInt("id"),
+                            rs.getString("title"),
+                            rs.getString("event_date"), // 🔥 SỬA Ở ĐÂY
+                            rs.getString("start_time"),
+                            rs.getString("end_time"),
+                            rs.getString("location"),
+                            rs.getString("description"),
+                            rs.getString("status")
+                    );
+                }
+            }
+        }
+        return null;
+    }
 
     // Cập nhật sự kiện
     public static void update(Event e) throws SQLException {

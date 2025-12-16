@@ -1,5 +1,6 @@
 package com.example.demo4.dao;
 
+import com.example.demo4.Database;
 import com.example.demo4.models.Booking;
 
 import java.sql.Connection;
@@ -55,5 +56,32 @@ public class BookingDao {
         }
     }
 
+    public static Booking findById(int bookingId) throws Exception {
+
+        String sql = """
+            SELECT id, user_id, event_id, status, payment_status
+            FROM bookings
+            WHERE id = ?
+        """;
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, bookingId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Booking(
+                            rs.getInt("id"),
+                            rs.getInt("user_id"),
+                            rs.getInt("event_id"),
+                            rs.getString("status"),
+                            rs.getString("payment_status")
+                    );
+                }
+            }
+        }
+        return null;
+    }
 
 }

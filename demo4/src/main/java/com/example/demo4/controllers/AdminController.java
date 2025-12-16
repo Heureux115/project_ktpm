@@ -2,6 +2,7 @@ package com.example.demo4.controllers;
 
 import com.example.demo4.Main;
 import com.example.demo4.dao.UserDao;
+import com.example.demo4.dto.UserRowData;
 import com.example.demo4.models.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,12 +21,13 @@ public class AdminController extends BaseController {
 
     @FXML private TableView<UserRow> tblUsers;
     @FXML private TableColumn<UserRow, String> colUsername;
+    @FXML private TableColumn<UserRow, String> colCitizen;
     @FXML private TableColumn<UserRow, String> colRole;
-    @FXML private Label lblMessage;
 
     @FXML
     public void initialize() {
         colUsername.setCellValueFactory(c -> c.getValue().usernameProperty());
+        colCitizen.setCellValueFactory(c -> c.getValue().citizenNameProperty());
         colRole.setCellValueFactory(c -> c.getValue().roleProperty());
         loadUsers();
     }
@@ -33,12 +35,18 @@ public class AdminController extends BaseController {
     // ================= LOAD USERS =================
     private void loadUsers() {
         try {
-            List<User> users = UserDao.findAll();
+            List<UserRowData> data = UserDao.findAllWithCitizenName();
             ObservableList<UserRow> rows = FXCollections.observableArrayList();
 
-            for (User u : users) {
-                rows.add(new UserRow(u.getId(), u.getUsername(), u.getRole()));
+            for (UserRowData d : data) {
+                rows.add(new UserRow(
+                        d.id,
+                        d.username,
+                        d.citizenName,
+                        d.role
+                ));
             }
+
             tblUsers.setItems(rows);
 
         } catch (Exception e) {
@@ -127,11 +135,15 @@ public class AdminController extends BaseController {
     public static class UserRow {
         private final javafx.beans.property.SimpleIntegerProperty id;
         private final javafx.beans.property.SimpleStringProperty username;
+        private final javafx.beans.property.SimpleStringProperty citizenName;
         private final javafx.beans.property.SimpleStringProperty role;
 
-        public UserRow(int id, String username, String role) {
+        public UserRow(int id, String username, String citizenName, String role) {
             this.id = new javafx.beans.property.SimpleIntegerProperty(id);
             this.username = new javafx.beans.property.SimpleStringProperty(username);
+            this.citizenName = new javafx.beans.property.SimpleStringProperty(
+                    citizenName == null ? "—" : citizenName
+            );
             this.role = new javafx.beans.property.SimpleStringProperty(role);
         }
 
@@ -141,6 +153,10 @@ public class AdminController extends BaseController {
 
         public javafx.beans.property.StringProperty usernameProperty() {
             return username;
+        }
+
+        public javafx.beans.property.StringProperty citizenNameProperty() {
+            return citizenName;
         }
 
         public javafx.beans.property.StringProperty roleProperty() {

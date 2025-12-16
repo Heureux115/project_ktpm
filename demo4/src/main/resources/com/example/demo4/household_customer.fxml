@@ -7,7 +7,7 @@
 
     <top>
         <ToolBar>
-            <Label text="Hộ khẩu của bạn"
+            <Label text="Nhân khẩu thuộc hộ khẩu của bạn"
                    style="-fx-font-size:18px; -fx-font-weight:bold;"/>
             <Pane HBox.hgrow="ALWAYS"/>
             <Button text="Menu" onAction="#backToMenu"/>
@@ -17,9 +17,27 @@
     <center>
         <TableView fx:id="table" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="colHead" text="Chủ hộ" prefWidth="300"/>
-                <TableColumn fx:id="colAddress" text="Địa chỉ" prefWidth="420"/>
-                <TableColumn fx:id="colMembers" text="Nhân khẩu" prefWidth="150"/>
+
+                <TableColumn fx:id="colName"
+                             text="Họ tên"
+                             prefWidth="180"/>
+
+                <TableColumn fx:id="colCccd"
+                             text="CCCD"
+                             prefWidth="150"/>
+
+                <TableColumn fx:id="colDob"
+                             text="Ngày sinh"
+                             prefWidth="120"/>
+
+                <TableColumn fx:id="colRelation"
+                             text="Quan hệ"
+                             prefWidth="120"/>
+
+                <TableColumn fx:id="colJob"
+                             text="Nghề nghiệp"
+                             prefWidth="200"/>
+
             </columns>
         </TableView>
     </center>
