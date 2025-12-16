@@ -1,32 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.demo4.controllers.RegisterController">
+            fx:controller="com.example.demo4.controllers.WelcomeController"
+            style="-fx-background-color: #0f172a;">
 
+    <!-- CENTER -->
     <center>
-        <VBox spacing="10" alignment="CENTER" style="-fx-padding:30;">
+        <VBox alignment="CENTER"
+              spacing="18"
+              style="-fx-padding: 60 40;">
 
-            <Label text="Đăng ký tài khoản"
-                   style="-fx-font-size:18px; -fx-font-weight:bold;"/>
+            <!-- Icon -->
+            <Label text="🎉"
+                   style="-fx-font-size: 72px;" />
 
-            <TextField fx:id="txtUsername" promptText="Username" maxWidth="280"/>
-            <PasswordField fx:id="txtPassword" promptText="Password" maxWidth="280"/>
-            <PasswordField fx:id="txtPassword2" promptText="Confirm Password" maxWidth="280"/>
-            <TextField fx:id="txtFullname" promptText="Họ tên" maxWidth="280"/>
-            <TextField fx:id="txtEmail" promptText="Email" maxWidth="280"/>
-            <ChoiceBox fx:id="roleBox" maxWidth="280"/>
+            <!-- Success text -->
+            <Label fx:id="lblSuccess"
+                   text="ĐĂNG NHẬP THÀNH CÔNG"
+                   style="-fx-font-size: 28px;
+                          -fx-font-weight: bold;
+                          -fx-text-fill: #facc15;"
+                   opacity="0"/>
 
-            <HBox spacing="10">
-                <Button text="Đăng ký" onAction="#onRegister"/>
-                <Button text="Quay lại" onAction="#onBack"/>
-            </HBox>
+            <!-- Subtitle -->
+            <Label fx:id="lblSubtitle"
+                   text="Chào mừng bạn đến với hệ thống"
+                   style="-fx-font-size: 16px;
+                          -fx-text-fill: #e5e7eb;"
+                   opacity="0"/>
 
-            <Label fx:id="lblMessage" textFill="red"/>
+            <!-- Loading text -->
+            <Label fx:id="lblLoading"
+                   text="Đang tải giao diện..."
+                   style="-fx-font-size: 14px;
+                          -fx-text-fill: #94a3b8;"
+                   opacity="0"/>
+
+            <!-- Spacer -->
+            <Region minHeight="30"/>
+
+            <!-- Progress -->
+            <ProgressBar fx:id="progressBar"
+                         prefWidth="280"
+                         progress="0"
+                         opacity="0"/>
 
         </VBox>
     </center>
+
+    <!-- BOTTOM -->
+    <bottom>
+        <HBox alignment="CENTER_RIGHT"
+              style="-fx-padding: 15 25;">
+            <Button fx:id="btnSkip"
+                    text="Bỏ qua"
+                    onAction="#onSkip"
+                    style="-fx-background-color: transparent;
+                           -fx-text-fill: #cbd5f5;
+                           -fx-font-size: 13px;
+                           -fx-cursor: hand;"/>
+        </HBox>
+    </bottom>
 
 </BorderPane>

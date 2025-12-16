@@ -30,6 +30,12 @@ public class AddCitizenController extends BaseController {
                 setDisable(empty || date.isAfter(LocalDate.now()));
             }
         });
+
+            System.out.println(
+                    getClass().getResource("/com.example.demo4/css/add_citizen.css")
+            );
+
+
     }
 
     public void setStage(Stage stage) {
