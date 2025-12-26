@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -18,6 +19,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         primaryStage = stage;
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/com/example/demo4/assets/icon.jpg")));
         stage.setTitle("Quản lý Nhà Văn Hóa");
         showLogin();
         stage.show();
@@ -52,12 +54,12 @@ public class Main extends Application {
 
     public static void showLogin() throws IOException {
         Parent root = FXMLLoader.load(Main.class.getResource("/com/example/demo4/login.fxml"));
-        primaryStage.setScene(new Scene(root, 800, 550));
+        primaryStage.setScene(new Scene(root, 600, 650));
     }
 
     public static void showRegister() throws IOException {
         Parent root = FXMLLoader.load(Main.class.getResource("/com/example/demo4/register.fxml"));
-        primaryStage.setScene(new Scene(root, 800, 550));
+        primaryStage.setScene(new Scene(root, 800, 750));
     }
 
     public static void showCustomer() throws IOException {

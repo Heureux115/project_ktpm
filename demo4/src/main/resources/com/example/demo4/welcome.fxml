@@ -10,13 +10,13 @@
 
     <!-- Hộp ? -->
     <ImageView fx:id="box"
-               layoutX="370" layoutY="250"
-               fitWidth="64" fitHeight="64"/>
+               layoutX="400" layoutY="250"
+               fitWidth="100" fitHeight="100"/>
 
     <!-- Mario -->
     <ImageView fx:id="mario"
-               layoutX="50" layoutY="350"
-               fitWidth="64" fitHeight="64"/>
+               layoutX="50" layoutY="300"
+               fitWidth="200" fitHeight="150"/>
 
     <!-- Text bật ra -->
     <Text fx:id="successText"
@@ -28,8 +28,9 @@
 
     <!-- Text cuộn cuối -->
     <Text fx:id="scrollText"
-          text="Welcome to the system!\nLoading dashboard..."
-          layoutX="800" layoutY="450"
+          text="Welcome to the system!&#10;Loading dashboard..."
+          textAlignment="CENTER"
+          layoutX="800" layoutY="500"
           fill="white"
           style="-fx-font-size: 22px;"
           opacity="0"

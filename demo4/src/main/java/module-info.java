@@ -7,6 +7,7 @@ module com.example.demo4 {
 
     // Nếu bạn dùng SQL Server JDBC driver
     requires com.microsoft.sqlserver.jdbc;
+    requires java.desktop;
 
     // Mở cho JavaFX controller có thể truy cập
     opens com.example.demo4 to javafx.fxml;
