@@ -10,7 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class MenuController {
+public class MenuController extends BaseController{
 
     @FXML
     public void goToManagement() throws Exception {
@@ -101,4 +101,28 @@ public class MenuController {
         }
     }
 
+    @FXML
+    public void goToStatistics() throws Exception {
+        if (!Session.isLoggedIn()) {
+            Main.showLogin();
+            return;
+        }
+
+        String role = Session.getCurrentRole();
+        if ("ADMIN".equalsIgnoreCase(role)) {
+            Main.showStatistics();
+        } else {
+            showWarning("Không có quyền", "Chỉ ADMIN mới xem được thống kê!");
+        }
+    }
+
+    @FXML
+    public void goToTemporaryRecords() throws Exception {
+        if (!Session.isLoggedIn()) {
+            Main.showLogin();
+            return;
+        }
+
+        Main.showTemporaryRecords();
+    }
 }

@@ -44,7 +44,7 @@
 
                 <!-- Action Buttons -->
                 <HBox alignment="CENTER_LEFT" spacing="12" style="-fx-padding: 10 0 0 0;">
-                    <Button fx:id="btnDelete" style="-fx-background-color: #e74c3c;                                    -fx-text-fill: white;                                    -fx-font-size: 13px;                                    -fx-font-weight: 600;                                    -fx-background-radius: 6;                                    -fx-padding: 10 18;                                    -fx-cursor: hand;" styleClass="btn-danger" text="🗑 Xóa tài khoản" />
+                    <Button fx:id="btnDelete" onAction="#onDelete" style="-fx-background-color: #e74c3c;                                    -fx-text-fill: white;                                    -fx-font-size: 13px;                                    -fx-font-weight: 600;                                    -fx-background-radius: 6;                                    -fx-padding: 10 18;                                    -fx-cursor: hand;" styleClass="btn-danger" text="🗑 Xóa tài khoản" />
 
                     <Label fx:id="lblMessage" style="-fx-text-fill: #27ae60;                                   -fx-font-size: 12px;                                   -fx-font-weight: 600;" />
                 </HBox>
@@ -57,13 +57,19 @@
     <bottom>
         <HBox alignment="CENTER" spacing="12" style="-fx-padding: 16 25;                      -fx-background-color: white;                      -fx-border-color: #e0e6ed;                      -fx-border-width: 1 0 0 0;">
 
+            <!-- NÚT THỐNG KÊ MỚI -->
+            <Button onAction="#onStatistics" style="-fx-background-color: #9b59b6;                            -fx-text-fill: white;                            -fx-font-size: 13px;                            -fx-font-weight: 600;                            -fx-background-radius: 6;                            -fx-padding: 10 20;                            -fx-cursor: hand;" styleClass="btn-action" text="📊 Thống kê" />
+
+            <!-- NÚT TẠM VẮNG/TRÚ MỚI -->
+            <Button onAction="#onTemporaryRecords" style="-fx-background-color: #16a085;                            -fx-text-fill: white;                            -fx-font-size: 13px;                            -fx-font-weight: 600;                            -fx-background-radius: 6;                            -fx-padding: 10 20;                            -fx-cursor: hand;" styleClass="btn-action" text="🏠 Tạm vắng/trú" />
+
             <Button onAction="#onManageAssets" style="-fx-background-color: #3498db;                            -fx-text-fill: white;                            -fx-font-size: 13px;                            -fx-font-weight: 600;                            -fx-background-radius: 6;                            -fx-padding: 10 20;                            -fx-cursor: hand;" styleClass="btn-action" text="📦 Cơ sở vật chất" />
 
             <Button onAction="#onApproveEvents" style="-fx-background-color: #27ae60;                            -fx-text-fill: white;                            -fx-font-size: 13px;                            -fx-font-weight: 600;                            -fx-background-radius: 6;                            -fx-padding: 10 20;                            -fx-cursor: hand;" styleClass="btn-action" text="✅ Duyệt sự kiện" />
 
             <Button onAction="#onViewPastEvents" style="-fx-background-color: #95a5a6;                            -fx-text-fill: white;                            -fx-font-size: 13px;                            -fx-font-weight: 600;                            -fx-background-radius: 6;                            -fx-padding: 10 20;                            -fx-cursor: hand;" styleClass="btn-action" text="📅 Sự kiện cũ" />
 
-            <Button onAction="#onAssignAccount" style="-fx-background-color: #9b59b6;                            -fx-text-fill: white;                            -fx-font-size: 13px;                            -fx-font-weight: 600;                            -fx-background-radius: 6;                            -fx-padding: 10 20;                            -fx-cursor: hand;" styleClass="btn-action" text="🔗 Gán tài khoản" />
+            <Button onAction="#onAssignAccount" style="-fx-background-color: #e67e22;                            -fx-text-fill: white;                            -fx-font-size: 13px;                            -fx-font-weight: 600;                            -fx-background-radius: 6;                            -fx-padding: 10 20;                            -fx-cursor: hand;" styleClass="btn-action" text="🔗 Gán tài khoản" />
         </HBox>
     </bottom>
 

@@ -2,12 +2,12 @@ package com.example.demo4.controllers;
 
 import com.example.demo4.Main;
 import com.example.demo4.dao.UserDao;
+import com.example.demo4.dao.CitizenDao;
 import com.example.demo4.models.User;
+import com.example.demo4.models.Citizen;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import com.example.demo4.dao.CitizenDao;
-import com.example.demo4.models.Citizen;
 
 public class RegisterController extends BaseController {
 
@@ -27,56 +27,71 @@ public class RegisterController extends BaseController {
 
     @FXML
     public void onRegister(ActionEvent e) {
-        String u = txtUsername.getText().trim();
-        String p = txtPassword.getText();
-        String p2 = txtPassword2.getText();
-        String name = txtFullname.getText().trim();
+
+        String username = txtUsername.getText().trim();
+        String password = txtPassword.getText();
+        String password2 = txtPassword2.getText();
+        String fullName = txtFullname.getText().trim();
         String email = txtEmail.getText().trim();
         String role = roleBox.getValue();
 
-        if (u.isEmpty() || p.isEmpty() || p2.isEmpty()) {
+        // ===== VALIDATE CƠ BẢN =====
+        if (username.isEmpty() || password.isEmpty() || password2.isEmpty()) {
             showWarning("Thiếu thông tin", "Vui lòng nhập đầy đủ username và password!");
             return;
         }
-        if (!p.equals(p2)) {
+
+        if (!password.equals(password2)) {
             showWarning("Sai mật khẩu", "Mật khẩu nhập lại không khớp!");
             return;
         }
 
+        // ===== ✅ VALIDATE MẬT KHẨU MẠNH =====
+        if (password.length() < 8) {
+            showWarning("Mật khẩu yếu", "Mật khẩu phải có ít nhất 8 ký tự!");
+            return;
+        }
+
         try {
-            // check username
-            if (UserDao.findByUsername(u) != null) {
+            // ===== CHECK USERNAME TRÙNG =====
+            if (UserDao.findByUsername(username) != null) {
                 showWarning("Trùng username", "Tên đăng nhập đã tồn tại!");
                 return;
             }
 
-            // 1. Tạo Citizen
-            Citizen citizen = new Citizen(
-                    0,
-                    name,
-                    "Chủ hộ",
-                    "",
-                    "",
-                    "",
-                    null,   // householdId
-                    null    // userId (chưa có)
-            );
+            // ===== TẠO CITIZEN TỐI THIỂU =====
+            Citizen citizen = new Citizen();
+            citizen.setFullName(fullName.isBlank() ? username : fullName);
+            citizen.setRelation(null);
+            citizen.setHouseholder(false);
+            citizen.setHouseholdId(null);
+            citizen.setUserId(null);
+
+            // ===== ⚠️ CCCD ĐỂ NULL CHO REGISTER =====
+            // Người dùng sẽ cập nhật CCCD sau khi đăng ký thành công
+            citizen.setCccd(null);
+
+            // ===== DOB ĐỂ NULL =====
+            citizen.setDob(null);
 
             int citizenId = CitizenDao.insert(citizen);
 
-            // 2. Tạo User
-            User user = new User(u, p, role, name, email);
+            // ===== TẠO USER =====
+            // TODO: Hash password trước khi lưu (cần thêm BCrypt library)
+            User user = new User(username, password, role, fullName, email);
             int userId = UserDao.insert(user);
 
-            // 3. Gán user vào citizen
+            // ===== GÁN USER ↔ CITIZEN =====
             CitizenDao.assignUser(citizenId, userId);
 
-            showInfo("Thành công", "Đăng ký thành công!");
+            showInfo("Thành công",
+                    "Đăng ký thành công!\n" +
+                            "Vui lòng cập nhật CCCD trong phần Quản lý tài khoản.");
             Main.showLogin();
 
         } catch (Exception ex) {
             ex.printStackTrace();
-            showError("Lỗi", "Không thể đăng ký tài khoản: " + ex.getMessage());
+            showError("Lỗi", "Không thể đăng ký: " + ex.getMessage());
         }
     }
 

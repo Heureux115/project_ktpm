@@ -120,15 +120,62 @@ public class UserDao extends BaseDao {
         throw new Exception("Không thể tạo user!");
     }
 
-    public static void deleteById(int id) throws SQLException {
-        try (Connection conn = getConn();
-             PreparedStatement ps =
-                     conn.prepareStatement("DELETE FROM users WHERE id=?")) {
+    public static void deleteById(int userId) throws SQLException {
+        try (Connection conn = Database.getConnection()) {
+            conn.setAutoCommit(false);
 
-            ps.setInt(1, id);
-            ps.executeUpdate();
+            try {
+
+                try (PreparedStatement ps = conn.prepareStatement(
+                        "DELETE FROM temporary_records WHERE citizen_id IN (SELECT id FROM citizens WHERE user_id = ?)")) {
+                    ps.setInt(1, userId);
+                    ps.executeUpdate();
+                }
+
+                // Xóa dữ liệu trong bảng citizen_changes liên quan tới citizen của user
+                try (PreparedStatement ps = conn.prepareStatement(
+                        "DELETE FROM citizen_changes WHERE citizen_id IN (SELECT id FROM citizens WHERE user_id = ?)")) {
+                    ps.setInt(1, userId);
+                    ps.executeUpdate();
+                }
+
+                // Xóa citizen trước
+                try (PreparedStatement ps = conn.prepareStatement(
+                        "DELETE FROM citizens WHERE user_id = ?")) {
+                    ps.setInt(1, userId);
+                    ps.executeUpdate();
+                }
+
+                // Xóa booking_assets trước
+                try (PreparedStatement ps = conn.prepareStatement(
+                        "DELETE FROM booking_assets WHERE booking_id IN (SELECT id FROM bookings WHERE user_id = ?)")) {
+                    ps.setInt(1, userId);
+                    ps.executeUpdate();
+                }
+
+                // Xóa booking
+                try (PreparedStatement ps = conn.prepareStatement(
+                        "DELETE FROM bookings WHERE user_id = ?")) {
+                    ps.setInt(1, userId);
+                    ps.executeUpdate();
+                }
+
+                // Cuối cùng xóa user
+                try (PreparedStatement ps = conn.prepareStatement(
+                        "DELETE FROM users WHERE id = ?")) {
+                    ps.setInt(1, userId);
+                    ps.executeUpdate();
+                }
+
+                conn.commit();
+            } catch (SQLException e) {
+                conn.rollback();
+                throw e;
+            }
         }
     }
+
+
 
     public static List<User> findAvailableForAssign() throws Exception {
         String sql = """

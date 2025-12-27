@@ -59,7 +59,7 @@ public class AddEventController extends BaseController {
         String end   = cbEndHour.getValue()   + ":" + cbEndMinute.getValue();
 
         try {
-            if (EventDao.hasTimeConflict(date.toString(), start, end)) {
+            if (EventDao.hasTimeConflict(date, start, end)){
                 showError("Trùng giờ", "Sự kiện này trùng giờ với sự kiện khác!");
                 return;
             }

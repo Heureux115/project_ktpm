@@ -8,7 +8,8 @@ import java.time.format.DateTimeFormatter;
 
 public class EventStatusUtil {
 
-    private static final DateTimeFormatter TIME_FMT = DateTimeFormatter.ofPattern("HH:mm");
+    private static final DateTimeFormatter TIME_FMT =
+            DateTimeFormatter.ofPattern("HH:mm");
 
     /**
      * Tự động cập nhật trạng thái các sự kiện đã diễn ra
@@ -22,7 +23,7 @@ public class EventStatusUtil {
                      "UPDATE events " +
                              "SET status = N'ĐÃ DIỄN RA' " +
                              "WHERE status <> N'ĐÃ DIỄN RA' " +
-                             "AND (event_date < ? OR (event_date = ? AND end_time < ?))"
+                             "AND (date < ? OR (date = ? AND end_time < ?))"
              )) {
 
             String todayStr = today.toString(); // yyyy-MM-dd

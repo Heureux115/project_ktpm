@@ -72,6 +72,17 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root, 1000, 600));
     }
 
+    public static void showStatistics() throws Exception {
+        Parent root = FXMLLoader.load(Main.class.getResource("/com/example/demo4/statistics.fxml"));
+        primaryStage.setScene(new Scene(root, 1000, 600));
+    }
+
+    public static void showTemporaryRecords() throws Exception {
+        Parent root = FXMLLoader.load(Main.class.getResource("/com/example/demo4/temporary_records.fxml"));
+        primaryStage.setScene(new Scene(root, 1000, 600));
+    }
+
+
     public static void main(String[]args) {
         launch(args);
     }

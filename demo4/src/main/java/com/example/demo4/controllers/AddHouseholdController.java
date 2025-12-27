@@ -71,16 +71,20 @@ public class AddHouseholdController extends BaseController {
                     ownerId
             );
 
+            // Thay cho đoạn insert cũ
             HouseholdDao.insert(h);
+            int newHouseholdId = HouseholdDao.getNextHouseholdId(); // lấy id mới
+            h.setHouseholdId(newHouseholdId);
 
-            // Gán chủ hộ vào hộ khẩu
+// Gán chủ hộ vào hộ khẩu
             if (headCitizenId != null) {
                 var citizen = CitizenDao.findById(headCitizenId);
                 if (citizen != null) {
-                    citizen.setHouseholdId(h.getHouseholdId());
+                    citizen.setHouseholdId(newHouseholdId);
                     CitizenDao.update(citizen);
                 }
             }
+
 
             showInfo("Thành công", "Đã thêm hộ khẩu mới!");
 
@@ -92,6 +96,7 @@ public class AddHouseholdController extends BaseController {
             showError("Lỗi", "Không thể thêm hộ khẩu!");
         }
     }
+
 
     @FXML
     private void handleCancel() {
