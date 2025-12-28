@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<?import java.lang.String?>
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.demo4.controllers.CustomerController"
+            style="-fx-background-color: #f5f7fa;">
+
+    <top>
+        <VBox spacing="0" style="-fx-background-color: #f5f7fa;">
+            <padding>
+                <Insets top="25" right="30" bottom="10" left="30"/>
+            </padding>
+            <!-- Header -->
+            <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 0 0 10 0;">
+                <Label text="🎉" style="-fx-font-size: 24px;"/>
+                <Label text="Sự Kiện Nhà Văn Hóa"
+                       style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Button text="🏠 Menu"
+                        onAction="#backToMenu"
+                        style="-fx-background-color: #ecf0f1;
+                               -fx-text-fill: #7f8c8d;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: 600;
+                               -fx-background-radius: 6;
+                               -fx-padding: 8 15;
+                               -fx-cursor: hand;">
+                    <styleClass>
+                        <String fx:value="button-cancel"/>
+                    </styleClass>
+                </Button>
+                <Button text="🚪 Đăng Xuất"
+                        onAction="#onLogout"
+                        style="-fx-background-color: #e74c3c;
+                               -fx-text-fill: white;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 6;
+                               -fx-padding: 8 15;
+                               -fx-cursor: hand;">
+                    <styleClass>
+                        <String fx:value="button-danger"/>
+                    </styleClass>
+                </Button>
+            </HBox>
+            <Separator style="-fx-background-color: #e0e6ed;"/>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="10" style="-fx-padding: 20 30 20 30; -fx-background-color: #f5f7fa;">
+            <TableView fx:id="eventTable" VBox.vgrow="ALWAYS"
+                       style="-fx-background-color: white;
+                              -fx-border-color: #dce1e8;
+                              -fx-border-radius: 6;
+                              -fx-background-radius: 6;">
+                <columns>
+                    <TableColumn fx:id="colTitle" text="Tiêu Đề" prefWidth="220"/>
+                    <TableColumn fx:id="colDate" text="Ngày" prefWidth="130"/>
+                    <TableColumn fx:id="colStart" text="Bắt Đầu" prefWidth="90"/>
+                    <TableColumn fx:id="colEnd" text="Kết Thúc" prefWidth="90"/>
+                    <TableColumn fx:id="colLocation" text="Địa Điểm" prefWidth="200"/>
+                    <TableColumn fx:id="colStatus" text="Trạng Thái" prefWidth="140"/>
+                </columns>
+            </TableView>
+
+            <HBox spacing="12" alignment="CENTER" style="-fx-padding: 15 0 0 0;">
+                <Button text="➕ Thêm Sự Kiện"
+                        onAction="#onAddEvent"
+                        prefWidth="150"
+                        style="-fx-background-color: #27ae60;
+                               -fx-text-fill: white;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 6;
+                               -fx-padding: 12 20;
+                               -fx-cursor: hand;">
+                    <styleClass>
+                        <String fx:value="button-success"/>
+                    </styleClass>
+                </Button>
+
+                <Button text="✏️ Cập Nhật"
+                        onAction="#onOpenUpdate"
+                        prefWidth="140"
+                        style="-fx-background-color: #3498db;
+                               -fx-text-fill: white;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 6;
+                               -fx-padding: 12 20;
+                               -fx-cursor: hand;">
+                    <styleClass>
+                        <String fx:value="button-primary"/>
+                    </styleClass>
+                </Button>
+
+                <Button text="🔄 Reset Bảng"
+                        onAction="#onResetTable"
+                        prefWidth="140"
+                        style="-fx-background-color: #f39c12;
+                               -fx-text-fill: white;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 6;
+                               -fx-padding: 12 20;
+                               -fx-cursor: hand;">
+                    <styleClass>
+                        <String fx:value="button-warning"/>
+                    </styleClass>
+                </Button>
+
+                <Button text="🛠️ Thuê Tài Sản"
+                        onAction="#openAssetRental"
+                        prefWidth="150"
+                        style="-fx-background-color: #9b59b6;
+                               -fx-text-fill: white;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 6;
+                               -fx-padding: 12 20;
+                               -fx-cursor: hand;">
+                    <styleClass>
+                        <String fx:value="button-secondary"/>
+                    </styleClass>
+                </Button>
+            </HBox>
+        </VBox>
+    </center>
+
+    <stylesheets>
+        <String fx:value="css/customer.css"/>
+    </stylesheets>
+
+</BorderPane>
