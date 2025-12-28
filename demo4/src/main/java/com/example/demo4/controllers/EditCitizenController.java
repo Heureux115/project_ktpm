@@ -2,6 +2,8 @@ package com.example.demo4.controllers;
 
 import com.example.demo4.dao.CitizenDao;
 import com.example.demo4.models.Citizen;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -21,7 +23,7 @@ public class EditCitizenController extends BaseController {
 
     @FXML private TextField tfJob;
     @FXML private TextField tfWorkplace;
-
+    @FXML private ChoiceBox<String> cbStatus;
     @FXML private TextField tfPreviousAddress;
     @FXML private DatePicker dpRegisterDate;
 
@@ -62,6 +64,12 @@ public class EditCitizenController extends BaseController {
             dpRegisterDate.setValue(c.getRegisterDate());
         }
 
+        if (c.getStatus() != null && !c.getStatus().isEmpty()) {
+            cbStatus.setValue(c.getStatus());
+        } else {
+            cbStatus.setValue("Thường trú"); // Giá trị mặc định
+        }
+
         cbHouseholder.setSelected(Boolean.TRUE.equals(c.getHouseholder()));
         if (cbHouseholder.isSelected()) {
             tfRelation.clear();
@@ -74,6 +82,13 @@ public class EditCitizenController extends BaseController {
 
     @FXML
     public void initialize() {
+        cbStatus.setItems(FXCollections.observableArrayList(
+                "Thường trú",
+                "Tạm trú",
+                "Tạm vắng",
+                "Mới sinh",
+                "Đã qua đời"
+        ));
         cbHouseholder.selectedProperty().addListener((obs, oldV, isSelected) -> {
             if (isSelected) {
                 tfRelation.clear();
@@ -81,6 +96,13 @@ public class EditCitizenController extends BaseController {
             } else {
                 tfRelation.setDisable(false);
             }
+        });
+        Platform.runLater(() -> {
+            Stage s = (Stage) tfFullName.getScene().getWindow();
+            s.setWidth(900);
+            s.setHeight(600);
+            s.setResizable(false); // nếu muốn
+            s.centerOnScreen();
         });
     }
 
@@ -91,8 +113,9 @@ public class EditCitizenController extends BaseController {
         if (tfFullName.getText().isBlank()
                 || dpDob.getValue() == null
                 || tfCccd.getText().isBlank()
-                || tfJob.getText().isBlank()) {
-            setMsg("Thiếu thông tin bắt buộc: Họ tên, ngày sinh, CCCD, nghề nghiệp!");
+                || tfJob.getText().isBlank()
+                || cbStatus.getValue() == null) {
+            setMsg("Thiếu thông tin bắt buộc: Họ tên, ngày sinh, CCCD, nghề nghiệp, tình trạng!");
             return;
         }
 
@@ -123,6 +146,9 @@ public class EditCitizenController extends BaseController {
 
             citizen.setPreviousAddress(blankToNull(tfPreviousAddress.getText()));
             citizen.setRegisterDate(dpRegisterDate.getValue());
+
+            citizen.setStatus(cbStatus.getValue());
+
             citizen.setHouseholder(cbHouseholder.isSelected());
             citizen.setRelation(cbHouseholder.isSelected() ? null : tfRelation.getText().trim());
 

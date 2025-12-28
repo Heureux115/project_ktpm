@@ -1,14 +1,17 @@
 package com.example.demo4.controllers;
 
 import com.example.demo4.Session;
+import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.stage.Stage;
 
 import java.util.Optional;
 
 public abstract class BaseController {
-
+    @FXML
     protected void showInfo(String title, String msg) {
         showAlert(title, msg, Alert.AlertType.INFORMATION);
     }
@@ -20,7 +23,13 @@ public abstract class BaseController {
     protected void showError(String title, String msg) {
         showAlert(title, msg, Alert.AlertType.ERROR);
     }
-
+    @FXML
+    protected void handleCancel(javafx.event.ActionEvent event) {
+        ((Stage) ((Node) event.getSource())
+                .getScene()
+                .getWindow())
+                .close();
+    }
     protected void showAlert(String title, String msg, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(title);

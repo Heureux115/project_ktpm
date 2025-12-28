@@ -164,5 +164,4 @@
     <stylesheets>
         <String fx:value="@/com/example/demo4/css/add_homeless_citizen.css"/>
     </stylesheets>
-
 </VBox>

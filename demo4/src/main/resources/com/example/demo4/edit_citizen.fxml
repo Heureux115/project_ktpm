@@ -3,6 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
 
+<?import java.lang.String?>
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.demo4.controllers.EditCitizenController"
       spacing="0"
@@ -109,6 +110,11 @@
                 <DatePicker fx:id="dpRegisterDate"/>
             </VBox>
 
+            <VBox spacing="6">
+                <Label text="Trạng thái hiện tại *"/>
+                <ChoiceBox fx:id="cbStatus" prefWidth="300"/>
+            </VBox>
+
             <Separator/>
 
             <!-- Chủ hộ -->
@@ -144,5 +150,7 @@
                 style="-fx-background-color: #ecf0f1;
                        -fx-text-fill: #7f8c8d;"/>
     </HBox>
-
+    <stylesheets>
+        <String fx:value="css/edit_citizen.css" />
+    </stylesheets>
 </VBox>

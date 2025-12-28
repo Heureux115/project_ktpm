@@ -10,6 +10,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.Node;
 
 public class WelcomeController {
 
@@ -17,8 +19,38 @@ public class WelcomeController {
     @FXML private Text successText, scrollText;
     @FXML private Pane rootPane;
     @FXML private Button btnSkip;
+    @FXML
+    private ProgressIndicator loadingSpinner;
 
     private SequentialTransition intro;
+    private Timeline loadingTimeline;
+    private void centerHorizontally(Node node) {
+        node.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                node.layoutXProperty().bind(
+                        newScene.widthProperty()
+                                .subtract(node.boundsInParentProperty().get().getWidth())
+                                .divide(2)
+                );
+            }
+        });
+    }
+    private void centerTextToBox(Text text, ImageView box) {
+        Runnable align = () -> {
+            double boxCenterX =
+                    box.getLayoutX() + box.getBoundsInParent().getWidth() / 2;
+
+            double textWidth = text.getBoundsInLocal().getWidth();
+
+            text.setLayoutX(boxCenterX - textWidth / 2);
+        };
+
+        // Khi layout xong
+        Platform.runLater(align);
+
+        // Nếu text scale / zoom / đổi nội dung → tự căn lại
+        text.boundsInLocalProperty().addListener((obs, o, n) -> align.run());
+    }
 
     @FXML
     public void initialize() {
@@ -30,7 +62,9 @@ public class WelcomeController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        centerHorizontally(box);
+        centerTextToBox(successText, box);
+        centerTextToBox(scrollText, box);
         // ===== FIX 1: căn Mario đứng ngay dưới box =====
         // Sử dụng Platform.runLater để đảm bảo layout đã load xong mới lấy tọa độ
         Platform.runLater(() -> {
@@ -39,10 +73,34 @@ public class WelcomeController {
         });
     }
 
+
     private void playIntro() {
         intro = buildIntroAnimation();
-        intro.setOnFinished(e -> goToMenu());
+        intro.setOnFinished(e ->{
+            stopLoadingDots();
+            goToMenu();
+        });
         intro.play();
+    }
+    private void startLoadingDots() {
+        if (loadingTimeline != null) return;
+
+        loadingTimeline = new Timeline(new KeyFrame(Duration.millis(400), e -> {
+            String currentText = scrollText.getText();
+            // Logic đơn giản:
+            if (currentText.endsWith("...")) {
+                scrollText.setText("Welcome to the system!\nLoading dashboard");
+            } else {
+                scrollText.setText(currentText + ".");
+            }
+        }));
+        loadingTimeline.setCycleCount(Animation.INDEFINITE); // Chạy vô tận
+        loadingTimeline.play();
+    }
+    private void stopLoadingDots() {
+        if (loadingTimeline != null) {
+            loadingTimeline.stop();
+        }
     }
 
     private SequentialTransition buildIntroAnimation() {
@@ -90,27 +148,29 @@ public class WelcomeController {
         marioJump.setAutoReverse(true);
         marioJump.setCycleCount(2);
 
-        SequentialTransition marioAnim = new SequentialTransition(marioRun, marioJump);
+
+        SequentialTransition marioAnim = new SequentialTransition(marioRun,marioJump);
 
         // ===== SCROLL TEXT =====
-        FadeTransition scrollFade = new FadeTransition(Duration.millis(400), scrollText);
-        scrollFade.setToValue(1);
+        FadeTransition showLoadingText = new FadeTransition(Duration.millis(500), scrollText);
+        showLoadingText.setToValue(1);
 
-        TranslateTransition scrollMove = new TranslateTransition(Duration.seconds(5), scrollText);
-        scrollMove.setFromX(0);
-        scrollMove.setToX(-rootPane.getPrefWidth() - scrollText.getLayoutX());
+        // Kích hoạt timeline dấu chấm ngay khi chữ bắt đầu hiện
+        showLoadingText.setOnFinished(e -> startLoadingDots());
 
-        SequentialTransition scrollAnim = new SequentialTransition(
-                new PauseTransition(Duration.seconds(1)),
-                scrollFade,
-                scrollMove
-        );
+        TranslateTransition runAway = new TranslateTransition(Duration.seconds(2), mario);
+        // Chạy ra khỏi màn hình (vượt qua chiều rộng pane + 100px dư)
+        // Lưu ý: setToX tính từ vị trí gốc ban đầu của Mario
+        runAway.setToX(rootPane.getPrefWidth() + 200);
+
+
 
         return new SequentialTransition(
                 marioAnim,     // Mario chạy + nhảy
                 boxBounce,    // Box rung
                 textAppear,   // LOGIN SUCCESS bật
-                scrollAnim,   // Welcome chạy
+                showLoadingText,
+                runAway,
                 new PauseTransition(Duration.seconds(1))
         );
     }

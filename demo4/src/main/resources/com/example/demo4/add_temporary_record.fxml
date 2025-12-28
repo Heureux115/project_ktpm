@@ -71,5 +71,7 @@
                 style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
         <Button text="❌ Hủy" onAction="#handleCancel" prefWidth="120"/>
     </HBox>
-
+    <stylesheets>
+        <String fx:value="css/add_temporary_record.css" />
+    </stylesheets>
 </VBox>

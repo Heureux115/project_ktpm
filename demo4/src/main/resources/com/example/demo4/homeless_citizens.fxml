@@ -2,6 +2,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 
+<?import java.lang.String?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.demo4.controllers.HomelessCitizenController"
             style="-fx-background-color: #f5f7fa;">
@@ -113,5 +114,7 @@
                            -fx-cursor: hand;"/>
         </HBox>
     </bottom>
-
+    <stylesheets>
+        <String fx:value="css/homeless_citizen.css" />
+    </stylesheets>
 </BorderPane>

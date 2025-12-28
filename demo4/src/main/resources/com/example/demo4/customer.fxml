@@ -73,7 +73,7 @@
     </bottom>
 
     <stylesheets>
-        <String fx:value="@../citizen.css" />
+        <String fx:value="@../customer.css" />
     </stylesheets>
 
 </BorderPane>

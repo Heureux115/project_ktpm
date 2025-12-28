@@ -3,6 +3,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 
+<?import java.lang.String?>
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.example.demo4.controllers.ManageHouseholdMembersController"
             style="-fx-background-color: #f5f7fa;">
@@ -140,5 +141,7 @@
 
         </HBox>
     </center>
-
+    <stylesheets>
+        <String fx:value="css/manage_household_members.css" />
+    </stylesheets>
 </BorderPane>
