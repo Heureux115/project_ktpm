@@ -59,7 +59,7 @@
     </bottom>
 
     <stylesheets>
-        <String fx:value="css/event_approval.css" />
+        <String fx:value="../../../css/event_approval.css" />
     </stylesheets>
 
 </BorderPane>

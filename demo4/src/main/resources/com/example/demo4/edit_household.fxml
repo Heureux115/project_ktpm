@@ -126,7 +126,7 @@
                   -fx-padding: 15 0 0 0;"/>
 
     <stylesheets>
-        <String fx:value="css/edit_household.css"/>
+        <String fx:value="../../../css/edit_household.css"/>
     </stylesheets>
 
 </VBox>

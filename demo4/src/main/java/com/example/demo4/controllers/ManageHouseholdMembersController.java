@@ -8,6 +8,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import java.sql.SQLException;
+
 public class ManageHouseholdMembersController extends BaseController {
 
     @FXML private TableView<Citizen> tableMembers;
@@ -39,15 +41,11 @@ public class ManageHouseholdMembersController extends BaseController {
 
     @FXML
     public void initialize() {
-        colName1.setCellValueFactory(d ->
-                new javafx.beans.property.SimpleStringProperty(d.getValue().getFullName()));
-        colRelation1.setCellValueFactory(d ->
-                new javafx.beans.property.SimpleStringProperty(d.getValue().getRelation()));
+        colName1.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().getFullName()));
+        colRelation1.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().getRelation()));
 
-        colName2.setCellValueFactory(d ->
-                new javafx.beans.property.SimpleStringProperty(d.getValue().getFullName()));
-        colRelation2.setCellValueFactory(d ->
-                new javafx.beans.property.SimpleStringProperty(d.getValue().getRelation()));
+        colName2.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().getFullName()));
+        colRelation2.setCellValueFactory(d -> new javafx.beans.property.SimpleStringProperty(d.getValue().getRelation()));
 
         tableMembers.setItems(members);
         tableNoHouse.setItems(noHouse);
@@ -55,7 +53,7 @@ public class ManageHouseholdMembersController extends BaseController {
 
     private void loadData() {
         try {
-            members.setAll(CitizenDao.findByHousehold(householdId));
+            members.setAll(CitizenDao.findByHouseholdId(householdId));
             noHouse.setAll(CitizenDao.findWithoutHousehold());
         } catch (Exception e) {
             e.printStackTrace();
@@ -63,7 +61,6 @@ public class ManageHouseholdMembersController extends BaseController {
         }
     }
 
-    // ➖ Gỡ thành viên khỏi hộ
     @FXML
     private void removeMember() {
         Citizen c = tableMembers.getSelectionModel().getSelectedItem();
@@ -81,7 +78,6 @@ public class ManageHouseholdMembersController extends BaseController {
         }
     }
 
-    // ➕ Thêm người chưa có nhà
     @FXML
     private void addMember() {
         Citizen c = tableNoHouse.getSelectionModel().getSelectedItem();
@@ -99,7 +95,6 @@ public class ManageHouseholdMembersController extends BaseController {
         }
     }
 
-    // ➡ Chuyển sang hộ khác
     @FXML
     private void moveToOtherHousehold() {
         Citizen c = tableMembers.getSelectionModel().getSelectedItem();
@@ -118,12 +113,14 @@ public class ManageHouseholdMembersController extends BaseController {
 
         try {
             CitizenDao.moveCitizenToHousehold(c.getId(), targetId);
+            showInfo("Thành công", "Đã chuyển công dân sang hộ khẩu mới!");
             loadData();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
-            showError("Lỗi", "Không thể chuyển thành viên!");
+            showError("Lỗi", e.getMessage());
         }
     }
+
 
     @FXML
     private void close() {

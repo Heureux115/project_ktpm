@@ -3,14 +3,12 @@ package com.example.demo4.controllers;
 import com.example.demo4.Main;
 import com.example.demo4.dao.UserDao;
 import com.example.demo4.dto.UserRowData;
-import com.example.demo4.models.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
@@ -162,5 +160,24 @@ public class AdminController extends BaseController {
         public javafx.beans.property.StringProperty roleProperty() {
             return role;
         }
+    }
+
+    @FXML
+    public void onStatistics() {
+        if (!requireAdmin()) return;
+        openWindow("/com/example/demo4/statistics.fxml", "Thống kê nhân khẩu");
+    }
+
+    @FXML
+    public void onTemporaryRecords() {
+        if (!requireAdmin()) return;
+        openWindow("/com/example/demo4/temporary_records.fxml", "Quản lý tạm vắng/tạm trú");
+    }
+
+    @FXML
+    public void onCitizenHistory() {
+        if (!requireAdmin()) return;
+
+        showInfo("Hướng dẫn", "Vui lòng vào Quản lý hộ khẩu, chọn công dân rồi xem lịch sử.");
     }
 }

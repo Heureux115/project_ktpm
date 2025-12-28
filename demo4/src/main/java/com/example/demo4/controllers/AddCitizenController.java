@@ -3,108 +3,87 @@ package com.example.demo4.controllers;
 import com.example.demo4.dao.CitizenDao;
 import com.example.demo4.models.Citizen;
 import javafx.fxml.FXML;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.time.LocalDate;
 
 public class AddCitizenController extends BaseController {
 
-    @FXML private TextField tfName;
-    @FXML private TextField tfRelation;
+    @FXML private TextField tfFullName;
+    @FXML private TextField tfAlias;
     @FXML private DatePicker dpDob;
-    @FXML private TextField tfCCCD;
+    @FXML private TextField tfPlaceOfBirth;
+    @FXML private TextField tfHometown;
+    @FXML private TextField tfEthnicity;
+
+    @FXML private TextField tfCccd;
+    @FXML private DatePicker dpCccdIssueDate;
+    @FXML private TextField tfCccdIssuePlace;
+
     @FXML private TextField tfJob;
+    @FXML private TextField tfWorkplace;
+
+    @FXML private TextField tfPreviousAddress;
+    @FXML private DatePicker dpRegisterDate;
+
+    @FXML private CheckBox cbHouseholder;
+    @FXML private TextField tfRelation;
+
+    @FXML private Label lblMessage;
 
     private Stage stage;
     private Runnable onAddSuccess;
-    private Integer householdId;
+    private Integer householdId; // truyền từ màn Household
+    private Integer userId = null; // nếu cần gán user sau
+
+    public void setStage(Stage stage) { this.stage = stage; }
+    public void setOnAddSuccess(Runnable r) { this.onAddSuccess = r; }
+    public void setHouseholdId(Integer householdId) { this.householdId = householdId; }
+    public void setUserId(Integer userId) { this.userId = userId; }
 
     @FXML
     public void initialize() {
-        dpDob.setDayCellFactory(picker -> new javafx.scene.control.DateCell() {
-            @Override
-            public void updateItem(LocalDate date, boolean empty) {
+        // DOB không được sau hôm nay
+        dpDob.setDayCellFactory(picker -> new DateCell() {
+            @Override public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
                 setDisable(empty || date.isAfter(LocalDate.now()));
             }
         });
-    }
 
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
-
-    public void setOnAddSuccess(Runnable r) {
-        this.onAddSuccess = r;
-    }
-
-    public void setHouseholdId(Integer householdId) {
-        this.householdId = householdId;
-    }
-
-    @FXML
-    private void handleAdd() {
-
-        if (tfName.getText().isBlank()
-                || tfRelation.getText().isBlank()
-                || tfCCCD.getText().isBlank()
-                || tfJob.getText().isBlank()
-                || dpDob.getValue() == null) {
-
-            showWarning("Thiếu thông tin", "Vui lòng nhập đầy đủ thông tin!");
-            return;
-        }
-
-        if (!isValidCCCD(tfCCCD.getText().trim())) {
-            showWarning("Sai CCCD", "CCCD phải gồm đúng 12 chữ số!");
-            return;
-        }
-
-        if (!isValidDob(dpDob.getValue())) {
-            showWarning("Sai ngày sinh", "Ngày sinh không hợp lệ!");
-            return;
-        }
-
-        try {
-            Citizen citizen = new Citizen(
-                    0,
-                    tfName.getText().trim(),
-                    tfRelation.getText().trim(),
-                    dpDob.getValue().toString(), // ⭐ DatePicker → String
-                    tfCCCD.getText().trim(),
-                    tfJob.getText().trim(),
-                    householdId,
-                    null
-            );
-
-            CitizenDao.insert(citizen);
-
-            if (onAddSuccess != null) onAddSuccess.run();
-            closeStage();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            showError("Lỗi", "Không thể thêm công dân!");
-        }
+        // checkbox chủ hộ => relation auto empty + disable
+        cbHouseholder.selectedProperty().addListener((obs, oldV, isSelected) -> {
+            if (isSelected) {
+                tfRelation.clear();
+                tfRelation.setDisable(true);
+            } else {
+                tfRelation.setDisable(false);
+            }
+        });
     }
 
     @FXML
     private void handleCancel() {
-        closeStage();
+        close();
     }
 
-    private void closeStage() {
+    private void close() {
         if (stage != null) stage.close();
+        else {
+            Stage s = (Stage) tfFullName.getScene().getWindow();
+            s.close();
+        }
     }
 
-    // ===== VALIDATE =====
-    private boolean isValidCCCD(String cccd) {
-        return cccd.matches("\\d{12}");
+    private void setMsg(String msg) {
+        if (lblMessage != null) lblMessage.setText(msg);
+        else showWarning("Thông báo", msg);
     }
 
-    private boolean isValidDob(LocalDate dob) {
-        return !dob.isAfter(LocalDate.now());
+    private String blankToNull(String s) {
+        if (s == null) return null;
+        String t = s.trim();
+        return t.isEmpty() ? null : t;
     }
 }

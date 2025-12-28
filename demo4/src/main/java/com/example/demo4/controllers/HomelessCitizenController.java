@@ -24,22 +24,16 @@ public class HomelessCitizenController extends BaseController {
 
     @FXML private ComboBox<Household> cbHousehold;
 
-    private final ObservableList<Citizen> data =
-            FXCollections.observableArrayList();
+    private final ObservableList<Citizen> data = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
 
-        colId.setCellValueFactory(c ->
-                new javafx.beans.property.SimpleObjectProperty<>(c.getValue().getId()));
-        colName.setCellValueFactory(c ->
-                new javafx.beans.property.SimpleStringProperty(c.getValue().getFullName()));
-        colRelation.setCellValueFactory(c ->
-                new javafx.beans.property.SimpleStringProperty(c.getValue().getRelation()));
-        colDob.setCellValueFactory(c ->
-                new javafx.beans.property.SimpleStringProperty(c.getValue().getDob()));
-        colCCCD.setCellValueFactory(c ->
-                new javafx.beans.property.SimpleStringProperty(c.getValue().getCccd()));
+        colId.setCellValueFactory(c -> new javafx.beans.property.SimpleObjectProperty<>(c.getValue().getId()));
+        colName.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getFullName()));
+        colRelation.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getRelation()));
+        colDob.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getDob() == null ? "" : c.getValue().getDob().toString()));
+        colCCCD.setCellValueFactory(c -> new javafx.beans.property.SimpleStringProperty(c.getValue().getCccd()));
 
         table.setItems(data);
 
@@ -58,11 +52,7 @@ public class HomelessCitizenController extends BaseController {
 
     private void loadHouseholds() {
         try {
-            cbHousehold.setItems(
-                    FXCollections.observableArrayList(
-                            HouseholdDao.findAll()
-                    )
-            );
+            cbHousehold.setItems(FXCollections.observableArrayList(HouseholdDao.findAll()));
         } catch (Exception e) {
             e.printStackTrace();
             showError("Lỗi", "Không tải được danh sách hộ khẩu");
@@ -75,8 +65,7 @@ public class HomelessCitizenController extends BaseController {
         Household h = cbHousehold.getValue();
 
         if (c == null || h == null) {
-            showWarning("Thiếu thông tin",
-                    "Vui lòng chọn công dân và hộ khẩu!");
+            showWarning("Thiếu thông tin", "Chọn công dân và hộ khẩu!");
             return;
         }
 
@@ -91,24 +80,16 @@ public class HomelessCitizenController extends BaseController {
     }
 
     @FXML
-    private void close() {
-        Stage s = (Stage) table.getScene().getWindow();
-        s.close();
-    }
-
-    @FXML
     private void openAddCitizen() {
         try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/com/example/demo4/add_homeless_citizen.fxml")
-            );
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/demo4/add_homeless_citizen.fxml"));
             Parent root = loader.load();
 
             AddHomelessCitizenController c = loader.getController();
             c.setParent(this);
 
             Stage stage = new Stage();
-            stage.setTitle("Thêm công dân");
+            stage.setTitle("Thêm công dân (chưa có hộ)");
             stage.setScene(new Scene(root));
             stage.show();
 
@@ -116,6 +97,12 @@ public class HomelessCitizenController extends BaseController {
             e.printStackTrace();
             showError("Lỗi", "Không mở được form");
         }
+    }
+
+    @FXML
+    private void close() {
+        Stage s = (Stage) table.getScene().getWindow();
+        s.close();
     }
 
     public void reload() {

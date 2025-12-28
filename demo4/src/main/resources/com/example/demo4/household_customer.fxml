@@ -48,7 +48,6 @@
                     <TableColumn fx:id="colName"
                                  text="Họ tên"
                                  prefWidth="180"/>
-
                     <TableColumn fx:id="colCccd"
                                  text="CCCD"
                                  prefWidth="150"/>
@@ -70,7 +69,7 @@
     </center>
 
     <stylesheets>
-        <String fx:value="css/household_customer.css"/>
+        <String fx:value="../../../css/household_customer.css"/>
     </stylesheets>
 
 </BorderPane>

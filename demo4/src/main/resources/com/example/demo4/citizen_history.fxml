@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="0" style="-fx-background-color: #f5f7fa;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo4.controllers.CitizenHistoryController">
+
+    <padding>
+        <Insets bottom="25" left="30" right="30" top="25" />
+    </padding>
+   <children>
+
+       <!-- HEADER -->
+       <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-padding: 0 0 20 0;">
+      <children>
+              <Label style="-fx-font-size: 28px;" text="📜" />
+              <VBox spacing="2">
+                 <children>
+                     <Label style="-fx-font-size: 22px;                           -fx-font-weight: bold;                           -fx-text-fill: #2c3e50;" text="Lịch Sử Thay Đổi" />
+                     <Label fx:id="lblCitizenInfo" style="-fx-font-size: 12px;                           -fx-text-fill: #7f8c8d;" text="Công dân: [Đang tải...]" />
+                 </children>
+              </VBox>
+
+              <Region HBox.hgrow="ALWAYS" />
+
+              <Button onAction="#refresh" style="-fx-background-color: #3498db;                        -fx-text-fill: white;                        -fx-font-size: 13px;                        -fx-font-weight: 600;                        -fx-background-radius: 6;                        -fx-padding: 10 18;                        -fx-cursor: hand;" styleClass="btn-refresh" text="🔄 Làm mới" />
+
+              <Button onAction="#close" style="-fx-background-color: #95a5a6;                        -fx-text-fill: white;                        -fx-font-size: 13px;                        -fx-font-weight: 600;                        -fx-background-radius: 6;                        -fx-padding: 10 18;                        -fx-cursor: hand;" styleClass="btn-close" text="✕ Đóng" />
+      </children>
+       </HBox>
+
+       <Separator style="-fx-background-color: #e0e6ed; -fx-padding: 0 0 20 0;" />
+
+       <!-- BẢNG LỊCH SỬ -->
+       <VBox spacing="12" VBox.vgrow="ALWAYS">
+      <children>
+
+              <!-- Action Bar -->
+              <HBox spacing="12" style="-fx-background-color: white;                      -fx-border-color: #dce1e8;                      -fx-border-radius: 8;                      -fx-background-radius: 8;                      -fx-padding: 12;">
+         <children>
+
+                     <Button onAction="#viewDetails" style="-fx-background-color: #2196F3;                            -fx-text-fill: white;                            -fx-font-size: 13px;                            -fx-font-weight: 600;                            -fx-background-radius: 6;                            -fx-padding: 10 20;                            -fx-cursor: hand;" styleClass="btn-view" text="👁 Xem chi tiết" />
+
+                     <Region HBox.hgrow="ALWAYS" />
+
+                     <!-- Info Badge -->
+                     <HBox alignment="CENTER" spacing="8" style="-fx-background-color: #e3f2fd;                          -fx-background-radius: 6;                          -fx-padding: 8 15;">
+            <children>
+                            <Label style="-fx-font-size: 14px;" text="ℹ">
+                           <font>
+                              <Font size="20.0" />
+                           </font></Label>
+                            <Label style="-fx-font-size: 12px;                               -fx-text-fill: #1976d2;                               -fx-font-weight: 600;" text="Chọn 1 dòng để xem chi tiết" />
+            </children>
+                     </HBox>
+         </children>
+              </HBox>
+
+              <!-- Table Container -->
+              <VBox style="-fx-background-color: white;                      -fx-border-color: #dce1e8;                      -fx-border-radius: 8;                      -fx-background-radius: 8;                      -fx-padding: 15;" VBox.vgrow="ALWAYS">
+         <children>
+
+                     <TableView fx:id="table" styleClass="table-view-custom" VBox.vgrow="ALWAYS">
+                         <columns>
+                             <TableColumn fx:id="colId" prefWidth="60" style="-fx-alignment: CENTER;" text="ID" />
+                             <TableColumn fx:id="colChangeType" prefWidth="160" text="Loại thay đổi" />
+                             <TableColumn fx:id="colChangeDate" prefWidth="130" style="-fx-alignment: CENTER;" text="Ngày thay đổi" />
+                             <TableColumn fx:id="colFromHousehold" prefWidth="220" text="Từ hộ khẩu" />
+                             <TableColumn fx:id="colToHousehold" prefWidth="220" text="Đến hộ khẩu" />
+                             <TableColumn fx:id="colNote" prefWidth="280" text="Ghi chú" />
+                         </columns>
+                     </TableView>
+         </children>
+              </VBox>
+
+              <!-- Statistics Summary -->
+              <HBox spacing="15" style="-fx-background-color: white;                      -fx-border-color: #dce1e8;                      -fx-border-radius: 8;                      -fx-background-radius: 8;                      -fx-padding: 15;">
+         <children>
+
+                     <!-- Stat Card 1 -->
+                     <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #e3f2fd;                          -fx-background-radius: 6;                          -fx-padding: 12 15;" HBox.hgrow="ALWAYS">
+            <children>
+                            <Label style="-fx-font-size: 20px;" text="📊" />
+                            <VBox spacing="2">
+                               <children>
+                                   <Label style="-fx-font-size: 11px;                                   -fx-text-fill: #1976d2;                                   -fx-font-weight: 600;" text="Tổng số thay đổi" />
+                                   <Label fx:id="lblTotalChanges" style="-fx-font-size: 18px;                                   -fx-font-weight: bold;                                   -fx-text-fill: #2c3e50;" text="0" />
+                               </children>
+                            </VBox>
+            </children>
+                     </HBox>
+
+                     <!-- Stat Card 2 -->
+                     <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #fff3cd;                          -fx-background-radius: 6;                          -fx-padding: 12 15;" HBox.hgrow="ALWAYS">
+            <children>
+                            <Label style="-fx-font-size: 20px;" text="🔄" />
+                            <VBox spacing="2">
+                               <children>
+                                   <Label style="-fx-font-size: 11px;                                   -fx-text-fill: #856404;                                   -fx-font-weight: 600;" text="Thay đổi gần nhất" />
+                                   <Label fx:id="lblLastChange" style="-fx-font-size: 13px;                                   -fx-font-weight: 600;                                   -fx-text-fill: #2c3e50;" text="Chưa có" />
+                               </children>
+                            </VBox>
+            </children>
+                     </HBox>
+
+                     <!-- Stat Card 3 -->
+                     <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #d4edda;                          -fx-background-radius: 6;                          -fx-padding: 12 15;" HBox.hgrow="ALWAYS">
+            <children>
+                            <Label style="-fx-font-size: 20px;" text="🏠" />
+                            <VBox spacing="2">
+                               <children>
+                                   <Label style="-fx-font-size: 11px;                                   -fx-text-fill: #155724;                                   -fx-font-weight: 600;" text="Hộ khẩu hiện tại" />
+                                   <Label fx:id="lblCurrentHousehold" style="-fx-font-size: 13px;                                   -fx-font-weight: 600;                                   -fx-text-fill: #2c3e50;" text="Đang tải..." />
+                               </children>
+                            </VBox>
+            </children>
+                     </HBox>
+         </children>
+              </HBox>
+      </children>
+
+       </VBox>
+   </children>
+
+
+
+</VBox>

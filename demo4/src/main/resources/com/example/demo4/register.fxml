@@ -1,201 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.*?>
 
-<?import java.lang.String?>
-<VBox xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.demo4.controllers.RegisterController"
-      spacing="0"
-      prefWidth="400"
-      style="-fx-background-color: #f5f7fa;">
+<BorderPane style="-fx-background-color: linear-gradient(to bottom right, #667eea, #764ba2);" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo4.controllers.RegisterController">
+    <center>
+        <VBox alignment="CENTER" maxWidth="500" prefHeight="700.0" prefWidth="450.0" spacing="0" style="-fx-background-color: white;-fx-background-radius: 16;-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 30, 0, 0, 10);">
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="20" />
+            </padding>
+            <VBox alignment="CENTER" spacing="10">
 
-    <padding>
-        <Insets top="30" right="20" bottom="30" left="20"/>
-    </padding>
+                <VBox alignment="CENTER" spacing="8" style="-fx-padding: 0 0 20 0;">
+                    <Label style="-fx-font-size: 40px;" text="🏛" />
+                    <Label style="-fx-font-size: 24px;-fx-font-weight: bold;-fx-text-fill: #2c3e50;" text="Tạo tài khoản mới" />
+                    <Label style="-fx-font-size: 13px;-fx-text-fill: #7f8c8d;" text="Nhập thông tin chi tiết của bạn bên dưới" />
+                </VBox>
 
-    <!-- Header -->
-    <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 0 0 20 0;">
-        <Label text="🔐" style="-fx-font-size: 24px;"/>
-        <Label text="Đăng Ký Tài Khoản"
-               style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
-    </HBox>
+                <VBox spacing="5">
+                    <Label style="-fx-font-size: 13px;-fx-font-weight: 600;-fx-text-fill: #34495e;" text="Tên đăng nhập" />
+                    <TextField fx:id="txtUsername" prefWidth="370" promptText="Chọn tên đăng nhập" style="-fx-background-color: #f8f9fa;-fx-border-color: #e0e6ed;-fx-border-radius: 8;-fx-background-radius: 8;-fx-padding: 5 14;-fx-font-size: 10px;-fx-prompt-text-fill: #95a5a6;" />
+                </VBox>
 
-    <Separator style="-fx-background-color: #e0e6ed; -fx-padding: 0 0 20 0;"/>
+                <VBox spacing="5">
+                    <Label style="-fx-font-size: 13px;-fx-font-weight: 600;-fx-text-fill: #34495e;" text="Mật khẩu" />
+                    <PasswordField fx:id="txtPassword" prefWidth="370" promptText="Nhập mật khẩu" style="-fx-background-color: #f8f9fa;-fx-border-color: #e0e6ed;-fx-border-radius: 8;-fx-background-radius: 8;-fx-padding: 5 14;-fx-font-size: 10px;-fx-prompt-text-fill: #95a5a6;" />
+                </VBox>
 
-    <!-- Form Container -->
-    <VBox spacing="18" alignment="CENTER">
+                <VBox spacing="5">
+                    <Label style="-fx-font-size: 13px;-fx-font-weight: 600;-fx-text-fill: #34495e;" text="Xác nhận mật khẩu" />
+                    <PasswordField fx:id="txtPassword2" prefWidth="370" promptText="Nhập lại mật khẩu" style="-fx-background-color: #f8f9fa;-fx-border-color: #e0e6ed;-fx-border-radius: 8;-fx-background-radius: 8;-fx-padding: 5 14;-fx-font-size: 10px;-fx-prompt-text-fill: #95a5a6;" />
+                </VBox>
 
-        <!-- Username -->
-        <VBox spacing="6">
-            <Label text="Tên đăng nhập *"
-                   style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #34495e;"/>
-            <TextField fx:id="txtUsername"
-                       promptText="Nhập tên đăng nhập"
-                       maxWidth="240"
-                       style="-fx-background-color: white;
-                              -fx-border-color: #dce1e8;
-                              -fx-border-radius: 6;
-                              -fx-background-radius: 6;
-                              -fx-padding: 10 12;
-                              -fx-font-size: 13px;
-                              -fx-prompt-text-fill: #95a5a6;">
-                <styleClass>
-                    <String fx:value="text-field-custom"/>
-                </styleClass>
-            </TextField>
+                <VBox spacing="5">
+                    <Label style="-fx-font-size: 13px;-fx-font-weight: 600;-fx-text-fill: #34495e;" text="Họ và tên" />
+                    <TextField fx:id="txtFullname" prefWidth="370" promptText="Ví dụ: Nguyễn Văn A" style="-fx-background-color: #f8f9fa;-fx-border-color: #e0e6ed;-fx-border-radius: 8;-fx-background-radius: 8;-fx-padding: 5 14;-fx-font-size: 10px;-fx-prompt-text-fill: #95a5a6;" />
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label style="-fx-font-size: 13px;-fx-font-weight: 600;-fx-text-fill: #34495e;" text="Email" />
+                    <TextField fx:id="txtEmail" prefWidth="370" promptText="example@email.com" style="-fx-background-color: #f8f9fa;-fx-border-color: #e0e6ed;-fx-border-radius: 8;-fx-background-radius: 8;-fx-padding: 5 14;-fx-font-size: 10px;-fx-prompt-text-fill: #95a5a6;" />
+                </VBox>
+
+                <VBox spacing="5">
+                    <Label style="-fx-font-size: 13px;-fx-font-weight: 600;-fx-text-fill: #34495e;" text="Vai trò (Role)" />
+                    <ChoiceBox fx:id="roleBox" prefWidth="370" style="-fx-background-color: #f8f9fa;-fx-border-color: #e0e6ed;-fx-border-radius: 8;-fx-background-radius: 8;-fx-font-size: 10px; -fx-padding: 5 10;" />
+                </VBox>
+
+
+                <Label fx:id="lblMessage" style="-fx-text-fill: #e74c3c;-fx-font-size: 12px;-fx-font-weight: 600;" />
+
+                <VBox alignment="CENTER" spacing="10" style="-fx-padding: 10 0 0 0;">
+                    <Button onAction="#onRegister" prefWidth="370" style="-fx-background-color: #667eea;-fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 8;  -fx-padding: 12 0; -fx-cursor: hand;" text="Đăng ký ngay" />
+                    <Button onAction="#onBack" prefWidth="370" style="-fx-background-color: white;-fx-text-fill: #667eea;-fx-border-color: #667eea;-fx-border-width: 2px;-fx-font-size: 14px;-fx-font-weight: 600;-fx-background-radius: 8;-fx-border-radius: 8;-fx-padding: 10 0;-fx-cursor: hand;" text="Quay lại đăng nhập" />
+                </VBox>
+            </VBox>
         </VBox>
 
-        <!-- Password -->
-        <VBox spacing="6">
-            <Label text="Mật khẩu *"
-                   style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #34495e;"/>
-            <PasswordField fx:id="txtPassword"
-                           promptText="Nhập mật khẩu"
-                           maxWidth="240"
-                           style="-fx-background-color: white;
-                                  -fx-border-color: #dce1e8;
-                                  -fx-border-radius: 6;
-                                  -fx-background-radius: 6;
-                                  -fx-padding: 10 12;
-                                  -fx-font-size: 13px;
-                                  -fx-prompt-text-fill: #95a5a6;">
-                <styleClass>
-                    <String fx:value="password-field-custom"/>
-                </styleClass>
-            </PasswordField>
-        </VBox>
+    </center>
 
-        <!-- Confirm Password -->
-        <VBox spacing="6">
-            <Label text="Xác nhận mật khẩu *"
-                   style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #34495e;"/>
-            <PasswordField fx:id="txtPassword2"
-                           promptText="Nhập lại mật khẩu"
-                           maxWidth="240"
-                           style="-fx-background-color: white;
-                                  -fx-border-color: #dce1e8;
-                                  -fx-border-radius: 6;
-                                  -fx-background-radius: 6;
-                                  -fx-padding: 10 12;
-                                  -fx-font-size: 13px;
-                                  -fx-prompt-text-fill: #95a5a6;">
-                <styleClass>
-                    <String fx:value="password-field-custom"/>
-                </styleClass>
-            </PasswordField>
-        </VBox>
-
-        <!-- Fullname -->
-        <VBox spacing="6">
-            <Label text="Họ tên *"
-                   style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #34495e;"/>
-            <TextField fx:id="txtFullname"
-                       promptText="Nhập họ và tên đầy đủ"
-                       maxWidth="240"
-                       style="-fx-background-color: white;
-                              -fx-border-color: #dce1e8;
-                              -fx-border-radius: 6;
-                              -fx-background-radius: 6;
-                              -fx-padding: 10 12;
-                              -fx-font-size: 13px;
-                              -fx-prompt-text-fill: #95a5a6;">
-                <styleClass>
-                    <String fx:value="text-field-custom"/>
-                </styleClass>
-            </TextField>
-        </VBox>
-
-        <!-- Email -->
-        <VBox spacing="6">
-            <Label text="Email *"
-                   style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #34495e;"/>
-            <TextField fx:id="txtEmail"
-                       promptText="Nhập địa chỉ email"
-                       maxWidth="240"
-                       style="-fx-background-color: white;
-                              -fx-border-color: #dce1e8;
-                              -fx-border-radius: 6;
-                              -fx-background-radius: 6;
-                              -fx-padding: 10 12;
-                              -fx-font-size: 13px;
-                              -fx-prompt-text-fill: #95a5a6;">
-                <styleClass>
-                    <String fx:value="text-field-custom"/>
-                </styleClass>
-            </TextField>
-        </VBox>
-
-        <!-- Role -->
-        <VBox spacing="6">
-            <Label text="Vai trò *"
-                   style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #34495e;"/>
-            <ChoiceBox fx:id="roleBox"
-                       maxWidth="240"
-                       style="-fx-background-color: white;
-                              -fx-border-color: #dce1e8;
-                              -fx-border-radius: 6;
-                              -fx-background-radius: 6;
-                              -fx-padding: 6 12;
-                              -fx-font-size: 13px;">
-                <styleClass>
-                    <String fx:value="choice-box-custom"/>
-                </styleClass>
-            </ChoiceBox>
-        </VBox>
-    </VBox>
-
-    <!-- Spacer -->
-    <Region VBox.vgrow="ALWAYS" minHeight="50"/>
-
-    <!-- Buttons -->
-    <HBox spacing="12" alignment="CENTER" style="-fx-padding: 15 0 0 0;">
-        <Button text="✓ Đăng Ký"
-                onAction="#onRegister"
-                prefWidth="140"
-                style="-fx-background-color: #27ae60;
-                       -fx-text-fill: white;
-                       -fx-font-size: 14px;
-                       -fx-font-weight: bold;
-                       -fx-background-radius: 6;
-                       -fx-padding: 12 20;
-                       -fx-cursor: hand;">
-            <styleClass>
-                <String fx:value="button-success"/>
-            </styleClass>
-        </Button>
-
-        <Button text="⬅️ Quay Lại"
-                onAction="#onBack"
-                prefWidth="140"
-                style="-fx-background-color: #ecf0f1;
-                       -fx-text-fill: #7f8c8d;
-                       -fx-font-size: 14px;
-                       -fx-font-weight: 600;
-                       -fx-background-radius: 6;
-                       -fx-padding: 12 20;
-                       -fx-cursor: hand;">
-            <styleClass>
-                <String fx:value="button-cancel"/>
-            </styleClass>
-        </Button>
-    </HBox>
-
-    <!-- Footer note -->
-    <Label text="* Trường bắt buộc"
-           style="-fx-font-size: 11px;
-                  -fx-text-fill: #95a5a6;
-                  -fx-padding: 15 0 0 0;"/>
-
-    <!-- Message -->
-    <Label fx:id="lblMessage"
-           style="-fx-text-fill: #e74c3c;
-                  -fx-font-size: 12px;
-                  -fx-font-weight: 600;
-                  -fx-padding: 15 0 0 0;"/>
-
-    <stylesheets>
-        <String fx:value="css/register.css"/>
-    </stylesheets>
-
-</VBox>
+</BorderPane>

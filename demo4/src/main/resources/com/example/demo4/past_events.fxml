@@ -46,7 +46,7 @@
     </center>
 
     <stylesheets>
-        <String fx:value="css/past_events.css"/>
+        <String fx:value="../../../css/past_events.css"/>
     </stylesheets>
 
 </BorderPane>

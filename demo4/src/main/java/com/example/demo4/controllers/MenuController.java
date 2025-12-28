@@ -7,9 +7,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class MenuController {
+public class MenuController extends BaseController{
 
     @FXML
     public void goToManagement() throws Exception {
@@ -47,15 +48,41 @@ public class MenuController {
     }
 
     @FXML private Label lblUsername;
-
+    @FXML private VBox cardAdmin;   // Card cho Admin
+    @FXML private VBox cardCustomer;
     @FXML
     public void initialize() {
         if (Session.isLoggedIn()) {
             lblUsername.setText(Session.getCurrentUsername()
                     + " (" + Session.getCurrentRole() + ")");
         }
+        String role = Session.getCurrentRole();
+        if ("ADMIN".equalsIgnoreCase(role)) {
+            showAdminMode();
+        } else {
+            showCustomerMode();
+        }
     }
 
+    private void showAdminMode() {
+        // HIỆN card Account
+        cardAdmin.setVisible(true);
+        cardAdmin.setManaged(true);
+
+        // ẨN card Cultural (Nhà văn hóa)
+        cardCustomer.setVisible(false);
+        cardCustomer.setManaged(false); // Quan trọng: setManaged(false) để nó không chiếm chỗ
+    }
+
+    private void showCustomerMode() {
+        // ẨN card Account
+        cardAdmin.setVisible(false);
+        cardAdmin.setManaged(false);
+
+        // HIỆN card Cultural
+        cardCustomer.setVisible(true);
+        cardCustomer.setManaged(true);
+    }
     @FXML
     private void openAccountProfile() {
         try {
@@ -74,4 +101,28 @@ public class MenuController {
         }
     }
 
+    @FXML
+    public void goToStatistics() throws Exception {
+        if (!Session.isLoggedIn()) {
+            Main.showLogin();
+            return;
+        }
+
+        String role = Session.getCurrentRole();
+        if ("ADMIN".equalsIgnoreCase(role)) {
+            Main.showStatistics();
+        } else {
+            showWarning("Không có quyền", "Chỉ ADMIN mới xem được thống kê!");
+        }
+    }
+
+    @FXML
+    public void goToTemporaryRecords() throws Exception {
+        if (!Session.isLoggedIn()) {
+            Main.showLogin();
+            return;
+        }
+
+        Main.showTemporaryRecords();
+    }
 }

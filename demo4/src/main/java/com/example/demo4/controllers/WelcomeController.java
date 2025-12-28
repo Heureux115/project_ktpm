@@ -2,6 +2,7 @@ package com.example.demo4.controllers;
 
 import com.example.demo4.Main;
 import javafx.animation.*;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -25,15 +26,17 @@ public class WelcomeController {
             box.setImage(new Image(getClass().getResourceAsStream(
                     "/com/example/demo4/assets/box.jpg")));
             mario.setImage(new Image(getClass().getResourceAsStream(
-                    "/com/example/demo4/assets/mario.png")));
+                    "/com/example/demo4/assets/mario.gif")));
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         // ===== FIX 1: căn Mario đứng ngay dưới box =====
-        mario.setLayoutY(box.getLayoutY() + box.getFitHeight());
-
-        playIntro();
+        // Sử dụng Platform.runLater để đảm bảo layout đã load xong mới lấy tọa độ
+        Platform.runLater(() -> {
+            mario.setLayoutY(box.getLayoutY() + box.getFitHeight());
+            playIntro();
+        });
     }
 
     private void playIntro() {
@@ -62,12 +65,27 @@ public class WelcomeController {
 
         ParallelTransition textAppear = new ParallelTransition(textZoom, textFade);
 
-        // ===== MARIO RUN TO BOX (FIX CHUẨN) =====
+        // ===== MARIO RUN TO BOX (FIX CHUẨN CENTER) =====
         TranslateTransition marioRun = new TranslateTransition(Duration.seconds(2), mario);
-        marioRun.setToX(box.getLayoutX() - mario.getLayoutX());
+
+        // 1. Tính toán tâm của Box và Mario
+        // Lưu ý: Nếu trong FXML bạn chưa set fitWidth, hãy dùng box.getBoundsInParent().getWidth()
+        double boxWidth = box.getFitWidth();
+        double marioWidth = mario.getFitWidth();
+
+        // Nếu fitWidth = 0 (do chưa load kịp hoặc không set trong FXML), ta lấy bounds
+        if (boxWidth == 0) boxWidth = box.getBoundsInParent().getWidth();
+        if (marioWidth == 0) marioWidth = mario.getBoundsInParent().getWidth();
+
+        double boxCenterX = box.getLayoutX() + (boxWidth / 2);
+        double marioCenterX = mario.getLayoutX() + (marioWidth / 2);
+
+        // 2. Set khoảng cách di chuyển = Tâm Box - Tâm Mario
+        marioRun.setToX(boxCenterX - marioCenterX);
 
         // ===== MARIO JUMP HIT BOX =====
         TranslateTransition marioJump = new TranslateTransition(Duration.millis(400), mario);
+        // Nhảy lên đúng bằng chiều cao Box để cụng đầu vào đáy Box
         marioJump.setByY(-box.getFitHeight());
         marioJump.setAutoReverse(true);
         marioJump.setCycleCount(2);

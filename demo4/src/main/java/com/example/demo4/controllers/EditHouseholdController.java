@@ -119,7 +119,7 @@ public class EditHouseholdController extends BaseController {
                 }
 
             } catch (Exception e) {
-                e.  printStackTrace();
+                e.printStackTrace();
             }
         });
     }

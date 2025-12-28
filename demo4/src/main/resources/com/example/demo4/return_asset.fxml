@@ -130,8 +130,4 @@
                   -fx-text-fill: #95a5a6;
                   -fx-padding: 15 0 0 0;"/>
 
-    <stylesheets>
-        <String fx:value="css/return_asset.css"/>
-    </stylesheets>
-
 </VBox>
