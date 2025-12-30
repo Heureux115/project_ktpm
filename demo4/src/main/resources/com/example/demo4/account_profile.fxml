@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import java.lang.String?>
+
+<VBox spacing="0" style="-fx-background-color: #f5f7fa;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo4.controllers.AccountProfileController">
+
+    <padding>
+        <Insets bottom="25" left="30" right="30" top="25" />
+    </padding>
+   <children>
+   
+       <!-- Header -->
+       <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 0 0 20 0;">
+      <children>
+              <Label style="-fx-font-size: 24px;" text="👤" />
+              <Label style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Thông Tin Tài Khoản" />
+      </children>
+       </HBox>
+   
+       <Separator style="-fx-background-color: #e0e6ed; -fx-padding: 0 0 20 0;" />
+   
+       <!-- Account Info Section -->
+       <VBox spacing="18" style="-fx-padding: 0 0 25 0;">
+      <children>
+      
+              <!-- Username -->
+              <VBox spacing="6">
+         <children>
+                     <Label style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #34495e;" text="Tên đăng nhập" />
+                     <TextField fx:id="txtUsername" promptText="Nhập tên đăng nhập mới" style="-fx-background-color: white;                               -fx-border-color: #dce1e8;                               -fx-border-radius: 6;                               -fx-background-radius: 6;                               -fx-padding: 10 12;                               -fx-font-size: 13px;                               -fx-prompt-text-fill: #95a5a6;" styleClass="text-field-custom" />
+         </children>
+              </VBox>
+      
+              <!-- Password -->
+              <VBox spacing="6">
+         <children>
+                     <Label style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #34495e;" text="Mật khẩu mới" />
+                     <PasswordField fx:id="txtPassword" promptText="Nhập mật khẩu mới (để trống nếu không đổi)" style="-fx-background-color: white;                                   -fx-border-color: #dce1e8;                                   -fx-border-radius: 6;                                   -fx-background-radius: 6;                                   -fx-padding: 10 12;                                   -fx-font-size: 13px;                                   -fx-prompt-text-fill: #95a5a6;" styleClass="text-field-custom" />
+         </children>
+              </VBox>
+      
+              <VBox spacing="6">
+         <children>
+                     <TextField fx:id="txtCccd" promptText="Nhập số CCCD để định danh tài khoản" style="-fx-background-color: white; -fx-border-color: #dce1e8; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 10 12; -fx-font-size: 13px;" styleClass="text-field-custom" />
+         </children>
+              </VBox>
+      
+              <!-- Update Button -->
+              <Button maxWidth="200" onAction="#updateAccount" style="-fx-background-color: #27ae60;                        -fx-text-fill: white;                        -fx-font-size: 14px;                        -fx-font-weight: bold;                        -fx-background-radius: 6;                        -fx-padding: 12 20;                        -fx-cursor: hand;" styleClass="button-success" text="💾 Cập Nhật Tài Khoản" />
+      </children>
+       </VBox>
+   
+       <Separator style="-fx-background-color: #e0e6ed; -fx-padding: 0 0 20 0;" />
+   
+       <!-- Citizen Info Section -->
+       <VBox spacing="12">
+      <children>
+              <Label style="-fx-font-size: 16px; -fx-font-weight: 600; -fx-text-fill: #2c3e50;" text="📋 Thông Tin Công Dân Gán Với Tài Khoản" />
+      
+              <VBox spacing="8" style="-fx-background-color: white;                      -fx-border-color: #dce1e8;                      -fx-border-radius: 8;                      -fx-background-radius: 8;                      -fx-padding: 16;">
+         <children>
+         
+                     <Label fx:id="lblCitizenFullname" style="-fx-font-size: 14px;                           -fx-font-weight: bold;                           -fx-text-fill: #2c3e50;" text="Đang tải dữ liệu..." wrapText="true" />
+         
+                     <Label fx:id="lblCitizenCccd" style="-fx-font-size: 13px;                           -fx-text-fill: #7f8c8d;" text="..." wrapText="true" />
+         </children>
+              </VBox>
+      </children>
+       </VBox>
+   
+       <!-- Message -->
+       <Label fx:id="lblMessage" style="-fx-text-fill: #e74c3c;                   -fx-font-size: 12px;                   -fx-font-weight: 600;                   -fx-padding: 15 0 0 0;" />
+   </children>
+
+    <stylesheets>
+        <String fx:value="css/account_profile.css" />
+    </stylesheets>
+
+</VBox>

@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane
+        style="-fx-background-color: #f5f7fa;"
+        xmlns="http://javafx.com/javafx/17.0.12"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="com.example.demo4.controllers.TemporaryRecordController">
+
+    <!-- ================= TOP ================= -->
+    <top>
+        <VBox spacing="0" style="-fx-background-color: #f5f7fa;">
+            <padding>
+                <Insets top="25" right="30" bottom="10" left="30"/>
+            </padding>
+
+            <!-- HEADER -->
+            <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 0 0 10 0;">
+                <Label text="🏠" style="-fx-font-size: 24px;"/>
+                <Label text="Quản Lý Tạm Trú / Tạm Vắng"
+                       style="-fx-font-size: 22px;
+                              -fx-font-weight: bold;
+                              -fx-text-fill: #2c3e50;"/>
+
+                <Pane HBox.hgrow="ALWAYS"/>
+
+                <Button text="🏠 Menu"
+                        onAction="#close"
+                        style="-fx-background-color: #ecf0f1;
+                               -fx-text-fill: #7f8c8d;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: 600;
+                               -fx-background-radius: 6;
+                               -fx-padding: 8 15;
+                               -fx-cursor: hand;"/>
+            </HBox>
+
+            <Separator style="-fx-background-color: #e0e6ed;"/>
+        </VBox>
+    </top>
+
+    <!-- ================= CENTER ================= -->
+    <center>
+        <VBox spacing="12"
+              style="-fx-padding: 20 30 20 30;
+                     -fx-background-color: #f5f7fa;">
+
+            <!-- FILTER BAR -->
+            <HBox spacing="12"
+                  alignment="CENTER_LEFT"
+                  style="-fx-background-color: white;
+                         -fx-border-color: #dce1e8;
+                         -fx-border-radius: 6;
+                         -fx-background-radius: 6;
+                         -fx-padding: 12;">
+
+                <Label text="Loại:"/>
+                <ComboBox fx:id="cbFilterType" prefWidth="120"/>
+
+                <Label text="Trạng thái:"/>
+                <ComboBox fx:id="cbFilterStatus" prefWidth="140"/>
+
+                <Label text="Công dân:"/>
+                <TextField fx:id="tfSearchCitizen"
+                           prefWidth="180"
+                           promptText="Nhập tên công dân"/>
+
+                <Pane HBox.hgrow="ALWAYS"/>
+
+                <Button text="Lọc"
+                        onAction="#applyFilter"
+                        style="-fx-background-color: #3498db;
+                               -fx-text-fill: white;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 6;
+                               -fx-padding: 8 18;
+                               -fx-cursor: hand;"/>
+
+                <Button text="Reset"
+                        onAction="#resetFilter"
+                        style="-fx-background-color: #95a5a6;
+                               -fx-text-fill: white;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 6;
+                               -fx-padding: 8 18;
+                               -fx-cursor: hand;"/>
+            </HBox>
+
+            <!-- TABLE -->
+            <TableView fx:id="table"
+                       VBox.vgrow="ALWAYS"
+                       style="-fx-background-color: white;
+                              -fx-border-color: #dce1e8;
+                              -fx-border-radius: 6;
+                              -fx-background-radius: 6;">
+                <columns>
+                    <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+                    <TableColumn fx:id="colCitizenName" text="Công dân" prefWidth="180"/>
+                    <TableColumn fx:id="colType" text="Loại" prefWidth="120"/>
+                    <TableColumn fx:id="colStartDate" text="Từ ngày" prefWidth="120"/>
+                    <TableColumn fx:id="colEndDate" text="Đến ngày" prefWidth="120"/>
+                    <TableColumn fx:id="colLocation" text="Địa điểm" prefWidth="220"/>
+                    <TableColumn fx:id="colStatus" text="Trạng thái" prefWidth="140"/>
+                </columns>
+            </TableView>
+
+        </VBox>
+    </center>
+
+    <!-- ================= BOTTOM ================= -->
+    <bottom>
+        <VBox spacing="12"
+              style="-fx-padding: 15 30 25 30;
+                     -fx-background-color: #f5f7fa;">
+
+            <HBox alignment="CENTER" spacing="12">
+
+                <Button text="➕ Thêm"
+                        onAction="#addRecord"
+                        prefWidth="120"
+                        style="-fx-background-color: #27ae60;
+                               -fx-text-fill: white;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 6;
+                               -fx-padding: 12 20;
+                               -fx-cursor: hand;"/>
+
+                <Button text="👁 Xem chi tiết"
+                        onAction="#viewDetails"
+                        prefWidth="150"
+                        style="-fx-background-color: #3498db;
+                               -fx-text-fill: white;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 6;
+                               -fx-padding: 12 20;
+                               -fx-cursor: hand;"/>
+
+                <Button text="🗑 Xóa"
+                        onAction="#deleteRecord"
+                        prefWidth="120"
+                        style="-fx-background-color: #e74c3c;
+                               -fx-text-fill: white;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 6;
+                               -fx-padding: 12 20;
+                               -fx-cursor: hand;"/>
+
+                <Button text="🔄 Làm mới"
+                        onAction="#refresh"
+                        prefWidth="140"
+                        style="-fx-background-color: #f39c12;
+                               -fx-text-fill: white;
+                               -fx-font-size: 14px;
+                               -fx-font-weight: bold;
+                               -fx-background-radius: 6;
+                               -fx-padding: 12 20;
+                               -fx-cursor: hand;"/>
+            </HBox>
+        </VBox>
+    </bottom>
+
+</BorderPane>

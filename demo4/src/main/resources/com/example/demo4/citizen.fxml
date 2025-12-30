@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane
+        xmlns="http://javafx.com/javafx/17.0.12"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="com.example.demo4.controllers.CitizenController"
+        style="-fx-background-color: #f5f7fa;">
+
+    <!-- ================= TOP ================= -->
+    <top>
+        <VBox spacing="0" style="-fx-background-color: #f5f7fa;">
+            <padding>
+                <Insets top="25" right="30" bottom="10" left="30"/>
+            </padding>
+
+            <!-- HEADER -->
+            <HBox alignment="CENTER_LEFT" spacing="10"
+                  style="-fx-padding: 0 0 10 0;">
+                <Label text="👤"
+                       style="-fx-font-size: 24px;"/>
+
+                <Label text="Quản Lý Công Dân"
+                       style="-fx-font-size: 22px;
+                              -fx-font-weight: bold;
+                              -fx-text-fill: #2c3e50;"/>
+
+                <Pane HBox.hgrow="ALWAYS"/>
+            </HBox>
+
+            <Separator style="-fx-background-color: #e0e6ed;"/>
+        </VBox>
+    </top>
+
+    <!-- ================= CENTER ================= -->
+    <center>
+        <VBox spacing="10"
+              style="-fx-padding: 20 30 20 30;
+                     -fx-background-color: #f5f7fa;">
+
+            <!-- SEARCH BAR (nhẹ, giống form admin) -->
+            <HBox spacing="10"
+                  alignment="CENTER_LEFT"
+                  style="-fx-background-color: white;
+                         -fx-border-color: #dce1e8;
+                         -fx-border-radius: 6;
+                         -fx-background-radius: 6;
+                         -fx-padding: 10;">
+
+                <Label text="Tìm kiếm:"/>
+
+                <TextField fx:id="searchField"
+                           prefWidth="300"
+                           promptText="Tìm theo tên hoặc CCCD..."/>
+
+                <Pane HBox.hgrow="ALWAYS"/>
+            </HBox>
+
+            <!-- TABLE -->
+            <TableView fx:id="citizenTable"
+                       VBox.vgrow="ALWAYS"
+                       style="-fx-background-color: white;
+                              -fx-border-color: #dce1e8;
+                              -fx-border-radius: 6;
+                              -fx-background-radius: 6;">
+                <columns>
+                    <TableColumn fx:id="colId" text="ID" prefWidth="60"/>
+                    <TableColumn fx:id="colFullName" text="Họ tên" prefWidth="180"/>
+                    <TableColumn fx:id="colAlias" text="Tên khác" prefWidth="120"/>
+                    <TableColumn fx:id="colDob" text="Ngày sinh" prefWidth="120"/>
+                    <TableColumn fx:id="colPlaceOfBirth" text="Nơi sinh" prefWidth="140"/>
+                    <TableColumn fx:id="colHometown" text="Quê quán" prefWidth="140"/>
+                    <TableColumn fx:id="colEthnicity" text="Dân tộc" prefWidth="100"/>
+                    <TableColumn fx:id="colCccd" text="CCCD" prefWidth="140"/>
+                    <TableColumn fx:id="colCccdIssueDate" text="Ngày cấp CCCD" prefWidth="140"/>
+                    <TableColumn fx:id="colCccdIssuePlace" text="Nơi cấp CCCD" prefWidth="160"/>
+                    <TableColumn fx:id="colJob" text="Nghề nghiệp" prefWidth="160"/>
+                    <TableColumn fx:id="colWorkplace" text="Nơi làm việc" prefWidth="160"/>
+                    <TableColumn fx:id="colPreviousAddress" text="Địa chỉ trước" prefWidth="200"/>
+                    <TableColumn fx:id="colRegisterDate" text="Ngày đăng ký" prefWidth="140"/>
+                    <TableColumn fx:id="colHouseholder" text="Chủ hộ" prefWidth="90"/>
+                    <TableColumn fx:id="colRelation" text="Quan hệ" prefWidth="120"/>
+                    <TableColumn fx:id="colHouseholdId" text="Household ID" prefWidth="120"/>
+                    <TableColumn fx:id="colUserId" text="User ID" prefWidth="100"/>
+                </columns>
+            </TableView>
+
+        </VBox>
+    </center>
+
+</BorderPane>
