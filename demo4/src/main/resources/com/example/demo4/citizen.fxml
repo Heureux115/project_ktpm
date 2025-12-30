@@ -81,9 +81,6 @@
     </center>
     <bottom>
         <HBox alignment="CENTER" spacing="12" style="-fx-padding: 16 25;                      -fx-background-color: white;                      -fx-border-color: #e0e6ed;                      -fx-border-width: 1 0 0 0;">
-
-            <Button onAction="#addCitizen" style="-fx-background-color: #27ae60;                            -fx-text-fill: white;                            -fx-font-size: 14px;                            -fx-font-weight: 600;                            -fx-background-radius: 6;                            -fx-padding: 10 24;                            -fx-cursor: hand;" styleClass="btn-add" text="➕ Thêm" />
-
             <Button onAction="#editCitizen" style="-fx-background-color: #f39c12;                            -fx-text-fill: white;                            -fx-font-size: 14px;                            -fx-font-weight: 600;                            -fx-background-radius: 6;                            -fx-padding: 10 24;                            -fx-cursor: hand;" styleClass="btn-edit" text="✏ Sửa" />
 
             <Button onAction="#deleteCitizen" style="-fx-background-color: #e74c3c;                            -fx-text-fill: white;                            -fx-font-size: 14px;                            -fx-font-weight: 600;                            -fx-background-radius: 6;                            -fx-padding: 10 24;                            -fx-cursor: hand;" styleClass="btn-delete" text="🗑 Xóa" />

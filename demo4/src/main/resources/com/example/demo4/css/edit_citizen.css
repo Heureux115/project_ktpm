@@ -1,0 +1,444 @@
+/* ===========================
+   EDIT CITIZEN FORM CSS
+   Modern & Professional Design
+   =========================== */
+
+/* ROOT CONTAINER */
+.root-container {
+    -fx-background-color: linear-gradient(to bottom right, #f0f4f8, #e8eef5);
+    -fx-font-family: "Segoe UI", "Roboto", "Arial", sans-serif;
+}
+
+/* HEADER SECTION */
+.header-section {
+    -fx-padding: 0 0 25 0;
+}
+
+.header-icon {
+    -fx-font-size: 32px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8, 0, 0, 2);
+}
+
+.header-title {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: linear-gradient(to right, #667eea, #764ba2);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0, 0, 1);
+}
+
+/* SEPARATORS */
+.main-separator {
+    -fx-background-color: linear-gradient(to right, transparent, #cbd5e0, transparent);
+    -fx-padding: 0 0 25 0;
+}
+
+.main-separator .line {
+    -fx-border-width: 0 0 2 0;
+    -fx-border-color: linear-gradient(to right, transparent, #cbd5e0, transparent);
+}
+
+.section-divider {
+    -fx-background-color: #e2e8f0;
+    -fx-padding: 25 0;
+}
+
+.section-divider .line {
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #e2e8f0;
+}
+
+/* SCROLL PANE */
+.form-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.form-scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.form-scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 10px;
+}
+
+.form-scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(102,126,234,0.4);
+    -fx-background-radius: 5px;
+}
+
+.form-scroll-pane .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: rgba(102,126,234,0.6);
+}
+
+.form-scroll-pane .scroll-bar:vertical .track {
+    -fx-background-color: #f0f2f5;
+    -fx-background-radius: 5px;
+}
+
+/* FORM CONTAINER */
+.form-container {
+    -fx-background-color: white;
+    -fx-background-radius: 16px;
+    -fx-padding: 30;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 20, 0, 0, 4);
+}
+
+/* SECTION GROUP */
+.section-group {
+    -fx-padding: 5 0;
+}
+
+.section-header {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+    -fx-padding: 0 0 5 0;
+}
+
+/* FORM GRID */
+.form-grid {
+    -fx-padding: 0;
+}
+
+/* GridPane Column Constraints */
+.form-grid .column-constraints {
+    -fx-hgrow: ALWAYS;
+}
+
+/* FIELD LABELS */
+.field-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #34495e;
+    -fx-padding: 0 0 2 0;
+}
+
+.required-field::after {
+    content: " *";
+    -fx-text-fill: #e74c3c;
+}
+
+.required-field {
+    -fx-text-fill: #2c3e50;
+}
+
+/* INPUT FIELDS */
+.input-field {
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: #dce4ec;
+    -fx-border-width: 2px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 12 16;
+    -fx-font-size: 14px;
+    -fx-text-fill: #2c3e50;
+    -fx-prompt-text-fill: #95a5a6;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.03), 5, 0, 0, 2);
+    -fx-transition: all 0.3s ease;
+}
+
+.input-field:focused {
+    -fx-background-color: white;
+    -fx-border-color: #667eea;
+    -fx-effect: dropshadow(gaussian, rgba(102,126,234,0.25), 10, 0, 0, 0);
+}
+
+.input-field:hover {
+    -fx-border-color: #a8b3cf;
+}
+
+/* Highlighted Input (CCCD) */
+.input-field-highlight {
+    -fx-border-color: #3498db;
+    -fx-background-color: #ebf5fb;
+}
+
+.input-field-highlight:focused {
+    -fx-border-color: #2980b9;
+    -fx-effect: dropshadow(gaussian, rgba(52,152,219,0.3), 10, 0, 0, 0);
+}
+
+/* DATE PICKER */
+.date-picker {
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: #dce4ec;
+    -fx-border-width: 2px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+}
+
+.date-picker:focused {
+    -fx-border-color: #667eea;
+    -fx-effect: dropshadow(gaussian, rgba(102,126,234,0.25), 10, 0, 0, 0);
+}
+
+.date-picker .text-field {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 12 16;
+    -fx-font-size: 14px;
+    -fx-text-fill: #2c3e50;
+    -fx-prompt-text-fill: #95a5a6;
+}
+
+.date-picker .arrow-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0 8 0 0;
+}
+
+.date-picker .arrow-button .arrow {
+    -fx-background-color: #667eea;
+    -fx-shape: "M 0 0 L 4 4 L 8 0 Z";
+    -fx-scale-x: 0.8;
+    -fx-scale-y: 0.8;
+}
+
+/* CHOICE BOX */
+.choice-box-field {
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: #dce4ec;
+    -fx-border-width: 2px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 12 16;
+    -fx-font-size: 14px;
+    -fx-text-fill: #2c3e50;
+}
+
+.choice-box-field:focused {
+    -fx-border-color: #667eea;
+    -fx-effect: dropshadow(gaussian, rgba(102,126,234,0.25), 10, 0, 0, 0);
+}
+
+.choice-box-field:hover {
+    -fx-border-color: #a8b3cf;
+}
+
+.choice-box-field .label {
+    -fx-text-fill: #2c3e50;
+}
+
+/* CHECKBOX */
+.checkbox-container {
+    -fx-padding: 8 0;
+}
+
+.checkbox-field {
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #2c3e50;
+}
+
+.checkbox-field .box {
+    -fx-background-color: white;
+    -fx-border-color: #667eea;
+    -fx-border-width: 2px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 3;
+}
+
+.checkbox-field:selected .box {
+    -fx-background-color: #667eea;
+    -fx-border-color: #667eea;
+}
+
+.checkbox-field:selected .mark {
+    -fx-background-color: white;
+}
+
+.checkbox-field:hover .box {
+    -fx-border-color: #5568d3;
+    -fx-effect: dropshadow(gaussian, rgba(102,126,234,0.2), 5, 0, 0, 0);
+}
+
+/* HINT TEXT */
+.hint-text {
+    -fx-font-size: 12px;
+    -fx-text-fill: #7f8c8d;
+    -fx-font-style: italic;
+    -fx-padding: 2 0 0 0;
+}
+
+/* MESSAGE LABEL */
+.message-label {
+    -fx-padding: 20 0 0 0;
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-background-radius: 8px;
+    -fx-padding: 14 18;
+    -fx-border-width: 0 0 0 4px;
+}
+
+.message-label[text=""] {
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-background-color: transparent;
+}
+
+/* Success Message */
+.message-success {
+    -fx-text-fill: #27ae60;
+    -fx-background-color: #d4edda;
+    -fx-border-color: #27ae60;
+}
+
+/* Error Message */
+.message-error {
+    -fx-text-fill: #e74c3c;
+    -fx-background-color: #ffe6e6;
+    -fx-border-color: #e74c3c;
+}
+
+/* Warning Message */
+.message-warning {
+    -fx-text-fill: #f39c12;
+    -fx-background-color: #fff3cd;
+    -fx-border-color: #f39c12;
+}
+
+/* Info Message */
+.message-info {
+    -fx-text-fill: #3498db;
+    -fx-background-color: #d6eaf8;
+    -fx-border-color: #3498db;
+}
+
+/* BUTTONS CONTAINER */
+.button-container {
+    -fx-padding: 25 0 0 0;
+}
+
+/* BUTTONS */
+.button {
+    -fx-background-radius: 10px;
+    -fx-padding: 14 28;
+    -fx-font-size: 15px;
+    -fx-font-weight: 600;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 10, 0, 0, 3);
+    -fx-transition: all 0.3s ease;
+}
+
+.button:hover {
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 15, 0, 0, 5);
+}
+
+.button:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+/* Primary Button (Save) */
+.btn-primary {
+    -fx-background-color: linear-gradient(to right, #27ae60, #229954);
+    -fx-text-fill: white;
+}
+
+.btn-primary:hover {
+    -fx-background-color: linear-gradient(to right, #229954, #1e8449);
+}
+
+.btn-save {
+    -fx-min-width: 180px;
+}
+
+/* Secondary Button (Reset) */
+.btn-secondary {
+    -fx-background-color: linear-gradient(to right, #3498db, #2980b9);
+    -fx-text-fill: white;
+    -fx-min-width: 140px;
+}
+
+.btn-secondary:hover {
+    -fx-background-color: linear-gradient(to right, #2980b9, #21618c);
+}
+
+/* Cancel Button */
+.btn-cancel {
+    -fx-background-color: linear-gradient(to right, #ecf0f1, #bdc3c7);
+    -fx-text-fill: #34495e;
+    -fx-min-width: 140px;
+}
+
+.btn-cancel:hover {
+    -fx-background-color: linear-gradient(to right, #bdc3c7, #95a5a6);
+}
+
+/* Back Button */
+.btn-back {
+    -fx-background-color: linear-gradient(to right, #95a5a6, #7f8c8d);
+    -fx-text-fill: white;
+    -fx-padding: 10 20;
+    -fx-background-radius: 8px;
+}
+
+.btn-back:hover {
+    -fx-background-color: linear-gradient(to right, #7f8c8d, #626567);
+}
+
+/* RESPONSIVE GRID */
+@media (max-width: 800px) {
+    .form-grid {
+        -fx-hgap: 15;
+        -fx-vgap: 15;
+    }
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn {
+    from {
+        -fx-opacity: 0;
+        -fx-translate-y: -10;
+    }
+    to {
+        -fx-opacity: 1;
+        -fx-translate-y: 0;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        -fx-translate-x: -20;
+        -fx-opacity: 0;
+    }
+    to {
+        -fx-translate-x: 0;
+        -fx-opacity: 1;
+    }
+}
+
+/* FOCUS RING ENHANCEMENT */
+.input-field:focused,
+.date-picker:focused,
+.choice-box-field:focused {
+    -fx-background-color: white;
+}
+
+/* PLACEHOLDER STYLING */
+.input-field:focused::prompt-text,
+.date-picker .text-field:focused::prompt-text {
+    -fx-opacity: 0.5;
+}
+
+/* FIELD VALIDATION STATES */
+.input-field.error {
+    -fx-border-color: #e74c3c;
+    -fx-background-color: #fff5f5;
+}
+
+.input-field.error:focused {
+    -fx-effect: dropshadow(gaussian, rgba(231,76,60,0.3), 10, 0, 0, 0);
+}
+
+.input-field.success {
+    -fx-border-color: #27ae60;
+    -fx-background-color: #f0fff4;
+}
+
+.input-field.success:focused {
+    -fx-effect: dropshadow(gaussian, rgba(39,174,96,0.3), 10, 0, 0, 0);
+}

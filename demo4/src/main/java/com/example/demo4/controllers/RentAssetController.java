@@ -23,17 +23,46 @@ public class RentAssetController extends BaseController {
         this.bookingId = bookingId;
     }
 
+
     @FXML
     public void initialize() {
         try {
             cbAsset.getItems().addAll(
                     com.example.demo4.dao.AssetDao.findAllAvailable()
             );
+
+            // 👇 HIỂN THỊ TRONG DROPDOWN
+            cbAsset.setCellFactory(listView -> new javafx.scene.control.ListCell<>() {
+                @Override
+                protected void updateItem(assets item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                    } else {
+                        setText(item.getName() + " (Còn: " + item.getQuantity() + ")");
+                    }
+                }
+            });
+
+            // 👇 HIỂN THỊ KHI ĐÃ CHỌN
+            cbAsset.setButtonCell(new javafx.scene.control.ListCell<>() {
+                @Override
+                protected void updateItem(assets item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText("Chọn tài sản");
+                    } else {
+                        setText(item.getName() + " (Còn: " + item.getQuantity() + ")");
+                    }
+                }
+            });
+
         } catch (Exception e) {
             e.printStackTrace();
             showError("Lỗi", "Không tải được danh sách tài sản!");
         }
     }
+
 
     @FXML
     private void handleRent() {

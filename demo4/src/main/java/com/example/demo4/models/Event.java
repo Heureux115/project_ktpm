@@ -11,10 +11,10 @@ public class Event {
     private String status;
 
     // Các hằng số trạng thái
-    public static final String STATUS_REGISTERED = "ĐĂNG KÝ";
-    public static final String STATUS_PAID       = "ĐÃ THANH TOÁN";
-    public static final String STATUS_CONFIRMED  = "XÁC NHẬN";
-    public static final String STATUS_CANCELLED  = "HUỶ";
+    public static final String STATUS_REGISTERED = "DANG KY";
+    public static final String STATUS_PAID       = "DA THANH TOAN";
+    public static final String STATUS_CONFIRMED  = "XAC NHAN";
+    public static final String STATUS_CANCELLED  = "HUY";
 
     // Constructor đầy đủ (dùng khi load từ DB)
     public Event(int id, String title, String date,

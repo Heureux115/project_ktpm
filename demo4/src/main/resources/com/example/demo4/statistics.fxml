@@ -15,9 +15,7 @@
     <HBox alignment="CENTER_LEFT" spacing="10">
         <Label text="📊 THỐNG KÊ NHÂN KHẨU" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
         <Region HBox.hgrow="ALWAYS"/>
-        <Button text="📄 Xuất báo cáo" onAction="#exportReport"
-                style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
-        <Button text="⬅️ Quay lại" onAction="#backToMenu"/>
+        <Button onAction="#handleCancel" style="-fx-background-color: #95a5a6;                        -fx-text-fill: white;                        -fx-font-size: 13px;                        -fx-font-weight: 600;                        -fx-background-radius: 6;                        -fx-padding: 10 20;                        -fx-cursor: hand;" styleClass="btn-close" text="✕ Đóng" />
     </HBox>
 
     <Separator/>
@@ -68,37 +66,5 @@
         </VBox>
     </HBox>
 
-    <!-- TẠM VẮNG TẠM TRÚ -->
-    <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 5;">
-        <Label text="🏠 THỐNG KÊ TẠM VẮNG / TẠM TRÚ" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
-
-        <HBox spacing="15" alignment="CENTER_LEFT">
-            <Label text="Từ ngày:"/>
-            <DatePicker fx:id="dpStartDate" prefWidth="150"/>
-            <Label text="Đến ngày:"/>
-            <DatePicker fx:id="dpEndDate" prefWidth="150"/>
-            <Button text="🔍 Lọc" onAction="#loadTemporaryRecords"
-                    style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
-        </HBox>
-
-        <GridPane hgap="30" vgap="10">
-            <Label text="Tạm vắng:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-            <Label fx:id="lblTamVang" text="0" GridPane.columnIndex="1" GridPane.rowIndex="0"
-                   style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #FF9800;"/>
-
-            <Label text="Tạm trú:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
-            <Label fx:id="lblTamTru" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1"
-                   style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #4CAF50;"/>
-        </GridPane>
-
-        <TableView fx:id="tableTempRecords" prefHeight="200">
-            <columns>
-                <TableColumn fx:id="colCitizenName" text="Công dân" prefWidth="200"/>
-                <TableColumn fx:id="colType" text="Loại" prefWidth="100"/>
-                <TableColumn fx:id="colStartDate" text="Từ ngày" prefWidth="120"/>
-                <TableColumn fx:id="colEndDate" text="Đến ngày" prefWidth="120"/>
-            </columns>
-        </TableView>
-    </VBox>
 
 </VBox>

@@ -4,6 +4,7 @@ import com.example.demo4.dao.CitizenDao;
 import com.example.demo4.models.Citizen;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
@@ -186,4 +187,6 @@ public class EditCitizenController extends BaseController {
     }
 
     private String nvl(String s) { return s == null ? "" : s; }
+
+
 }

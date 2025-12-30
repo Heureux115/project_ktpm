@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 
 public class Database {
     // 🔹 JDBC URL cho SQL Server
-    private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=ktpm;encrypt=false";
+    private static final String URL = "jdbc:sqlserver://localhost:1433;databaseName=ktpm1;encrypt=false";
     private static final String USER = "sa"; // 👈 Tài khoản mặc định của SQL Server
     private static final String PASSWORD = "123456"; // 👈 Thay bằng mật khẩu bạn đặt khi cài SQL Server
 

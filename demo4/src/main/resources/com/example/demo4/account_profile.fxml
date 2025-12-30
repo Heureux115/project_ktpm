@@ -57,6 +57,18 @@
                                   -fx-prompt-text-fill: #95a5a6;"/>
         </VBox>
 
+        <VBox spacing="6">
+            <TextField fx:id="txtCccd"
+                       promptText="Nhập số CCCD để định danh tài khoản"
+                       styleClass="text-field-custom"
+                       style="-fx-background-color: white;
+                              -fx-border-color: #d35400;
+                              -fx-border-radius: 6;
+                              -fx-background-radius: 6;
+                              -fx-padding: 10 12;
+                              -fx-font-size: 13px;"/>
+        </VBox>
+
         <!-- Update Button -->
         <Button text="💾 Cập Nhật Tài Khoản"
                 onAction="#updateAccount"
@@ -84,11 +96,19 @@
                      -fx-border-radius: 8;
                      -fx-background-radius: 8;
                      -fx-padding: 16;">
-            <Label fx:id="lblCitizenInfo"
+
+            <Label fx:id="lblCitizenFullname"
+                   text="Đang tải dữ liệu..."
+                   wrapText="true"
+                   style="-fx-font-size: 14px;
+                          -fx-font-weight: bold;
+                          -fx-text-fill: #2c3e50;"/>
+
+            <Label fx:id="lblCitizenCccd"
+                   text="..."
                    wrapText="true"
                    style="-fx-font-size: 13px;
-                          -fx-text-fill: #34495e;
-                          -fx-line-spacing: 4;"/>
+                          -fx-text-fill: #7f8c8d;"/>
         </VBox>
     </VBox>
 
