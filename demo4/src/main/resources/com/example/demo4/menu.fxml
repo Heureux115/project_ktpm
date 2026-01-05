@@ -51,7 +51,7 @@
 
                     <VBox alignment="CENTER" spacing="15">
                         <Label style="-fx-font-size: 48px;" text="🏢" />
-                        <Label style="-fx-font-size: 16px;-fx-font-weight: bold;-fx-text-fill: #2c3e50;-fx-text-alignment: center;-fx-wrap-text: true;" text="Quản lý Nhà Văn Hóa" />
+                        <Label style="-fx-font-size: 16px;-fx-font-weight: bold;-fx-text-fill: #2c3e50;-fx-text-alignment: center;-fx-wrap-text: true;" text="Đăng ký sự kiện" />
                         <Label style="-fx-font-size: 12px;-fx-text-fill: #7f8c8d;-fx-text-alignment: center;" text="Lịch sự kiện • Đặt phòng" />
                     </VBox>
                 </VBox>
@@ -61,17 +61,27 @@
 
                     <VBox alignment="CENTER" spacing="15">
                         <Label style="-fx-font-size: 48px;" text="🏢" />
-                        <Label style="-fx-font-size: 16px;-fx-font-weight: bold;-fx-text-fill: #2c3e50;-fx-text-alignment: center;-fx-wrap-text: true;" text="Quản lý tài khoản" />
-                        <Label style="-fx-font-size: 12px;-fx-text-fill: #7f8c8d;-fx-text-alignment: center;" text="Tài khoản • Mật khẩu" />
+                        <Label style="-fx-font-size: 16px;-fx-font-weight: bold;-fx-text-fill: #2c3e50;-fx-text-alignment: center;-fx-wrap-text: true;" text="Quản lý tài khoản - nhà văn hóa" />
+                        <Label style="-fx-font-size: 12px;-fx-text-fill: #7f8c8d;-fx-text-alignment: center;" text="Tài khoản • Sự kiện" />
                     </VBox>
                 </VBox>
 
                 <!-- Card 2: Quản lý Công Dân -->
-                <VBox onMouseClicked="#goToCitizenManagement" spacing="0" style="-fx-background-color: white;                              -fx-background-radius: 12;                              -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 15, 0, 0, 5);                              -fx-padding: 35 40;                              -fx-cursor: hand;                              -fx-min-width: 240;                              -fx-min-height: 200;" styleClass="menu-card">
+                <VBox fx:id="cardCustomer1" onMouseClicked="#goToCitizenManagement" spacing="0" style="-fx-background-color: white;                              -fx-background-radius: 12;                              -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 15, 0, 0, 5);                              -fx-padding: 35 40;                              -fx-cursor: hand;                              -fx-min-width: 240;                              -fx-min-height: 200;" styleClass="menu-card">
 
                     <VBox alignment="CENTER" spacing="15">
                         <Label style="-fx-font-size: 48px;" text="👥" />
                         <Label style="-fx-font-size: 16px;                                       -fx-font-weight: bold;                                       -fx-text-fill: #2c3e50;                                       -fx-text-alignment: center;                                       -fx-wrap-text: true;" text="Quản lý Công Dân" />
+                        <Label style="-fx-font-size: 12px;                                       -fx-text-fill: #7f8c8d;                                       -fx-text-alignment: center;" text="Hộ khẩu • Nhân khẩu" />
+                    </VBox>
+                </VBox>
+
+                <!-- Card 2.2: Quản lý Công Dân -->
+                <VBox fx:id="cardAdmin1" onMouseClicked="#goToCitizenManagement" spacing="0" style="-fx-background-color: white;                              -fx-background-radius: 12;                              -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 15, 0, 0, 5);                              -fx-padding: 35 40;                              -fx-cursor: hand;                              -fx-min-width: 240;                              -fx-min-height: 200;" styleClass="menu-card">
+
+                    <VBox alignment="CENTER" spacing="15">
+                        <Label style="-fx-font-size: 48px;" text="👥" />
+                        <Label style="-fx-font-size: 16px;                                       -fx-font-weight: bold;                                       -fx-text-fill: #2c3e50;                                       -fx-text-alignment: center;                                       -fx-wrap-text: true;" text="Quản lý hộ khẩu" />
                         <Label style="-fx-font-size: 12px;                                       -fx-text-fill: #7f8c8d;                                       -fx-text-alignment: center;" text="Hộ khẩu • Nhân khẩu" />
                     </VBox>
                 </VBox>

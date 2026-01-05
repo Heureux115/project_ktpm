@@ -60,20 +60,29 @@ public class HouseholdCustomerController extends BaseController {
                 return;
             }
 
-            List<Household> households = HouseholdDao.findByOwner(userId);
-            List<Citizen> allCitizens = new ArrayList<>();
-
-            for (Household h : households) {
-                allCitizens.addAll(
-                        CitizenDao.findByHouseholdId(h.getHouseholdId())
-                );
+            // 1️⃣ user → citizen
+            Citizen me = CitizenDao.findByUserId(userId);
+            if (me == null) {
+                showWarning("Lỗi", "Tài khoản chưa được gán với công dân!");
+                return;
             }
 
-            table.getItems().setAll(allCitizens);
+            Integer householdId = me.getHouseholdId();
+            if (householdId == null) {
+                showWarning("Thông báo", "Bạn chưa thuộc hộ khẩu nào!");
+                table.getItems().clear();
+                return;
+            }
+
+            // 2️⃣ household → citizens
+            List<Citizen> citizens =
+                    CitizenDao.findByHouseholdId(householdId);
+
+            table.getItems().setAll(citizens);
 
         } catch (Exception e) {
             e.printStackTrace();
-            showError("Lỗi", "Không thể tải nhân khẩu");
+            showError("Lỗi", "Không thể tải danh sách nhân khẩu");
         }
     }
 

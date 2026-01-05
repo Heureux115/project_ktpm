@@ -38,9 +38,22 @@ public class Main extends Application {
     }
 
     public static void showMenu() throws IOException {
-        Parent root = FXMLLoader.load(Main.class.getResource("/com/example/demo4/menu.fxml"));
-        primaryStage.setScene(new Scene(root, 800, 600));
+        Parent root = FXMLLoader.load(
+                Main.class.getResource("/com/example/demo4/menu.fxml")
+        );
+
+        Scene scene = new Scene(root, 800, 600);
+
+        // ✅ thêm CSS cho scene
+        scene.getStylesheets().add(
+                Main.class.getResource("/com/example/demo4/css/menu.css")
+                        .toExternalForm()
+        );
+
+        primaryStage.setScene(scene);
+        primaryStage.centerOnScreen();
     }
+
 
     public static void showAdminHousehold() throws IOException {
         Parent root = FXMLLoader.load(Main.class.getResource("/com/example/demo4/household_admin.fxml"));

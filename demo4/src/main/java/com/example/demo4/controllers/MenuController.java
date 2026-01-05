@@ -50,6 +50,8 @@ public class MenuController extends BaseController{
     @FXML private Label lblUsername;
     @FXML private VBox cardAdmin;   // Card cho Admin
     @FXML private VBox cardCustomer;
+    @FXML private VBox cardAdmin1;
+    @FXML private VBox cardCustomer1;
     @FXML
     public void initialize() {
         if (Session.isLoggedIn()) {
@@ -68,20 +70,26 @@ public class MenuController extends BaseController{
         // HIỆN card Account
         cardAdmin.setVisible(true);
         cardAdmin.setManaged(true);
-
+        cardAdmin1.setVisible(true);
+        cardAdmin1.setManaged(true);
         // ẨN card Cultural (Nhà văn hóa)
         cardCustomer.setVisible(false);
         cardCustomer.setManaged(false); // Quan trọng: setManaged(false) để nó không chiếm chỗ
+        cardCustomer1.setVisible(false);
+        cardCustomer1.setManaged(false);
     }
 
     private void showCustomerMode() {
         // ẨN card Account
         cardAdmin.setVisible(false);
         cardAdmin.setManaged(false);
-
+        cardAdmin1.setVisible(false);
+        cardAdmin1.setManaged(false);
         // HIỆN card Cultural
         cardCustomer.setVisible(true);
         cardCustomer.setManaged(true);
+        cardCustomer1.setVisible(true);
+        cardCustomer1.setManaged(true);
     }
     @FXML
     private void openAccountProfile() {
