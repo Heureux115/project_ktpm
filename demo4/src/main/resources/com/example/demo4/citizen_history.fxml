@@ -14,7 +14,7 @@
     </padding>
    <children>
 
-       <!-- HEADER -->
+       
        <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-padding: 0 0 20 0;">
       <children>
               <Label style="-fx-font-size: 28px;" text="📜" />
@@ -35,11 +35,11 @@
 
        <Separator style="-fx-background-color: #e0e6ed; -fx-padding: 0 0 20 0;" />
 
-       <!-- BẢNG LỊCH SỬ -->
+       
        <VBox spacing="12" VBox.vgrow="ALWAYS">
       <children>
 
-              <!-- Action Bar -->
+              
               <HBox spacing="12" style="-fx-background-color: white;                      -fx-border-color: #dce1e8;                      -fx-border-radius: 8;                      -fx-background-radius: 8;                      -fx-padding: 12;">
          <children>
 
@@ -47,7 +47,7 @@
 
                      <Region HBox.hgrow="ALWAYS" />
 
-                     <!-- Info Badge -->
+                     
                      <HBox alignment="CENTER" spacing="8" style="-fx-background-color: #e3f2fd;                          -fx-background-radius: 6;                          -fx-padding: 8 15;">
             <children>
                             <Label style="-fx-font-size: 14px;" text="ℹ">
@@ -60,7 +60,7 @@
          </children>
               </HBox>
 
-              <!-- Table Container -->
+              
               <VBox style="-fx-background-color: white;                      -fx-border-color: #dce1e8;                      -fx-border-radius: 8;                      -fx-background-radius: 8;                      -fx-padding: 15;" VBox.vgrow="ALWAYS">
          <children>
 
@@ -77,11 +77,11 @@
          </children>
               </VBox>
 
-              <!-- Statistics Summary -->
+              
               <HBox spacing="15" style="-fx-background-color: white;                      -fx-border-color: #dce1e8;                      -fx-border-radius: 8;                      -fx-background-radius: 8;                      -fx-padding: 15;">
          <children>
 
-                     <!-- Stat Card 1 -->
+                     
                      <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #e3f2fd;                          -fx-background-radius: 6;                          -fx-padding: 12 15;" HBox.hgrow="ALWAYS">
             <children>
                             <Label style="-fx-font-size: 20px;" text="📊" />
@@ -94,7 +94,7 @@
             </children>
                      </HBox>
 
-                     <!-- Stat Card 2 -->
+                     
                      <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #fff3cd;                          -fx-background-radius: 6;                          -fx-padding: 12 15;" HBox.hgrow="ALWAYS">
             <children>
                             <Label style="-fx-font-size: 20px;" text="🔄" />
@@ -107,7 +107,7 @@
             </children>
                      </HBox>
 
-                     <!-- Stat Card 3 -->
+                     
                      <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: #d4edda;                          -fx-background-radius: 6;                          -fx-padding: 12 15;" HBox.hgrow="ALWAYS">
             <children>
                             <Label style="-fx-font-size: 20px;" text="🏠" />

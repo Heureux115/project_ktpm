@@ -7,7 +7,7 @@
             fx:controller="com.example.demo4.controllers.HomelessCitizenController"
             style="-fx-background-color: #f5f7fa;">
 
-    <!-- TOP BAR -->
+    
     <top>
         <HBox spacing="15"
               alignment="CENTER_LEFT"
@@ -35,7 +35,7 @@
         </HBox>
     </top>
 
-    <!-- CENTER -->
+    
     <center>
         <VBox style="-fx-padding: 25;">
             <ScrollPane fitToWidth="true" fitToHeight="true">
@@ -73,7 +73,7 @@
         </VBox>
     </center>
 
-    <!-- BOTTOM -->
+    
     <bottom>
         <HBox spacing="15"
               alignment="CENTER_LEFT"

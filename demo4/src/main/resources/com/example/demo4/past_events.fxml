@@ -13,7 +13,7 @@
             <padding>
                 <Insets top="25" right="30" bottom="10" left="30"/>
             </padding>
-            <!-- Header -->
+            
             <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 0 0 10 0;">
                 <Label text="📅" style="-fx-font-size: 24px;"/>
                 <Label text="Sự Kiện Đã Qua (Trên 30 Ngày)"

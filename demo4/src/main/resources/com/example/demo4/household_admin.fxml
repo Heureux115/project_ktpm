@@ -12,7 +12,7 @@
             <padding>
                 <Insets bottom="10" left="30" right="30" top="25" />
             </padding>
-            <!-- Header -->
+            
             <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 0 0 10 0;">
                 <Label style="-fx-font-size: 24px;" text="🏠" />
                 <Label style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Quản Lý Hộ Khẩu (ADMIN)" />
@@ -43,7 +43,7 @@
     <bottom>
         <VBox spacing="12" style="-fx-padding: 15 30 25 30; -fx-background-color: #f5f7fa;">
 
-            <!-- HÀNG 1: Các nút chính -->
+            
             <HBox alignment="CENTER" spacing="12">
                 <Button onAction="#addHousehold" prefWidth="120" style="-fx-background-color: #27ae60;                            -fx-text-fill: white;                            -fx-font-size: 14px;                            -fx-font-weight: bold;                            -fx-background-radius: 6;                            -fx-padding: 12 20;                            -fx-cursor: hand;" text="➕ Thêm">
                     <styleClass>
@@ -76,7 +76,7 @@
                 </Button>
             </HBox>
 
-            <!-- HÀNG 2: Các nút bổ sung MỚI -->
+            
             <HBox alignment="CENTER" spacing="12">
                 <Button onAction="#splitHousehold" prefWidth="140" style="-fx-background-color: #e67e22;                            -fx-text-fill: white;                            -fx-font-size: 14px;                            -fx-font-weight: bold;                            -fx-background-radius: 6;                            -fx-padding: 12 20;                            -fx-cursor: hand;" text="✂ Tách hộ">
                     <styleClass>

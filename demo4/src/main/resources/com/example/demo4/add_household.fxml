@@ -13,7 +13,7 @@
         <Insets top="25" right="30" bottom="25" left="30"/>
     </padding>
 
-    <!-- Header -->
+    
     <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 0 0 20 0;">
         <Label text="🏡" style="-fx-font-size: 24px;"/>
         <Label text="Thêm Hộ Khẩu Mới"
@@ -22,10 +22,10 @@
 
     <Separator style="-fx-background-color: #e0e6ed; -fx-padding: 0 0 20 0;"/>
 
-    <!-- Form Container -->
+    
     <VBox spacing="18">
 
-        <!-- Chủ hộ -->
+        
         <VBox spacing="6">
             <Label text="Chủ hộ *"
                    style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #34495e;"/>
@@ -44,7 +44,7 @@
             </ComboBox>
         </VBox>
 
-        <!-- Địa chỉ -->
+        
         <VBox spacing="6">
             <Label text="Địa chỉ *"
                    style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #34495e;"/>
@@ -64,10 +64,10 @@
         </VBox>
     </VBox>
 
-    <!-- Spacer -->
+    
     <Region VBox.vgrow="ALWAYS" minHeight="20"/>
 
-    <!-- Buttons -->
+    
     <HBox spacing="12" alignment="CENTER" style="-fx-padding: 15 0 0 0;">
         <Button text="✓ Thêm Hộ Khẩu"
                 onAction="#handleAdd"
@@ -100,7 +100,7 @@
         </Button>
     </HBox>
 
-    <!-- Footer note -->
+    
     <Label text="* Trường bắt buộc"
            style="-fx-font-size: 11px;
                   -fx-text-fill: #95a5a6;

@@ -3,14 +3,14 @@ package com.example.demo4.models;
 import java.time.LocalDate;
 
 public class Citizen {
-    private int id; // Mã định danh duy nhất
+    private int id; 
     private String fullName;
-    private String alias; // Bí danh
+    private String alias; 
     private String gender;
     private LocalDate dob;
     private String placeOfBirth;
-    private String hometown; // Nguyên quán
-    private String ethnicity; // Dân tộc
+    private String hometown; 
+    private String ethnicity; 
 
     private String cccd;
     private LocalDate cccdIssueDate;
@@ -19,19 +19,19 @@ public class Citizen {
     private String job;
     private String workplace;
 
-    private String previousAddress; // Địa chỉ trước khi chuyển đến (Ghi "mới sinh" nếu là trẻ em)
-    private LocalDate registerDate; // Ngày đăng ký thường trú
+    private String previousAddress; 
+    private LocalDate registerDate; 
 
-    private String status; // Thường trú / Tạm trú / Tạm vắng / Đã qua đời
+    private String status; 
     private Boolean isHouseholder;
-    private String relation; // Quan hệ với chủ hộ
+    private String relation; 
 
     private Integer householdId;
     private Integer userId;
 
     public Citizen() {}
 
-    // Getters and Setters ...
+    
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public String getFullName() { return fullName; }

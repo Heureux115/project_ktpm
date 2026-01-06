@@ -13,7 +13,7 @@
         <Insets top="25" right="30" bottom="25" left="30"/>
     </padding>
 
-    <!-- Header -->
+    
     <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 0 0 20 0;">
         <Label text="🔄" style="-fx-font-size: 24px;"/>
         <Label text="Trả Tài Sản"
@@ -22,7 +22,7 @@
 
     <Separator style="-fx-background-color: #e0e6ed; -fx-padding: 0 0 20 0;"/>
 
-    <!-- Table Container -->
+    
     <VBox spacing="10">
         <Label text="Danh Sách Tài Sản Đang Thuê"
                style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #34495e;"/>
@@ -42,12 +42,12 @@
 
     <Separator style="-fx-background-color: #e0e6ed; -fx-padding: 0 0 20 0;"/>
 
-    <!-- Form Container -->
+    
     <VBox spacing="18">
         <Label fx:id="lblAssetInfo"
                style="-fx-font-size: 14px; -fx-text-fill: #34495e;"/>
 
-        <!-- Số lượng trả -->
+        
         <VBox spacing="6">
             <Label text="Số lượng trả *"
                    style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #34495e;"/>
@@ -66,7 +66,7 @@
             </TextField>
         </VBox>
 
-        <!-- Tình trạng khi nhận về -->
+        
         <VBox spacing="6">
             <Label text="Tình trạng khi nhận về"
                    style="-fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: #34495e;"/>
@@ -88,10 +88,10 @@
         </VBox>
     </VBox>
 
-    <!-- Spacer -->
+    
     <Region VBox.vgrow="ALWAYS" minHeight="20"/>
 
-    <!-- Buttons -->
+    
     <HBox spacing="12" alignment="CENTER" style="-fx-padding: 15 0 0 0;">
         <Button text="✓ Xác Nhận Trả"
                 onAction="#handleConfirmReturn"
@@ -124,7 +124,7 @@
         </Button>
     </HBox>
 
-    <!-- Footer note -->
+    
     <Label text="* Trường bắt buộc"
            style="-fx-font-size: 11px;
                   -fx-text-fill: #95a5a6;

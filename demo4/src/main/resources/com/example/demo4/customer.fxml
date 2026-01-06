@@ -6,7 +6,7 @@
 
 <BorderPane style="-fx-background-color: #f5f7fa;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo4.controllers.CustomerController">
 
-    <!-- HEADER -->
+    
     <top>
         <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-background-color: white;                      -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);                      -fx-padding: 20 25;">
            <children>
@@ -16,12 +16,12 @@
         </HBox>
     </top>
 
-    <!-- CENTER -->
+    
     <center>
         <VBox spacing="15" style="-fx-padding: 25;">
            <children>
    
-               <!-- Search Bar -->
+               
                <HBox spacing="12" style="-fx-background-color: white;                          -fx-border-color: #dce1e8;                          -fx-border-radius: 8;                          -fx-background-radius: 8;                          -fx-padding: 15;">
       <children>
       
@@ -33,7 +33,7 @@
       </children>
                </HBox>
    
-               <!-- Table -->
+               
                <VBox style="-fx-background-color: white;                          -fx-border-color: #dce1e8;                          -fx-border-radius: 8;                          -fx-background-radius: 8;                          -fx-padding: 15;" VBox.vgrow="ALWAYS">
       <children>
       
@@ -54,7 +54,7 @@
         </VBox>
     </center>
 
-    <!-- FOOTER -->
+    
     <bottom>
         <HBox alignment="CENTER" spacing="12" style="-fx-padding: 16 25;                      -fx-background-color: white;                      -fx-border-color: #e0e6ed;                      -fx-border-width: 1 0 0 0;">
            <children>

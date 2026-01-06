@@ -11,7 +11,7 @@ import java.time.LocalDate;
 
 public class AddCitizenController extends BaseController {
 
-    // === KHAI BÁO CÁC CONTROL TRONG FXML ===
+    
     @FXML private TextField tfFullName;
     @FXML private TextField tfAlias;
     @FXML private DatePicker dpDob;
@@ -34,13 +34,13 @@ public class AddCitizenController extends BaseController {
 
     @FXML private Label lblMessage;
 
-    // === CÁC BIẾN HỖ TRỢ LOGIC ===
+    
     private Stage stage;
     private Runnable onAddSuccess;
-    private Integer householdId; // ID hộ khẩu (Bắt buộc phải set từ màn hình trước)
-    private Integer userId = null; // ID người tạo (Optional)
+    private Integer householdId; 
+    private Integer userId = null; 
 
-    // === SETTER ĐỂ TRUYỀN DỮ LIỆU TỪ BÊN NGOÀI VÀO ===
+    
     public void setStage(Stage stage) { this.stage = stage; }
     public void setOnAddSuccess(Runnable r) { this.onAddSuccess = r; }
     public void setHouseholdId(Integer householdId) { this.householdId = householdId; }
@@ -48,7 +48,7 @@ public class AddCitizenController extends BaseController {
 
     @FXML
     public void initialize() {
-        // 1. Validate Ngày sinh: Không được chọn ngày tương lai
+        
         dpDob.setDayCellFactory(picker -> new DateCell() {
             @Override public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
@@ -56,7 +56,7 @@ public class AddCitizenController extends BaseController {
             }
         });
 
-        // 2. Logic Checkbox Chủ hộ
+        
         cbHouseholder.selectedProperty().addListener((obs, oldV, isSelected) -> {
             if (isSelected) {
                 tfRelation.setText("Chủ hộ");
@@ -67,13 +67,13 @@ public class AddCitizenController extends BaseController {
             }
         });
 
-        // Mặc định ngày đăng ký là ngày hiện tại nếu chưa chọn
+        
         dpRegisterDate.setValue(LocalDate.now());
     }
 
     @FXML
     private void handleAdd() {
-        // --- BƯỚC 1: LẤY DỮ LIỆU ---
+        
         String fullName = blankToNull(tfFullName.getText());
         String alias = blankToNull(tfAlias.getText());
         LocalDate dob = dpDob.getValue();
@@ -81,7 +81,7 @@ public class AddCitizenController extends BaseController {
         String job = blankToNull(tfJob.getText());
         String relation = blankToNull(tfRelation.getText());
 
-        // --- BƯỚC 2: VALIDATE DỮ LIỆU (Dựa trên dấu * ở FXML) ---
+        
         if (householdId == null) {
             setMsg("Lỗi hệ thống: Không xác định được hộ khẩu cần thêm!");
             return;
@@ -107,7 +107,7 @@ public class AddCitizenController extends BaseController {
             return;
         }
 
-        // Validate logic quan hệ
+        
         if (cbHouseholder.isSelected()) {
             relation = "Chủ hộ";
         } else {
@@ -118,12 +118,12 @@ public class AddCitizenController extends BaseController {
             }
         }
 
-        // --- BƯỚC 3: TẠO ĐỐI TƯỢNG MODEL ---
+        
         Citizen c = new Citizen();
         c.setHouseholdId(this.householdId);
         c.setFullName(fullName);
         c.setAlias(alias);
-        c.setDob(Date.valueOf(dob).toLocalDate()); // LocalDate -> SQL Date
+        c.setDob(Date.valueOf(dob).toLocalDate()); 
 
         c.setPlaceOfBirth(blankToNull(tfPlaceOfBirth.getText()));
         c.setHometown(blankToNull(tfHometown.getText()));
@@ -146,23 +146,23 @@ public class AddCitizenController extends BaseController {
         c.setRelation(relation);
         c.setRelation(cbHouseholder.isSelected() ? "Chủ hộ" : "Thành viên");
 
-        // CẢNH BÁO: FXML CỦA BẠN ĐANG THIẾU TRƯỜNG GIỚI TÍNH (GENDER)
-        // Tôi tạm set null hoặc mặc định, bạn cần bổ sung ComboBox vào FXML nếu DB bắt buộc
+        
+        
         c.setGender("Chưa xác định");
 
 
-        // --- BƯỚC 4: GỌI DAO ĐỂ LƯU ---
+        
         try {
-            CitizenDao dao = new CitizenDao(); // Hoặc getInstance() tùy code DAO của bạn
+            CitizenDao dao = new CitizenDao(); 
             int newId = dao.insert(c);
             boolean success = newId > 0;
 
             if (success) {
-                // Gọi callback để màn hình cha (Danh sách) load lại dữ liệu
+                
                 if (onAddSuccess != null) {
                     onAddSuccess.run();
                 }
-                close(); // Đóng cửa sổ
+                close(); 
             } else {
                 setMsg("Thêm thất bại! Có thể số CCCD đã tồn tại.");
             }
@@ -177,13 +177,13 @@ public class AddCitizenController extends BaseController {
         close();
     }
 
-    // --- CÁC HÀM HỖ TRỢ ---
+    
 
     private void close() {
         if (stage != null) {
             stage.close();
         } else {
-            // Fallback nếu quên setStage
+            
             Stage s = (Stage) tfFullName.getScene().getWindow();
             if (s != null) s.close();
         }
@@ -193,7 +193,7 @@ public class AddCitizenController extends BaseController {
         if (lblMessage != null) {
             lblMessage.setText(msg);
         } else {
-            // Nếu không có label thì hiện alert
+            
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Thông báo");
             alert.setHeaderText(null);

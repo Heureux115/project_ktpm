@@ -11,7 +11,7 @@
 
     <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
 
-    <!-- HEADER -->
+    
     <HBox alignment="CENTER_LEFT" spacing="10">
         <Label text="📊 THỐNG KÊ NHÂN KHẨU" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
         <Region HBox.hgrow="ALWAYS"/>
@@ -20,7 +20,7 @@
 
     <Separator/>
 
-    <!-- TỔNG QUAN -->
+    
     <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 5;">
         <Label text="📈 TỔNG QUAN" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
 
@@ -42,9 +42,9 @@
         </GridPane>
     </VBox>
 
-    <!-- BIỂU ĐỒ -->
+    
     <HBox spacing="15" VBox.vgrow="ALWAYS">
-        <!-- Biểu đồ độ tuổi -->
+        
         <VBox spacing="5" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 5;"
               HBox.hgrow="ALWAYS">
             <Label text="📊 Phân bố theo độ tuổi" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
@@ -58,7 +58,7 @@
             </BarChart>
         </VBox>
 
-        <!-- Biểu đồ giới tính -->
+        
         <VBox spacing="5" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 5;"
               prefWidth="350">
             <Label text="📊 Phân bố giới tính" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>

@@ -10,7 +10,7 @@ import java.util.List;
 
 public class HouseholdDao {
 
-    // ================== FIND ALL ==================
+    
     public static List<Household> findAll() throws Exception {
         String sql = "SELECT * FROM households";
 
@@ -26,7 +26,7 @@ public class HouseholdDao {
         }
     }
 
-    // ================== FIND BY ID ==================
+    
     public static Household findById(int householdId) throws SQLException {
         String sql = "SELECT * FROM households WHERE household_id = ?";
         try (Connection conn = Database.getConnection();
@@ -39,7 +39,7 @@ public class HouseholdDao {
         return null;
     }
 
-    // ================== FIND BY OWNER ==================
+    
     public static List<Household> findByOwner(int ownerUserId) {
         List<Household> list = new ArrayList<>();
 
@@ -61,7 +61,7 @@ public class HouseholdDao {
         return list;
     }
 
-    // ================== FIND BY USER ==================
+    
     public static List<Household> findByUser(int userId) throws SQLException {
         List<Household> list = new ArrayList<>();
         String sql = "SELECT * FROM households WHERE owner_user_id = ?";
@@ -76,7 +76,7 @@ public class HouseholdDao {
         return list;
     }
 
-    // Insert với Connection
+    
     public static void insert(Connection conn, Household h) throws SQLException {
         String sql = """
         INSERT INTO households
@@ -104,12 +104,12 @@ public class HouseholdDao {
 
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {
-                h.setHouseholdId(rs.getInt(1)); // set ID mới
+                h.setHouseholdId(rs.getInt(1)); 
             }
         }
     }
 
-    // Update với Connection
+    
     public static void update(Connection conn, Household h) throws SQLException {
         String sql = """
         UPDATE households
@@ -131,7 +131,7 @@ public class HouseholdDao {
     }
 
 
-    // ================== INSERT ==================
+    
     public static void insert(Household h) throws SQLException {
         String sql = """
             INSERT INTO households
@@ -161,7 +161,7 @@ public class HouseholdDao {
         }
     }
 
-    // ================== UPDATE ==================
+    
     public static void update(Household h) throws Exception {
         String sql = """
             UPDATE households
@@ -184,27 +184,27 @@ public class HouseholdDao {
         }
     }
 
-    // ================== DELETE (TRANSACTION) ==================
+    
     public static void delete(int householdId) throws SQLException {
         Connection conn = Database.getConnection();
         try {
             conn.setAutoCommit(false);
 
-            // 1. Xóa tất cả bản ghi liên quan trong household_changes
+            
             try (PreparedStatement ps = conn.prepareStatement(
                     "DELETE FROM household_changes WHERE household_id = ?")) {
                 ps.setInt(1, householdId);
                 ps.executeUpdate();
             }
 
-            // 2. Cập nhật citizen để household_id = NULL
+            
             try (PreparedStatement ps = conn.prepareStatement(
                     "UPDATE citizens SET household_id = NULL WHERE household_id = ?")) {
                 ps.setInt(1, householdId);
                 ps.executeUpdate();
             }
 
-            // 3. Xóa hộ khẩu
+            
             try (PreparedStatement ps = conn.prepareStatement(
                     "DELETE FROM households WHERE household_id = ?")) {
                 ps.setInt(1, householdId);
@@ -224,10 +224,10 @@ public class HouseholdDao {
         delete(householdId);
     }
 
-    // ================== MAP ROW ==================
+    
     private static Household mapRow(ResultSet rs) throws SQLException {
         Household h = new Household(
-                rs.getInt("household_id"), // Sử dụng đúng tên cột
+                rs.getInt("household_id"), 
                 rs.getObject("head_citizen_id", Integer.class),
                 rs.getString("address"),
                 rs.getObject("owner_user_id", Integer.class)
@@ -245,7 +245,7 @@ public class HouseholdDao {
         return h;
     }
 
-    // Lấy household_id lớn nhất hiện tại
+    
     public static int getNextHouseholdId() throws SQLException {
         String sql = "SELECT MAX(household_id) FROM households";
         try (Connection conn = Database.getConnection();
@@ -253,7 +253,7 @@ public class HouseholdDao {
              ResultSet rs = ps.executeQuery()) {
 
             if (rs.next()) {
-                return rs.getInt(1); // trả về max id, nếu null sẽ trả về 0
+                return rs.getInt(1); 
             }
             return 0;
         }

@@ -10,8 +10,8 @@ import java.util.List;
 
 public class CitizenChangeDao {
 
-    // ================= INSERT =================
-    // Trong CitizenChangeDao
+    
+    
     public static void insert(Connection conn, CitizenChange cc) throws SQLException {
         String sql = """
         INSERT INTO citizen_changes
@@ -37,7 +37,7 @@ public class CitizenChangeDao {
     }
 
 
-    // ================= FIND =================
+    
     public static List<CitizenChange> findByCitizen(int citizenId) throws Exception {
         List<CitizenChange> list = new ArrayList<>();
         String sql = "SELECT * FROM citizen_changes WHERE citizen_id=? ORDER BY change_date DESC";
@@ -52,11 +52,11 @@ public class CitizenChangeDao {
         return list;
     }
 
-    // ================= MAP =================
+    
     private static CitizenChange mapRow(ResultSet rs) throws SQLException {
         CitizenChange c = new CitizenChange();
-        c.setId(rs.getInt("id"));                 // id tự sinh
-        c.setCitizenId(rs.getInt("citizen_id"));  // giữ citizen_id
+        c.setId(rs.getInt("id"));                 
+        c.setCitizenId(rs.getInt("citizen_id"));  
         c.setFromHouseholdId((Integer) rs.getObject("from_household_id"));
         c.setToHouseholdId((Integer) rs.getObject("to_household_id"));
         c.setChangeType(rs.getString("change_type"));
@@ -69,7 +69,7 @@ public class CitizenChangeDao {
         return c;
     }
 
-    // ================= HELPERS =================
+    
     private static void setDate(PreparedStatement ps, int idx, LocalDate d) throws SQLException {
         if (d != null) ps.setDate(idx, Date.valueOf(d));
         else ps.setNull(idx, Types.DATE);

@@ -29,7 +29,7 @@ public class BookingAsset {
         this.conditionIn = conditionIn;
     }
 
-    // getters + setters
+    
 
     public int getId() {
         return id;

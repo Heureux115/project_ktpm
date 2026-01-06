@@ -71,12 +71,12 @@ public class AddHouseholdController extends BaseController {
                     ownerId
             );
 
-            // Thay cho đoạn insert cũ
+            
             HouseholdDao.insert(h);
-            int newHouseholdId = HouseholdDao.getNextHouseholdId(); // lấy id mới
+            int newHouseholdId = HouseholdDao.getNextHouseholdId(); 
             h.setHouseholdId(newHouseholdId);
 
-// Gán chủ hộ vào hộ khẩu
+
             if (headCitizenId != null) {
                 var citizen = CitizenDao.findById(headCitizenId);
                 if (citizen != null) {
@@ -103,7 +103,7 @@ public class AddHouseholdController extends BaseController {
         closeStage();
     }
 
-    // ================= HELPER =================
+    
     private Integer parseInteger(String s) {
         if (s.isEmpty()) return null;
         try {

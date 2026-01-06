@@ -13,7 +13,7 @@
         <Insets top="25" right="30" bottom="25" left="30"/>
     </padding>
 
-    <!-- Header -->
+    
     <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 0 0 20 0;">
         <Label text="🆘" style="-fx-font-size: 24px;"/>
         <Label text="Thêm Công Dân Chưa Có Nơi Cư Trú"
@@ -24,10 +24,10 @@
 
     <Separator style="-fx-background-color: #e0e6ed; -fx-padding: 0 0 20 0;"/>
 
-    <!-- Form -->
+    
     <VBox spacing="18">
 
-        <!-- Họ và tên -->
+        
         <VBox spacing="6">
             <Label text="Họ và tên *"
                    style="-fx-font-size: 13px;
@@ -48,7 +48,7 @@
             </TextField>
         </VBox>
 
-        <!-- Ngày sinh -->
+        
         <VBox spacing="6">
             <Label text="Ngày sinh *"
                    style="-fx-font-size: 13px;
@@ -68,7 +68,7 @@
             </DatePicker>
         </VBox>
 
-        <!-- CCCD -->
+        
         <VBox spacing="6">
             <Label text="Số CCCD *"
                    style="-fx-font-size: 13px;
@@ -89,7 +89,7 @@
             </TextField>
         </VBox>
 
-        <!-- Nghề nghiệp -->
+        
         <VBox spacing="6">
             <Label text="Nghề nghiệp"
                    style="-fx-font-size: 13px;
@@ -112,10 +112,10 @@
 
     </VBox>
 
-    <!-- Spacer -->
+    
     <Region VBox.vgrow="ALWAYS" minHeight="20"/>
 
-    <!-- Buttons -->
+    
     <HBox spacing="12" alignment="CENTER" style="-fx-padding: 15 0 0 0;">
         <Button text="✓ Lưu"
                 onAction="#save"
@@ -148,13 +148,13 @@
         </Button>
     </HBox>
 
-    <!-- Note -->
+    
     <Label text="* Trường bắt buộc"
            style="-fx-font-size: 11px;
                   -fx-text-fill: #95a5a6;
                   -fx-padding: 15 0 0 0;"/>
 
-    <!-- Message -->
+    
     <Label fx:id="lblMessage"
            style="-fx-text-fill: #e74c3c;
                   -fx-font-size: 12px;

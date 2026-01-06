@@ -8,7 +8,7 @@
             fx:controller="com.example.demo4.controllers.ManageHouseholdMembersController"
             style="-fx-background-color: #f5f7fa;">
 
-    <!-- ===== TOP BAR ===== -->
+    
     <top>
         <HBox spacing="15"
               alignment="CENTER_LEFT"
@@ -37,12 +37,12 @@
         </HBox>
     </top>
 
-    <!-- ===== CENTER ===== -->
+    
     <center>
         <HBox spacing="20"
               style="-fx-padding: 25;">
 
-            <!-- ===== MEMBERS IN HOUSE ===== -->
+            
             <VBox spacing="10" HBox.hgrow="ALWAYS">
 
                 <Label text="Thành viên trong hộ"
@@ -99,7 +99,7 @@
 
             </VBox>
 
-            <!-- ===== NO HOUSE ===== -->
+            
             <VBox spacing="10" HBox.hgrow="ALWAYS">
 
                 <Label text="Công dân chưa có hộ"

@@ -168,7 +168,7 @@ public class AccountProfileController extends BaseController {
 
                 }
 
-                if (!newCccd.matches("\\d{12}")) { // Ví dụ check 12 số
+                if (!newCccd.matches("\\d{12}")) { 
 
                     showWarning("Lỗi", "Số CCCD không hợp lệ (phải là 12 chữ số)!");
 
@@ -178,11 +178,11 @@ public class AccountProfileController extends BaseController {
 
                 if (currentCitizen != null) {
 
-// TRƯỜNG HỢP 1: Đã có hồ sơ, chỉ điền bù số CCCD còn thiếu
+
 
                     currentCitizen.setCccd(newCccd);
 
-                    CitizenDao.update(currentCitizen); // Quan trọng: Phải gọi DAO để lưu xuống DB
+                    CitizenDao.update(currentCitizen); 
 
                     changed = true;
 
@@ -190,9 +190,9 @@ public class AccountProfileController extends BaseController {
 
                 else {
 
-// TRƯỜNG HỢP 2: Chưa có hồ sơ (currentCitizen == null)
 
-// -> Dùng số CCCD này để đi tìm người sở hữu trong DB để liên kết
+
+
 
                     Citizen citizenToLink = CitizenDao.findByCccd(newCccd);
 
@@ -202,7 +202,7 @@ public class AccountProfileController extends BaseController {
 
                         CitizenDao.assignUser(citizenToLink.getId(), currentUser.getId());
 
-                        currentCitizen = citizenToLink; // Gán lại để cập nhật giao diện
+                        currentCitizen = citizenToLink; 
 
                         changed = true;
 
@@ -210,7 +210,7 @@ public class AccountProfileController extends BaseController {
 
                         showWarning("Lỗi", "Không tìm thấy công dân nào có số CCCD này trong hệ thống!");
 
-                        return; // Dừng lại, không cho update
+                        return; 
 
                     }
 

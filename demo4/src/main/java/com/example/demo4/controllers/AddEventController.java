@@ -75,10 +75,10 @@ public class AddEventController extends BaseController {
                     Event.STATUS_REGISTERED
             );
 
-            // ✅ 1. INSERT EVENT
+            
             int eventId = EventDao.insertWithCheck(event);
 
-            // ✅ 2. INSERT BOOKING NGƯỜI TẠO
+            
             Booking booking = new Booking(
                     0,
                     Session.getCurrentUserId(),

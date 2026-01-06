@@ -11,14 +11,14 @@
         fx:controller="com.example.demo4.controllers.CitizenController"
         style="-fx-background-color: #f5f7fa;">
 
-    <!-- ================= TOP ================= -->
+    
     <top>
         <VBox spacing="0" style="-fx-background-color: #f5f7fa;">
             <padding>
                 <Insets top="25" right="30" bottom="10" left="30"/>
             </padding>
 
-            <!-- HEADER -->
+            
             <HBox alignment="CENTER_LEFT" spacing="10"
                   style="-fx-padding: 0 0 10 0;">
                 <Label text="👤"
@@ -36,11 +36,11 @@
         </VBox>
     </top>
 
-    <!-- ================= CENTER ================= -->
+    
     <center>
         <VBox spacing="15" style="-fx-padding: 25;">
 
-            <!-- Search Bar -->
+            
             <HBox spacing="12" style="-fx-background-color: white;                          -fx-border-color: #dce1e8;                          -fx-border-radius: 8;                          -fx-background-radius: 8;                          -fx-padding: 15;">
 
                 <TextField fx:id="searchField" promptText="🔍 Tìm kiếm theo tên hoặc CCCD..." style="-fx-background-color: #f8f9fa;                                   -fx-border-color: #dce1e8;                                   -fx-border-radius: 6;                                   -fx-background-radius: 6;                                   -fx-padding: 10 14;                                   -fx-font-size: 14px;                                   -fx-prompt-text-fill: #95a5a6;" styleClass="search-field" HBox.hgrow="ALWAYS" />
@@ -50,7 +50,7 @@
                 <Button onAction="#refreshList" style="-fx-background-color: #95a5a6;                                -fx-text-fill: white;                                -fx-font-size: 13px;                                -fx-font-weight: 600;                                -fx-background-radius: 6;                                -fx-padding: 10 20;                                -fx-cursor: hand;" styleClass="btn-refresh" text="🔄 Làm mới" />
             </HBox>
 
-            <!-- Table -->
+            
             <VBox style="-fx-background-color: white;                          -fx-border-color: #dce1e8;                          -fx-border-radius: 8;                          -fx-background-radius: 8;                          -fx-padding: 15;" VBox.vgrow="ALWAYS">
 
                 <TableView fx:id="citizenTable" styleClass="table-view-custom" VBox.vgrow="ALWAYS">

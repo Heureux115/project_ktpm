@@ -4,17 +4,17 @@
     import java.time.LocalDate;
 
     public class Household {
-        private int householdId;        // Số hộ khẩu (Mã định danh)
-        private Integer headCitizenId;  // Họ tên chủ hộ (thông qua ID)
-        private String address;         // Địa chỉ hiện tại (Số nhà)
-        private String street;          // Đường phố / Ấp
-        private String ward;            // Phường / Xã
-        private String district;        // Quận / Huyện
+        private int householdId;        
+        private Integer headCitizenId;  
+        private String address;         
+        private String street;          
+        private String ward;            
+        private String district;        
 
         private List<Citizen> members;
         private Integer ownerUserId;
 
-        // Lưu lịch sử thay đổi hộ (Chủ hộ mới, nội dung thay đổi)
+        
         private String changeNote;
         private LocalDate lastChangeDate;
 
@@ -32,7 +32,7 @@
             return "Số HK: " + householdId + " - " + address + ", " + street;
         }
 
-        // Getters and Setters ...
+        
         public int getHouseholdId() { return householdId; }
         public void setHouseholdId(int householdId) { this.householdId = householdId; }
         public Integer getHeadCitizenId() { return headCitizenId; }

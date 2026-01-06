@@ -10,7 +10,7 @@ import java.util.List;
 
 public class EventDao {
 
-    // Lấy các sự kiện từ ngày minDate trở đi
+    
     public static List<Event> findUpcomingFrom(LocalDate minDate) throws SQLException {
         List<Event> list = new ArrayList<>();
         String sql = "SELECT id, title, date, start_time, end_time, location, description, status " +
@@ -28,7 +28,7 @@ public class EventDao {
         return list;
     }
 
-    // Lấy sự kiện quá khứ
+    
     public static List<Event> findPastBefore(LocalDate limitDate) throws SQLException {
         List<Event> list = new ArrayList<>();
         String sql = "SELECT id, title, date, start_time, end_time, location, description, status " +
@@ -46,7 +46,7 @@ public class EventDao {
         return list;
     }
 
-    // Lấy tất cả sự kiện
+    
     public static List<Event> findAll() throws SQLException {
         List<Event> list = new ArrayList<>();
         String sql = "SELECT id, title, date, start_time, end_time, location, description, status FROM events";
@@ -62,7 +62,7 @@ public class EventDao {
         return list;
     }
 
-    // Kiểm tra trùng lịch sự kiện
+    
     public static boolean hasTimeConflict(LocalDate date, String start, String end) throws SQLException {
         String sql = """
             SELECT COUNT(*) FROM events
@@ -82,7 +82,7 @@ public class EventDao {
         }
     }
 
-    // Thêm mới sự kiện
+    
     public static void insert(Event e) throws SQLException {
         String sql = "INSERT INTO events(title, date, start_time, end_time, location, description, status) " +
                 "VALUES(?,?,?,?,?,?,?)";
@@ -117,7 +117,7 @@ public class EventDao {
         try (Connection conn = Database.getConnection()) {
             conn.setAutoCommit(false);
 
-            // 1️⃣ Check trùng giờ
+            
             try (PreparedStatement ps = conn.prepareStatement(checkSql)) {
                 ps.setDate(1, Date.valueOf(e.getDate()));
                 ps.setString(2, e.getStartTime());
@@ -129,7 +129,7 @@ public class EventDao {
                 }
             }
 
-            // 2️⃣ Insert + lấy ID
+            
             try (PreparedStatement ps = conn.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS)) {
                 ps.setString(1, e.getTitle());
                 ps.setDate(2, Date.valueOf(e.getDate()));
@@ -184,7 +184,7 @@ public class EventDao {
         return null;
     }
 
-    // Cập nhật sự kiện
+    
     public static void update(Event e) throws SQLException {
         String sql = "UPDATE events SET title=?, date=?, start_time=?, end_time=?, " +
                 "location=?, description=?, status=? WHERE id=?";
@@ -204,7 +204,7 @@ public class EventDao {
         }
     }
 
-    // Cập nhật trạng thái sự kiện
+    
     public static void updateStatus(int id, String status) throws SQLException {
         String sql = "UPDATE events SET status=? WHERE id=?";
 
@@ -217,7 +217,7 @@ public class EventDao {
         }
     }
 
-    // Map ResultSet -> Event
+    
     private static Event mapRow(ResultSet rs) throws SQLException {
         return new Event(
                 rs.getInt("id"),

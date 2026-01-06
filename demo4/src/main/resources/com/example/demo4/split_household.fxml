@@ -12,7 +12,7 @@
     </padding>
    <children>
    
-       <!-- HEADER -->
+       
        <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-padding: 0 0 20 0;">
       <children>
               <Label style="-fx-font-size: 28px;" text="✂" />
@@ -31,11 +31,11 @@
    
        <Separator style="-fx-background-color: #e0e6ed; -fx-padding: 0 0 20 0;" />
    
-       <!-- HAI BẢNG -->
+       
        <HBox spacing="20" VBox.vgrow="ALWAYS">
       <children>
       
-              <!-- Bảng 1: Thành viên hiện tại -->
+              
               <VBox spacing="12" HBox.hgrow="ALWAYS">
          <children>
                      <HBox alignment="CENTER_LEFT" spacing="8">
@@ -67,7 +67,7 @@
          </children>
               </VBox>
       
-              <!-- NÚT DI CHUYỂN -->
+              
               <VBox alignment="CENTER" spacing="15" style="-fx-padding: 20 0;">
          <children>
                      <Button onAction="#moveToNewHousehold" prefHeight="50" prefWidth="60" style="-fx-background-color: #3498db;                            -fx-text-fill: white;                            -fx-font-size: 24px;                            -fx-background-radius: 8;                            -fx-cursor: hand;" styleClass="btn-move-right" text="➡️" />
@@ -78,7 +78,7 @@
          </children>
               </VBox>
       
-              <!-- Bảng 2: Hộ mới -->
+              
               <VBox spacing="12" HBox.hgrow="ALWAYS">
          <children>
                      <HBox alignment="CENTER_LEFT" spacing="8">
@@ -112,10 +112,10 @@
       </children>
        </HBox>
    
-       <!-- SPACER -->
+       
        <Region minHeight="20" />
    
-       <!-- THÔNG TIN HỘ MỚI -->
+       
        <VBox spacing="15" style="-fx-background-color: white;                  -fx-border-color: #dce1e8;                  -fx-border-radius: 8;                  -fx-background-radius: 8;                  -fx-padding: 20;">
       <children>
       
@@ -128,7 +128,7 @@
       
               <VBox spacing="15">
          <children>
-                     <!-- Địa chỉ mới -->
+                     
                      <VBox spacing="6">
                         <children>
                             <Label style="-fx-font-size: 13px;                               -fx-font-weight: 600;                               -fx-text-fill: #34495e;" text="Địa chỉ mới *" />
@@ -136,7 +136,7 @@
                         </children>
                      </VBox>
          
-                     <!-- Ghi chú -->
+                     
                      <VBox spacing="6">
             <children>
                             <Label style="-fx-font-size: 13px;                               -fx-font-weight: 600;                               -fx-text-fill: #34495e;" text="Ghi chú" />
@@ -148,7 +148,7 @@
       
               <Separator style="-fx-background-color: #e0e6ed; -fx-padding: 5 0;" />
       
-              <!-- Action Buttons -->
+              
               <HBox alignment="CENTER_RIGHT" spacing="12">
          <children>
                      <Button onAction="#handleSplit" style="-fx-background-color: #27ae60;                            -fx-text-fill: white;                            -fx-font-size: 14px;                            -fx-font-weight: bold;                            -fx-background-radius: 6;                            -fx-padding: 12 24;                            -fx-cursor: hand;" styleClass="btn-confirm" text="✅ Xác Nhận Tách Hộ" />
@@ -157,7 +157,7 @@
          </children>
               </HBox>
       
-              <!-- Footer note -->
+              
               <Label style="-fx-font-size: 11px;                       -fx-text-fill: #95a5a6;" text="* Trường bắt buộc" />
       </children>
        </VBox>

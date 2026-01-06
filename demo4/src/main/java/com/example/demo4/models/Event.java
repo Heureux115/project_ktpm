@@ -3,20 +3,20 @@ package com.example.demo4.models;
 public class Event {
     private int id;
     private String title;
-    private String date;       // yyyy-MM-dd (tùy bạn)
-    private String startTime;  // HH:mm (nếu dùng)
-    private String endTime;    // HH:mm
+    private String date;       
+    private String startTime;  
+    private String endTime;    
     private String location;
     private String description;
     private String status;
 
-    // Các hằng số trạng thái
+    
     public static final String STATUS_REGISTERED = "DANG KY";
     public static final String STATUS_PAID       = "DA THANH TOAN";
     public static final String STATUS_CONFIRMED  = "XAC NHAN";
     public static final String STATUS_CANCELLED  = "HUY";
 
-    // Constructor đầy đủ (dùng khi load từ DB)
+    
     public Event(int id, String title, String date,
                  String startTime, String endTime,
                  String location, String description,
@@ -31,21 +31,21 @@ public class Event {
         this.status = status;
     }
 
-    // Constructor tiện lợi khi KHÔNG quan tâm start/end time
-    // (vd: tương thích với code cũ nếu cần)
+    
+    
     public Event(int id, String title, String date,
                  String location, String description, String status) {
         this(id, title, date, null, null, location, description, status);
     }
 
-    // Constructor dùng khi tạo mới (chưa có id, chưa set status → mặc định ĐĂNG KÝ)
+    
     public Event(String title, String date,
                  String startTime, String endTime,
                  String location, String description) {
         this(-1, title, date, startTime, endTime, location, description, STATUS_REGISTERED);
     }
 
-    // --- Getters ---
+    
     public int getId() { return id; }
     public String getTitle() { return title; }
     public String getDate() { return date; }
@@ -55,7 +55,7 @@ public class Event {
     public String getDescription() { return description; }
     public String getStatus() { return status; }
 
-    // --- Setters ---
+    
     public void setId(int id) { this.id = id; }
     public void setTitle(String title) { this.title = title; }
     public void setDate(String date) { this.date = date; }

@@ -2,12 +2,12 @@ package com.example.demo4;
 
 public class Session {
 
-    // Có thể lưu cả id nếu cần
+    
     private static Integer currentUserId;
     private static String currentUsername;
     private static String currentRole;
 
-    // ==== LOGIN / LOGOUT ====
+    
 
     public static void login(Integer userId, String username, String role) {
         currentUserId   = userId;
@@ -21,7 +21,7 @@ public class Session {
         currentRole     = null;
     }
 
-    // ==== GETTER ====
+    
 
     public static Integer getCurrentUserId() {
         return currentUserId;
@@ -35,7 +35,7 @@ public class Session {
         return currentRole;
     }
 
-    // ==== TIỆN ÍCH PHÂN QUYỀN ====
+    
 
     public static boolean isLoggedIn() {
         return currentUsername != null;

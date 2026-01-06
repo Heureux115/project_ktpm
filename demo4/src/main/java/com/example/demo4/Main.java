@@ -44,7 +44,7 @@ public class Main extends Application {
 
         Scene scene = new Scene(root, 800, 600);
 
-        // ✅ thêm CSS cho scene
+        
         scene.getStylesheets().add(
                 Main.class.getResource("/com/example/demo4/css/menu.css")
                         .toExternalForm()

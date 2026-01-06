@@ -9,9 +9,9 @@ import java.util.List;
 
 public class BookingAssetDao {
 
-    // ==========================
-    // THUÊ TÀI SẢN
-    // ==========================
+    
+    
+    
     public static void rentAsset(
             int bookingId,
             int assetId,
@@ -62,7 +62,7 @@ public class BookingAssetDao {
                     ps.setInt(1, bookingId);
                     ps.setInt(2, assetId);
                     ps.setInt(3, quantity);
-                    ps.setInt(4, 0); // returned_qty
+                    ps.setInt(4, 0); 
                     ps.setString(5, conditionOut);
                     ps.executeUpdate();
                 }
@@ -76,9 +76,9 @@ public class BookingAssetDao {
         }
     }
 
-    // ==========================
-    // LOAD THEO BOOKING (CHƯA TRẢ)
-    // ==========================
+    
+    
+    
     public static List<BookingAsset> findUnreturnedByBooking(int bookingId)
             throws SQLException {
 
@@ -112,9 +112,9 @@ public class BookingAssetDao {
         return list;
     }
 
-    // ==========================
-    // TRẢ TỪNG PHẦN
-    // ==========================
+    
+    
+    
     public static void confirmReturnPartial(
             int bookingAssetId,
             int returnedNow,
@@ -184,9 +184,9 @@ public class BookingAssetDao {
         }
     }
 
-    // ==========================
-    // LOAD TẤT CẢ CHƯA TRẢ
-    // ==========================
+    
+    
+    
     public static List<BookingAsset> findAllUnreturned()
             throws SQLException {
 

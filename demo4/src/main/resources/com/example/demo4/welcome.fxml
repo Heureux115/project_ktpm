@@ -9,16 +9,16 @@
       fx:controller="com.example.demo4.controllers.WelcomeController"
       prefWidth="800" prefHeight="500" style="-fx-background-color: linear-gradient(to bottom right, #667eea, #764ba2);">
 
-    <!-- Hộp ? -->
+    
     <ImageView fx:id="box"
                layoutY="250"
                fitWidth="100" fitHeight="100"/>
-    <!-- Mario -->
+    
     <ImageView fx:id="mario"
                layoutX="50" layoutY="300"
                fitWidth="200" fitHeight="150"/>
 
-    <!-- Text bật ra -->
+    
     <Text fx:id="successText"
           text="LOGIN SUCCESS!"
           layoutY="220"
@@ -26,7 +26,7 @@
           style="-fx-font-size: 32px; -fx-font-weight: bold;"
           opacity="0"/>
 
-    <!-- Text cuộn cuối -->
+    
     <Text fx:id="scrollText"
           text="Welcome to the system!&#10;Loading dashboard"
           textAlignment="CENTER"

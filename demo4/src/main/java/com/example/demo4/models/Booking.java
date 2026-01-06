@@ -10,7 +10,7 @@ public class Booking {
     public Booking(int id, int userId, int eventId, String status, String paymentStatus) {
         this.id=id; this.userId=userId; this.eventId=eventId; this.status=status; this.paymentStatus=paymentStatus;
     }
-    // getters + setters
+    
 
     public int getId() {
         return id;

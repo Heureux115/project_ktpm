@@ -24,7 +24,7 @@ public class AddHomelessCitizenController extends BaseController {
     @FXML
     private void save() {
         try {
-            // ✅ CHỈ CHECK TỐI THIỂU
+            
             if (tfFullName.getText().isBlank()
                     || dpDob.getValue() == null
                     || tfCccd.getText().isBlank()) {
@@ -40,21 +40,21 @@ public class AddHomelessCitizenController extends BaseController {
 
             Citizen c = new Citizen();
 
-            // ===== BẮT BUỘC =====
+            
             c.setFullName(tfFullName.getText().trim());
             c.setDob(dpDob.getValue());
             c.setCccd(tfCccd.getText().trim());
 
-            // ===== TÙY CHỌN =====
+            
             c.setJob(blankToNull(tfJob.getText()));
 
-            // ===== TRẠNG THÁI HOMELESS =====
+            
             c.setHouseholdId(null);
             c.setHouseholder(false);
             c.setRelation(null);
             c.setUserId(null);
 
-            // ===== CÁC FIELD KHÁC ĐỂ NULL =====
+            
             c.setAlias(null);
             c.setPlaceOfBirth(null);
             c.setHometown(null);

@@ -11,14 +11,14 @@
         xmlns:fx="http://javafx.com/fxml/1"
         fx:controller="com.example.demo4.controllers.TemporaryRecordController">
 
-    <!-- ================= TOP ================= -->
+    
     <top>
         <VBox spacing="0" style="-fx-background-color: #f5f7fa;">
             <padding>
                 <Insets top="25" right="30" bottom="10" left="30"/>
             </padding>
 
-            <!-- HEADER -->
+            
             <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 0 0 10 0;">
                 <Label text="🏠" style="-fx-font-size: 24px;"/>
                 <Label text="Quản Lý Tạm Trú / Tạm Vắng"
@@ -43,13 +43,13 @@
         </VBox>
     </top>
 
-    <!-- ================= CENTER ================= -->
+    
     <center>
         <VBox spacing="12"
               style="-fx-padding: 20 30 20 30;
                      -fx-background-color: #f5f7fa;">
 
-            <!-- FILTER BAR -->
+            
             <HBox spacing="12"
                   alignment="CENTER_LEFT"
                   style="-fx-background-color: white;
@@ -90,7 +90,7 @@
                                -fx-cursor: hand;"/>
             </HBox>
 
-            <!-- TABLE -->
+            
             <TableView fx:id="table"
                        VBox.vgrow="ALWAYS"
                        style="-fx-background-color: white;
@@ -111,7 +111,7 @@
         </VBox>
     </center>
 
-    <!-- ================= BOTTOM ================= -->
+    
     <bottom>
         <VBox spacing="12"
               style="-fx-padding: 15 30 25 30;

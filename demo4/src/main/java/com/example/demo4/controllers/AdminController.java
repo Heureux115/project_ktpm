@@ -30,7 +30,7 @@ public class AdminController extends BaseController {
         loadUsers();
     }
 
-    // ================= LOAD USERS =================
+    
     private void loadUsers() {
         try {
             List<UserRowData> data = UserDao.findAllWithCitizenName();
@@ -53,7 +53,7 @@ public class AdminController extends BaseController {
         }
     }
 
-    // ================= ACTIONS =================
+    
     @FXML
     public void onAssignAccount() {
         if (!requireAdmin()) return;
@@ -112,7 +112,7 @@ public class AdminController extends BaseController {
                 "Quản lý cơ sở vật chất");
     }
 
-    // ================= HELPER =================
+    
     private void openWindow(String fxml, String title) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
@@ -129,7 +129,7 @@ public class AdminController extends BaseController {
         }
     }
 
-    // ================= INNER CLASS =================
+    
     public static class UserRow {
         private final javafx.beans.property.SimpleIntegerProperty id;
         private final javafx.beans.property.SimpleStringProperty username;

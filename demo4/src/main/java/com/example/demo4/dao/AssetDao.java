@@ -74,7 +74,7 @@ public class AssetDao {
         );
     }
 
-    // Lấy asset theo ID (FOR UPDATE để khóa dòng)
+    
     public static assets findByIdForUpdate(Connection conn, int assetId) throws SQLException {
         String sql = "SELECT * FROM assets WHERE id = ?";
 
@@ -122,7 +122,7 @@ public class AssetDao {
         return list;
     }
 
-    // Trừ số lượng asset
+    
     public static void decreaseQuantity(Connection conn, int assetId, int amount) throws SQLException {
         String sql = "UPDATE assets SET quantity = quantity - ? WHERE id = ?";
 

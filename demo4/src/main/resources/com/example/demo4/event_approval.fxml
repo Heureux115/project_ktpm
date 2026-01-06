@@ -12,7 +12,7 @@
             <padding>
                 <Insets bottom="10" left="30" right="30" top="25" />
             </padding>
-            <!-- Header -->
+            
             <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 0 0 10 0;">
                 <Label style="-fx-font-size: 24px;" text="✅" />
                 <Label style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Duyệt Sự Kiện" />

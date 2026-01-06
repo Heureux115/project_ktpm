@@ -5,15 +5,15 @@ import java.time.LocalDate;
 public class CitizenChange {
     private int id;
     private int citizenId;
-    private Integer fromHouseholdId; // Hộ khẩu cũ (dùng khi tách hộ)
-    private Integer toHouseholdId;   // Hộ khẩu mới (dùng khi tách hộ)
+    private Integer fromHouseholdId; 
+    private Integer toHouseholdId;   
 
-    private String changeType;       // NEW_BIRTH, MOVE_OUT, DEAD, SPLIT_HOUSEHOLD
+    private String changeType;       
     private LocalDate changeDate;
-    private String destination;      // Nơi chuyển đến
-    private String note;             // Ví dụ: "Đã qua đời", "Tách từ hộ số X"
+    private String destination;      
+    private String note;             
 
-    // Getters and Setters ...
+    
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public int getCitizenId() { return citizenId; }

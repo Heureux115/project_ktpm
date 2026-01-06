@@ -11,7 +11,7 @@ import java.util.List;
 
 public class CitizenDao {
 
-    // ================= INSERT =================
+    
     public static int insert(Citizen c) throws Exception {
         String sql = """
             INSERT INTO citizens(
@@ -64,7 +64,7 @@ public class CitizenDao {
         throw new Exception("Không thể thêm citizen");
     }
 
-    // ================= FIND =================
+    
     public static List<Citizen> findAll() throws SQLException {
         List<Citizen> list = new ArrayList<>();
         String sql = "SELECT * FROM citizens ORDER BY id DESC";
@@ -192,7 +192,7 @@ public class CitizenDao {
         try (Connection conn = Database.getConnection()) {
             conn.setAutoCommit(false);
 
-            // 1. Kiểm tra công dân tồn tại
+            
             try (PreparedStatement ps = conn.prepareStatement(
                     "SELECT id, household_id FROM citizens WHERE id = ?"
             )) {
@@ -203,7 +203,7 @@ public class CitizenDao {
                 }
             }
 
-            // 2. Kiểm tra hộ khẩu đích tồn tại
+            
             try (PreparedStatement ps = conn.prepareStatement(
                     "SELECT household_id FROM households WHERE household_id = ?"
             )) {
@@ -214,7 +214,7 @@ public class CitizenDao {
                 }
             }
 
-            // 3. Cập nhật công dân sang hộ khẩu mới
+            
             try (PreparedStatement ps = conn.prepareStatement(
                     "UPDATE citizens SET household_id = ? WHERE id = ?"
             )) {
@@ -227,7 +227,7 @@ public class CitizenDao {
         }
     }
 
-    // Move citizen sang hộ mới với Connection
+    
     public static void moveCitizenToHousehold(Connection conn, int citizenId, int householdId) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement(
                 "UPDATE citizens SET household_id = ? WHERE id = ?")) {
@@ -237,7 +237,7 @@ public class CitizenDao {
         }
     }
 
-    // Update citizen với Connection
+    
     public static void update(Connection conn, Citizen c) throws SQLException {
         String sql = """
         UPDATE citizens SET
@@ -283,7 +283,7 @@ public class CitizenDao {
     }
 
 
-    // ================= UPDATE =================
+    
     public static void update(Citizen c) throws Exception {
         String sql = """
             UPDATE citizens SET
@@ -377,7 +377,7 @@ public class CitizenDao {
         return list;
     }
 
-    // ================= DELETE =================
+    
     public static void deleteById(int id) throws Exception {
         try (Connection conn = Database.getConnection();
              PreparedStatement ps = conn.prepareStatement("DELETE FROM citizens WHERE id = ?")) {
@@ -386,7 +386,7 @@ public class CitizenDao {
         }
     }
 
-    // ================= MAP =================
+    
     private static Citizen map(ResultSet rs) throws SQLException {
         Citizen c = new Citizen();
         c.setId(rs.getInt("id"));
@@ -423,7 +423,7 @@ public class CitizenDao {
         return c;
     }
 
-    // ================= HELPERS =================
+    
     private static void setDate(PreparedStatement ps, int idx, LocalDate d) throws SQLException {
         if (d != null) ps.setDate(idx, Date.valueOf(d));
         else ps.setNull(idx, Types.DATE);
@@ -444,7 +444,7 @@ public class CitizenDao {
 
             Integer oldHouseholdId = null;
 
-            // 1. Lấy household hiện tại của công dân
+            
             try (PreparedStatement ps = conn.prepareStatement(
                     "SELECT household_id FROM citizens WHERE id=?"
             )) {
@@ -458,7 +458,7 @@ public class CitizenDao {
                 }
             }
 
-            // 2. Cập nhật công dân: gỡ khỏi hộ khẩu
+            
             try (PreparedStatement ps = conn.prepareStatement(
                     "UPDATE citizens SET household_id=NULL WHERE id=?"
             )) {
@@ -466,17 +466,17 @@ public class CitizenDao {
                 ps.executeUpdate();
             }
 
-            // 3. Ghi lại thay đổi vào citizen_changes, dùng cùng connection
+            
             CitizenChange cc = new CitizenChange();
             cc.setCitizenId(citizenId);
-            cc.setFromHouseholdId(oldHouseholdId); // null cũng ok nếu cột cho phép
+            cc.setFromHouseholdId(oldHouseholdId); 
             cc.setToHouseholdId(null);
-            cc.setChangeType(reason); // DEAD / MOVE_OUT
+            cc.setChangeType(reason); 
             cc.setChangeDate(LocalDate.now());
             cc.setDestination(null);
             cc.setNote("Gỡ khỏi hộ khẩu");
 
-            CitizenChangeDao.insert(conn, cc); // dùng cùng transaction
+            CitizenChangeDao.insert(conn, cc); 
 
             conn.commit();
         } catch (SQLException e) {
@@ -485,7 +485,7 @@ public class CitizenDao {
         }
     }
 
-    // Lấy household_id lớn nhất hiện tại
+    
     public static int getNextHouseholdId() throws SQLException {
         String sql = "SELECT MAX(household_id) FROM households";
 
@@ -495,9 +495,9 @@ public class CitizenDao {
 
             if (rs.next()) {
                 int maxId = rs.getInt(1);
-                return maxId + 1; // ID tiếp theo
+                return maxId + 1; 
             }
-            return 1; // nếu bảng trống, bắt đầu từ 1
+            return 1; 
         }
     }
 
