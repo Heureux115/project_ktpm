@@ -2,5 +2,5 @@
 ## Demo Video
 [Click here to watch demo video](https://www.youtube.com/watch?v=X1Aq5usLhq0)
 
-Mô tả:
+## Mô tả:
 Hệ thống quản lý nhân khẩu và nhà văn hóa hỗ trợ tổ dân phố trong việc quản lý thông tin hộ khẩu, nhân khẩu và lịch sử biến động dân cư, bao gồm các nghiệp vụ như thêm mới, thay đổi cư trú, tách hộ, tạm trú – tạm vắng và thống kê theo nhiều tiêu chí. Bên cạnh đó, hệ thống cho phép quản lý tài sản, lịch sử sử dụng và đăng ký khai thác nhà văn hóa cho các hoạt động cộng đồng và sự kiện cá nhân, với cơ chế phê duyệt rõ ràng nhằm đảm bảo sử dụng hiệu quả và minh bạch.
