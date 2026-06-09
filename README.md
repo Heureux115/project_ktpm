@@ -50,7 +50,7 @@ Hệ thống cung cấp giao diện trực quan và phân quyền xử lý chặ
 ### Các bước triển khai chi tiết
 
 #### 1. Tải mã nguồn về máy cục bộ
-    git clone [https://github.com/your-username/project_ktpm.git](https://github.com/your-username/project_ktpm.git)
+    git clone [https://github.com/Heureux115/project_ktpm.git](https://github.com/Heureux115/project_ktpm.git)
     cd project_ktpm
 
 #### 2. Khởi tạo và Import Cơ sở dữ liệu
